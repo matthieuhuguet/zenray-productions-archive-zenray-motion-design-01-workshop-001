@@ -1,0 +1,12 @@
+{
+  "render": "zenray-motion-design-01-v6.mp4",
+  "checked": {
+    "C00": "lisible à 4,6 s, sur l'appareil",
+    "C06": "lisible à 16,6 s",
+    "C07": "lisible à 17,8 s",
+    "C10": "lisible à 21,8 s",
+    "C20": "lisible à 47,0 s, mais chevauche le bas de l'appareil",
+    "C26": "lisible à 59,0 s",
+    "C27": "lisible à 61,4 s"
+  }
+}

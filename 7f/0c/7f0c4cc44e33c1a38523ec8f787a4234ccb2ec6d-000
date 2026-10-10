@@ -1,49 +1,548 @@
-# 10 October 2026, 00:40 CEST
-# BuildStoryboard.py: writes storyboard/storyboard.html from the parameters, the reference analysis and the verification report.
-# Run with python3 -I: reference frames are read as images only, and their thumbnails stay outside the workshop.
+# 10 October 2026, 00:55 CEST
+# BuildStoryboard.py: writes the detailed study storyboard (HTML, two CSV files, checks) from the parameters, the notes and the render measures.
+# Run with python3 -I: the render is read through ffmpeg and tesseract. No reference frame is read or written.
 import argparse
+import csv
 import html
 import json
+import re
 import sys
 from pathlib import Path
-
-from PIL import Image
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
 
 from AnalyzeReference import curves  # noqa: E402
+from MeasureDna import boundary_scores  # noqa: E402
+from Verify import caption_checks, ocr_spans  # noqa: E402
 
+FPS = 60
+WIDTH, HEIGHT = 1920, 1080
+TOTAL_FRAMES = 4080
+TOKEN_WHOLE = re.compile(r"^@([A-Za-z0-9_.]+)$")
+TOKEN_INLINE = re.compile(r"@([A-Za-z0-9_.]+)")
+HEX = re.compile(r"^#[0-9a-fA-F]{6}$")
+
+PROP_LABELS = {
+    "x": "x", "y": "y", "scale": "échelle", "scaleX": "échelle horizontale", "opacity": "opacité",
+    "rotation": "rotation", "rotationX": "rotation X", "rotationY": "rotation Y", "rotationZ": "rotation Z",
+    "xPercent": "x en %", "yPercent": "y en %", "z": "profondeur", "width": "largeur", "height": "hauteur",
+    "filter": "filtre", "clipPath": "masque", "strokeDashoffset": "tracé", "backgroundPosition": "position du dégradé",
+    "borderTopLeftRadius": "rayon haut gauche", "borderTopRightRadius": "rayon haut droit",
+    "borderBottomLeftRadius": "rayon bas gauche", "borderBottomRightRadius": "rayon bas droit",
+}
+EASE_TEXT = {"none": "linéaire"}
+REVEAL_TEXT = {
+    "fade": "fondu", "blur": "flou vers net", "wipe": "masque de gauche à droite",
+    "sweep": "balayage de lumière dans le texte", "split-left": "glissement depuis la gauche",
+    "split-right": "glissement depuis la droite", "typewriter": "frappe caractère par caractère",
+}
+PLACEMENT_KEYS = {
+    "centre": ("centreX", "centerY"), "title-big": ("centreX", "centerY"),
+    "centre-left": ("centreLeftX", "centerY"), "bottom": ("centreX", "bottomY"),
+    "footnote": ("centreX", "footnoteY"), "title": ("centreX", "titleY"),
+    "split-left": ("splitLeftX", "centerY"), "split-right": ("splitRightX", "centerY"),
+    "left-small": ("leftSmallX", "leftSmallY"), "left-statement": ("leftStatementX", "leftStatementY"),
+    "logo": ("centreX", "logoWordmarkY"), "handle": ("centreX", "handleY"),
+}
+PLACEMENT_TEXT = {
+    "centre": "centre", "title-big": "centre, grand titre", "centre-left": "centre gauche",
+    "bottom": "tiers bas", "footnote": "note en bas", "title": "titre en haut",
+    "split-left": "moitié gauche", "split-right": "moitié droite", "left-small": "gauche, petite taille",
+    "left-statement": "gauche, grande taille", "logo": "sous la marque", "handle": "sous la marque, compte",
+}
+SIZE_TOKEN = {
+    "title-big": "sizeTitle", "statement": "sizeStatement", "sub": "sizeSub", "title": "sizeLabel",
+    "small": "sizeSmall", "footnote": "sizeFootnote",
+}
 ACTS = [
-    ("1", "Accroche", 0.00, 6.28,
-     "Un orbe, une arche, un appareil qui se lève, puis le titre.",
-     "Un orbe, une arche qui se déforme, un appareil à timeline, le titre « Motion, in code ».",
-     "Le motion design s'écrit en code."),
-    ("2", "Matières", 6.28, 14.60,
-     "Des plans sur les matières, les reflets et le verre.",
-     "Une tige métallique, un chanfrein, une bande bronze, un plan, des traînées de lumière.",
-     "Lumière et matière se calculent."),
-    ("3", "Systèmes", 14.60, 25.40,
-     "Des couches, une puce, un circuit, une confirmation.",
-     "Des couches 3D à traces lumineuses, quatre puces pulsées, un circuit, une coche tracée.",
-     "Les systèmes se voient bouger."),
-    ("4", "Confiance", 25.40, 39.40,
-     "Des phrases qui s'écrivent, un objet suivi, une recharge sans fil, une carte de sauvegarde.",
-     "Une frappe, un doute levé par le lint, une pastille suivie, des arcs, une carte qui se retourne.",
-     "On vérifie avant de rendre."),
-    ("5", "Connectivité", 39.40, 50.20,
-     "Un menu, une matrice de code, une clé d'accès avec ondes.",
-     "Un menu décalé, une matrice QR qui s'assemble module par module, des ondes.",
-     "Le rendu se fait hors ligne, et la sortie reste identique."),
-    ("6", "Produit", 50.20, 58.00,
-     "Des coupes rapides, un compteur en anneau, deux panneaux, une licence, une courbe d'aisance.",
-     "Cinq aplats coupés sur le temps, un compteur en anneau, deux panneaux, un badge, une courbe d'aisance.",
-     "Les données bougent, le rythme se mesure."),
-    ("7", "Titre et marque", 58.00, 68.00,
-     "Un titre, un hero en lettres 3D, un logo qui se trace.",
-     "Un titre, « HTML » en Vogun avec fumée, un logo tracé, la marque et le compte.",
-     "Recréer ce plan avec le même rythme."),
+    (1, "Accroche", 0.00, 6.28, "Fond noir, une sphère, une arche, un appareil qui se lève, un titre.",
+     "Orbe, arche qui se déforme, appareil à timeline, titre « Motion, in code. »", "Le motion design s'écrit en code."),
+    (2, "Matières", 6.28, 14.60, "Plans sur une matière métallique, des reflets, une surface ambrée, du verre.",
+     "Barre métallique, connecteur, bande bronze, plan en dégradé, traînées de lumière.", "Lumière et matière se calculent."),
+    (3, "Systèmes", 14.60, 25.40, "Des couches translucides, des puces, un circuit, une confirmation.",
+     "Quatre couches 3D à traces, quatre puces qui s'éclairent, circuit, coche tracée.", "Les systèmes se voient bouger."),
+    (4, "Confiance", 25.40, 39.40, "Des phrases qui s'écrivent, un objet suivi, une recharge, une carte.",
+     "Frappe, lint, palet suivi, arcs, carte qui se retourne.", "On vérifie avant de rendre."),
+    (5, "Connectivité", 39.40, 50.20, "Un menu, un code matriciel qui se construit, une clé avec ondes.",
+     "Menu, matrice QR assemblée module par module, ondes concentriques.", "Le rendu se fait hors ligne, sortie identique."),
+    (6, "Produit", 50.20, 58.00, "Coupes rapides, anneau de données, panneaux, courbe.",
+     "Cinq aplats coupés sur le temps, compteur en anneau, panneaux, badge, courbe d'aisance.", "Les données bougent, le rythme se mesure."),
+    (7, "Titre et marque", 58.00, 68.00, "Titre, motif en lettres 3D, marque tracée.",
+     "Titre, « SURE » en fumée et en bronze, marque tracée, compte.", "Le même rythme, avec son propre contenu."),
 ]
+ACT_COLOUR_TOKEN = ["accent", "bronzeLight", "signal", "steel", "signalDeep", "accentDeep", "fg2"]
+CAMERA_FR = {"static": "fixe", "push": "poussée", "drift": "dérive", "parallax": "parallaxe", "wipe": "balayage", "pan": "panoramique", "stack": "empilement", "cut": "coupe", "swipe": "glissement", "mixed": "mixte"}
+
+
+def badge(ok):
+    return '<span class="pass">réussi</span>' if ok else '<span class="fail">échoué</span>'
+
+
+def fr(value, digits=2):
+    return f"{value:.{digits}f}".replace(".", ",")
+
+
+def num(value):
+    value = float(value)
+    return str(int(value)) if value.is_integer() else fr(value, 2)
+
+
+def wrap_tables(page):
+    # Phone width: each table scrolls inside its own box, so the page itself never scrolls sideways.
+    return re.sub(r"</table>", "</table></div>", re.sub(r"<table", '<div class="scroll"><table', page))
+
+
+def esc(text):
+    return html.escape(str(text), quote=True)
+
+
+def frames_of(seconds):
+    return int(round(seconds * FPS))
+
+
+def lookup(tokens, path):
+    node = tokens
+    for key in path.split("."):
+        node = node[key]
+    return node
+
+
+def resolve(value, tokens):
+    if not isinstance(value, str) or "@" not in value:
+        return value
+    whole = TOKEN_WHOLE.match(value)
+    if whole:
+        return lookup(tokens, whole.group(1))
+    return TOKEN_INLINE.sub(lambda match: str(lookup(tokens, match.group(1))), value)
+
+
+def resolve_map(mapping, tokens):
+    if mapping is None:
+        return None
+    return {key: resolve(value, tokens) for key, value in mapping.items()}
+
+
+def value_text(value):
+    if isinstance(value, bool):
+        return str(value).lower()
+    if isinstance(value, (int, float)):
+        return num(value)
+    return str(value)
+
+
+def props_text(source, target):
+    parts = []
+    for key, value in target.items():
+        if key == "stagger":
+            parts.append(f"décalage de {value_text(value)} s entre éléments")
+            continue
+        label = PROP_LABELS.get(key, key)
+        if source and key in source:
+            parts.append(f"{label} de {value_text(source[key])} à {value_text(value)}")
+        else:
+            parts.append(f"{label} vers {value_text(value)}")
+    return ", ".join(parts)
+
+
+def ease_text(value):
+    return EASE_TEXT.get(value, value)
+
+
+def describe_records(records, base, tokens):
+    rows = []
+    for record in records:
+        op = record[0]
+        if op == "$set":
+            _, target, at, vars_ = record
+            when = base + float(resolve(at, tokens))
+            rows.append((when, 0.0, f"{target} : réglage immédiat, {props_text(None, resolve_map(vars_, tokens))}"))
+        elif op == "$draw":
+            _, target, at, dur, ease, direction = record
+            when, duration = base + float(resolve(at, tokens)), float(resolve(dur, tokens))
+            sense = "apparition du tracé" if direction == "in" else "effacement du tracé"
+            rows.append((when, duration, f"{target} : {sense}, courbe {ease_text(resolve(ease, tokens))}"))
+        elif op == "$ring":
+            _, target, at, dur, ease, fraction = record
+            when, duration = base + float(resolve(at, tokens)), float(resolve(dur, tokens))
+            rows.append((when, duration, f"{target} : anneau rempli à {fr(float(fraction) * 100, 0)} % du tour, courbe {ease_text(resolve(ease, tokens))}"))
+        elif op == "$count":
+            _, target, at, dur, ease, value = record
+            when, duration = base + float(resolve(at, tokens)), float(resolve(dur, tokens))
+            rows.append((when, duration, f"{target} : compteur de 0 à {num(value)}, courbe {ease_text(resolve(ease, tokens))}"))
+        elif op == "$along":
+            _, path_selector, dot_selector, at, dur, ease = record
+            when, duration = base + float(resolve(at, tokens)), float(resolve(dur, tokens))
+            rows.append((when, duration, f"{dot_selector} suit le tracé {path_selector}, courbe {ease_text(resolve(ease, tokens))}"))
+        elif op == "$qr":
+            _, target, at, dur, ease = record
+            when, duration = base + float(resolve(at, tokens)), float(resolve(dur, tokens))
+            rows.append((when, duration, f"{target} : assemblage module par module, courbe {ease_text(resolve(ease, tokens))}"))
+        else:
+            target, at, dur, ease, source, destination = record
+            when, duration = base + float(resolve(at, tokens)), float(resolve(dur, tokens))
+            text = f"{target} : {props_text(resolve_map(source, tokens), resolve_map(destination, tokens))}, courbe {ease_text(resolve(ease, tokens))}"
+            rows.append((when, duration, text))
+    rows.sort(key=lambda row: row[0])
+    return rows
+
+
+def keyframe_line(when, duration, text):
+    span = f"durée {fr(duration, 2)} s" if duration > 0 else "instantané"
+    return f"{fr(when, 2)} s, image {frames_of(when)} : {text}, {span}"
+
+
+def ambient_text(entry, start, end):
+    unit = "degrés" if entry["property"].startswith("rotation") else "px"
+    amount = entry["amplitude"]
+    return (f"{entry['target']} : dérive {entry['property']} de {num(-amount)} à {num(amount)} {unit} "
+            f"sur toute la durée du plan (de {fr(start, 2)} s à {fr(end, 2)} s), sans accélération")
+
+
+def reveal_text(caption, motion):
+    # Same window rule as template/motion-core.js: reveal and exit take a share of the caption's own span.
+    kind = caption["reveal"]
+    span = caption["end"] - caption["start"]
+
+    def fit(seconds, share):
+        return min(seconds, span * share)
+
+    exit_len = fit(motion["exitDur"], 0.15)
+    if kind == "rise":
+        base, full, share = f"montée de {num(motion['riseDistance'])} px avec fondu", motion["revealDur"], 0.3
+    elif kind == "fade":
+        base, full, share = REVEAL_TEXT["fade"], motion["fadeDur"], 0.3
+    elif kind == "sweep":
+        base, full, share = REVEAL_TEXT["sweep"], motion["sweepDur"], 0.4
+    elif kind == "typewriter":
+        base = REVEAL_TEXT["typewriter"]
+        duration = span * motion["typeFraction"]
+        return f"{base}, {fr(duration, 2)} s ; sortie de {fr(exit_len, 2)} s avant la fin"
+    else:
+        base, full, share = REVEAL_TEXT.get(kind, kind), motion["revealDur"], 0.3
+    duration = fit(full, share)
+    shortened = " (réduite pour tenir dans la fenêtre)" if duration < full else ""
+    return f"{base}, {fr(duration, 2)} s{shortened} ; sortie de {fr(exit_len, 2)} s avant la fin"
+
+def caption_position(caption, layout):
+    x_key, y_key = PLACEMENT_KEYS[caption["placement"]]
+    return float(layout[x_key]) * WIDTH, float(layout[y_key]) * HEIGHT
+
+
+def caption_size(caption, tokens):
+    token = SIZE_TOKEN[caption["size"]]
+    return float(tokens["type"][token].replace("px", ""))
+
+
+def checks_for(timeline, tokens, choreography, notes, template_text, report):
+    results = []
+    shots = timeline["shots"]
+    contiguous = all(abs(shots[i]["start"] - shots[i - 1]["end"]) < 1e-6 for i in range(1, len(shots)))
+    results.append(("Plans contigus, sans trou ni recouvrement", contiguous, f"{len(shots)} plans"))
+    last_frame = frames_of(shots[-1]["end"])
+    results.append(("Durée totale en images", last_frame == TOTAL_FRAMES, f"{last_frame} images sur {TOTAL_FRAMES}"))
+    results.append(("Notes présentes pour chaque plan", all(s["id"] in notes for s in shots), f"{sum(1 for s in shots if s['id'] in notes)} sur {len(shots)}"))
+    missing_targets = []
+    for shot_id, records in choreography.items():
+        for record in records:
+            if record[0] in ("$set", "$draw", "$ring", "$count", "$qr"):
+                targets = [record[1]]
+            elif record[0] == "$along":
+                targets = [record[1], record[2]]
+            else:
+                targets = [record[0]]
+            for target in targets:
+                for name in re.findall(r"#([A-Za-z0-9_-]+)", target):
+                    # The cook wraps each shot block in a section whose id is shot-SXX, so that id is generated, not authored.
+                    generated = name.startswith("shot-")
+                    if not generated and f'id="{name}"' not in template_text:
+                        missing_targets.append(name)
+                for name in re.findall(r"\.([A-Za-z][A-Za-z0-9_-]*)", target):
+                    if not re.search(rf'class="[^"]*\b{re.escape(name)}\b', template_text):
+                        missing_targets.append("." + name)
+    results.append(("Cibles de la chorégraphie présentes dans le gabarit", not missing_targets,
+                    "aucune cible manquante" if not missing_targets else ", ".join(sorted(set(missing_targets)))))
+    unresolved = []
+    for shot_id, records in choreography.items():
+        for record in records:
+            for field in record:
+                if isinstance(field, str) and "@" in field:
+                    try:
+                        resolve(field, tokens)
+                    except (KeyError, TypeError):
+                        unresolved.append(field)
+    results.append(("Jetons référencés résolus", not unresolved, "tous résolus" if not unresolved else ", ".join(unresolved)))
+    bad_hex = [key for key, value in tokens["color"].items() if not HEX.match(value) and not value.startswith("rgba")]
+    results.append(("Couleurs en hexadécimal valide", not bad_hex, "toutes valides" if not bad_hex else ", ".join(bad_hex)))
+    bad_captions = [c["id"] for c in timeline["captions"] if not (0 <= c["start"] < c["end"] <= 68.0)]
+    results.append(("Légendes dans la durée de la vidéo", not bad_captions, "toutes dans la durée" if not bad_captions else ", ".join(bad_captions)))
+    duration = report["checks"]["duration"]["value"]
+    results.append(("Durée du rendu mesurée", abs(duration - 68.0) <= 0.1, f"{fr(duration, 3)} s"))
+    return results
+
+
+def timeline_svg(shots, captions, act_colours):
+    width, height = 1200, 120
+    scale = width / TOTAL_FRAMES
+    parts = [f'<svg viewBox="0 0 {width} {height}" width="100%" role="img" aria-label="Chronologie des 27 plans">']
+    for number, name, start, end, *_ in ACTS:
+        x = frames_of(start) * scale
+        w = (frames_of(end) - frames_of(start)) * scale
+        parts.append(f'<rect x="{x:.1f}" y="20" width="{w:.1f}" height="16" fill="{act_colours[number - 1]}" opacity="0.35"/>')
+        parts.append(f'<text x="{x + 4:.1f}" y="14" font-size="12" fill="#161616">{number} {esc(name)}</text>')
+    for shot in shots:
+        x = frames_of(shot["start"]) * scale
+        w = (frames_of(shot["end"]) - frames_of(shot["start"])) * scale
+        parts.append(f'<rect x="{x:.1f}" y="40" width="{max(w - 1, 1):.1f}" height="40" fill="#161616" opacity="0.85"/>')
+        parts.append(f'<text x="{x + 2:.1f}" y="96" font-size="10" fill="#161616">{shot["id"][1:]}</text>')
+    for caption in captions:
+        x = frames_of(caption["start"]) * scale
+        parts.append(f'<line x1="{x:.1f}" y1="84" x2="{x:.1f}" y2="104" stroke="#cc7c5e" stroke-width="2"/>')
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def anchor_svg(layout, tokens):
+    parts = [f'<svg viewBox="0 0 {WIDTH} {HEIGHT}" width="100%" role="img" aria-label="Grille de cadrage 16:9">',
+             f'<rect x="4" y="4" width="{WIDTH - 8}" height="{HEIGHT - 8}" fill="#fafaf8" stroke="#161616" stroke-width="6"/>']
+    for fraction in (1 / 3, 0.5, 2 / 3):
+        parts.append(f'<line x1="{WIDTH * fraction:.0f}" y1="0" x2="{WIDTH * fraction:.0f}" y2="{HEIGHT}" stroke="#e6e4e1" stroke-width="3"/>')
+        parts.append(f'<line x1="0" y1="{HEIGHT * fraction:.0f}" x2="{WIDTH}" y2="{HEIGHT * fraction:.0f}" stroke="#e6e4e1" stroke-width="3"/>')
+    anchors = [("centre", "centreX", "centerY"), ("titre", "centreX", "titleY"), ("bas", "centreX", "bottomY"),
+               ("note", "centreX", "footnoteY"), ("gauche centre", "centreLeftX", "centerY"),
+               ("moitié gauche", "splitLeftX", "centerY"), ("moitié droite", "splitRightX", "centerY"),
+               ("petite gauche", "leftSmallX", "leftSmallY"), ("grande gauche", "leftStatementX", "leftStatementY"),
+               ("marque", "centreX", "logoWordmarkY"), ("compte", "centreX", "handleY")]
+    for label, x_key, y_key in anchors:
+        x = float(layout[x_key]) * WIDTH
+        y = float(layout[y_key]) * HEIGHT
+        parts.append(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="14" fill="#cc7c5e"/>')
+        parts.append(f'<text x="{x + 22:.0f}" y="{y + 9:.0f}" font-size="34" fill="#161616">{esc(label)} ({fr(float(layout[x_key]), 3)}, {fr(float(layout[y_key]), 3)})</text>')
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def build_html(context):
+    tokens, layout, motion = context["tokens"], context["layout"], context["motion"]
+    shots, captions = context["shots"], context["captions"]
+    checks, report = context["checks"], context["report"]
+    colour_rows = []
+    for key, value in tokens["color"].items():
+        colour_rows.append(f"<tr><td class=\"mono\">{esc(key)}</td><td class=\"mono\">{esc(value)}</td>"
+                           f"<td><span class=\"chip\" style=\"background:{esc(value)}\"></span></td></tr>")
+    type_rows = []
+    for key in ("sizeHero", "sizeCounter", "sizeTitle", "sizeStatement", "sizeSub", "sizeLabel", "sizeSmall", "sizeFootnote", "sizeMono"):
+        type_rows.append(f"<tr><td class=\"mono\">{esc(key)}</td><td class=\"num\">{esc(tokens['type'][key])}</td></tr>")
+    motion_rows = []
+    for key in ("durFast", "durBase", "durSlow", "revealDur", "fadeDur", "exitDur", "sweepDur"):
+        motion_rows.append(f"<tr><td class=\"mono\">{esc(key)}</td><td class=\"num\">{fr(motion[key], 2)} s</td>"
+                           f"<td class=\"num\">{frames_of(motion[key])} images</td></tr>")
+    act_rows = []
+    for number, name, start, end, reference_text, study_text, message in ACTS:
+        act_rows.append(f"<tr><td class=\"num\">{number}</td><td>{esc(name)}</td>"
+                        f"<td class=\"num\">{fr(start, 2)} à {fr(end, 2)} s<br>images {frames_of(start)} à {frames_of(end)}</td>"
+                        f"<td>{esc(reference_text)}</td><td>{esc(study_text)}</td><td>{esc(message)}</td></tr>")
+    shot_cards = []
+    for row in shots:
+        keyframes = "".join(f"<li>{esc(line)}</li>" for line in row["keyframes"]) or "<li>Aucun mouvement propre : le plan repose sur ses entrées et sa dérive.</li>"
+        captions_here = "".join(f"<li>« {esc(c['text'])} » : {esc(c['window'])}</li>" for c in row["captions"]) or "<li>Aucune légende sur ce plan.</li>"
+        ratio = "n.d." if row["ratio"] is None else fr(row["ratio"], 2)
+        detected = "non" if row["detected"] is None else f"oui, score {fr(row['detected'], 1)}"
+        cut_ref = row["cut_ref"]
+        drift = esc(row["drift"]) if row["drift"] else "Aucune dérive propre."
+        shot_cards.append(f"""
+<article class="shot" id="{row['id']}">
+<header><span class="mono">{row['id']}</span><h3>{esc(row['name'])}</h3>
+<span class="num">{fr(row['start'], 2)} à {fr(row['end'], 2)} s · images {row['f0']} à {row['f1']} · {row['frames']} images</span></header>
+<div class="grid2">
+<figure><img src="ours/{row['id']}.png" alt="Rendu {row['id']} à mi-plan"><figcaption>Rendu de l'étude, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Coupe d'entrée.</strong> {esc(cut_ref)}</p>
+<p><strong>Référence, description.</strong> {esc(row['ref_frame'])} <em>Mouvement : {esc(row['ref_motion'])}</em></p>
+<p><strong>Étude, description.</strong> {esc(row['study_frame'])}</p>
+<p><strong>Cadrage.</strong> {esc(row['framing'])} Caméra : {esc(row['camera'])}. Technique : {esc(row['technique'])}.</p>
+<p><strong>Mouvements, dans l'ordre.</strong></p><ul class="kf">{keyframes}</ul>
+<p><strong>Dérive continue.</strong> {drift}</p>
+<p><strong>Légendes.</strong></p><ul>{captions_here}</ul>
+<table class="mini">
+<tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
+<tr><td>Moyenne par image</td><td class="num">{row['ref_motion_mean']:.4f}</td><td class="num">{row['ours_motion_mean']:.4f}</td><td class="num">{ratio}</td><td>{detected}</td></tr>
+</table>
+<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> {esc(row['cue'])}</p>
+</div></div></article>""")
+    caption_rows = []
+    for c in captions:
+        ocr = "non mesuré" if c["recall"] is None else f"{fr(c['recall'] * 100, 0)} %"
+        timing = "non lue par l'OCR" if c["timing"] is None else f"{fr(c['timing'], 2)} s"
+        caption_rows.append(
+            f"<tr><td class=\"mono\">{c['id']}</td><td class=\"num\">{fr(c['start'], 2)} à {fr(c['end'], 2)} s<br>images {c['f0']} à {c['f1']}</td>"
+            f"<td>{esc(c['text'])}</td><td>{esc(c['placement_text'])}<br><span class=\"num\">{fr(c['x'], 0)} × {fr(c['y'], 0)} px</span></td>"
+            f"<td class=\"num\">{fr(c['size'], 0)} px</td><td class=\"mono\">{esc(c['fill_name'])} {esc(c['fill_hex'])}</td>"
+            f"<td>{esc(c['reveal'])}</td><td class=\"num\">{ocr}</td><td class=\"num\">{timing}</td></tr>")
+    # Captions the OCR does not read in full are listed, and only a visual check recorded for this render counts as read.
+    unread = [c["id"] for c in captions if c["recall"] is None or c["recall"] < report["contract"]["caption_recall_min"]]
+    checked = context["visual"]["checked"]
+    seen_ok = [i for i in unread if i in checked]
+    todo = [i for i in unread if i not in checked]
+    caption_note = ""
+    if unread:
+        caption_note += f"<p>Légendes non lues en entier par l'OCR : {', '.join(unread)}. L'OCR échoue sur les fonds en dégradé, les couleurs vives et les titres de petit corps ; il ne mesure donc pas ce que voit le spectateur.</p>"
+    if seen_ok:
+        caption_note += "<p>Relues à l'œil sur l'image de leur instant dans le rendu : " + ", ".join(f"{i} ({checked[i]})" for i in seen_ok) + ".</p>"
+    if todo:
+        caption_note += f"<p>À contrôler à l'œil avant toute conclusion : {', '.join(todo)}.</p>"
+    check_rows = "".join(
+        f"<tr><td>{esc(name)}</td><td>{badge(ok)}</td><td>{esc(detail)}</td></tr>"
+        for name, ok, detail in checks)
+    contract = report["contract"]
+    verify = report["checks"]
+    verify_rows = [
+        ("Durée du rendu", f"{fr(verify['duration']['value'], 3)} s", "68,053 s ± 0,10 s", verify["duration"]["pass"]),
+        ("Mouvement image à image", fr(verify["motion"]["frame_correlation"], 3), f"au moins {fr(contract['motion_correlation_min'], 2)}", verify["motion"]["frame_correlation"] >= contract["motion_correlation_min"]),
+        ("Mouvement par plan (rang)", fr(verify["motion"]["shot_rank_correlation"], 3), f"au moins {fr(contract['shot_motion_rank_min'], 2)}", verify["motion"]["shot_rank_correlation"] >= contract["shot_motion_rank_min"]),
+        ("Coupes franches retrouvées", f"{verify['cuts']['matched']} sur {verify['cuts']['reference_hard_cuts']}", f"au moins {fr(contract['hard_cut_match_min'] * 100, 0)} %", verify["cuts"]["rate"] >= contract["hard_cut_match_min"]),
+        ("Légendes lisibles à l'OCR", f"{verify['captions']['readable']} sur {verify['captions']['captions']}", f"au moins {fr(contract['caption_recall_min'] * 100, 0)} %", verify["captions"]["readable_rate"] >= contract["caption_recall_min"]),
+        ("Timing des légendes (médiane)", f"{fr(verify['captions']['timing_median_s'], 2)} s", f"au plus {fr(contract['caption_timing_median_s'], 2)} s", (verify["captions"]["timing_median_s"] or 99) <= contract["caption_timing_median_s"]),
+        ("Couleurs par plan (ΔE médian)", fr(verify["palette"]["median_delta_e"], 2), f"au plus {fr(contract['palette_delta_e_median_max'], 0)}", verify["palette"]["pass"]),
+        ("Taille d'encre des légendes", fr(verify["typography"]["ratio"], 3), f"entre {fr(contract['ink_ratio_min'], 2)} et {fr(contract['ink_ratio_max'], 2)}", verify["typography"]["pass"]),
+    ]
+    verify_html = "".join(
+        f"<tr><td>{esc(name)}</td><td class=\"num\">{esc(value)}</td><td>{esc(limit)}</td>"
+        f"<td>{badge(ok)}</td></tr>"
+        for name, value, limit, ok in verify_rows)
+    overall = "OVERALL PASS" if report["passed"] else "OVERALL FAIL"
+    act_colours = [tokens["color"][token] for token in ACT_COLOUR_TOKEN]
+    grid_svg = anchor_svg(layout, tokens)
+    timeline = timeline_svg(shots, captions, act_colours)
+    neutral_reference = ["#000000", "#ffffff", "#d8d8d8", "#b6b4b1"]
+    accent_reference = ["#8b3b16", "#a34028", "#e0873f", "#4d74bc", "#0d298d", "#516374"]
+    ref_swatches = "".join(f"<span class=\"sw\"><i style=\"background:{c}\"></i><code>{c}</code></span>" for c in neutral_reference + accent_reference)
+    return f"""<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Generated by Scripts/BuildStoryboard.py on 10 October 2026. Edit params and notes, then regenerate. -->
+<title>Storyboard d'étude, motion design 01</title>
+<style>{CSS}</style>
+</head>
+<body>
+<main>
+<header class="hero">
+<p class="mono">zenray-motion-design-01 · 10 October 2026 · document d'étude</p>
+<h1>Storyboard d'étude : structure, rythme et coupes d'une vidéo produit, avec un contenu original</h1>
+<p class="lede">Ce document décrit une étude de motion design. Il reprend la structure, le rythme et les coupes mesurées d'une référence publique, et garde un contenu, une typographie et des visuels originaux.</p>
+<div class="notice">
+<strong>Périmètre.</strong> Aucune image, aucun texte, aucun logo et aucun son de la référence ne figure dans ce document ni dans la vidéo. Les descriptions de la référence sont rédigées à partir de l'analyse, pas à partir de copies. Le son n'est pas repris : pour une musique, fournir un fichier dont tu as les droits, la chronologie en images sert de repère.
+</div>
+<p class="mono">Résultat de contrôle : {overall} sur le dernier rendu · {len(shots)} plans · {len(captions)} légendes · {TOTAL_FRAMES} images</p>
+</header>
+
+<h2 id="s1">1. Lecture rapide</h2>
+<table>
+<tr><th>Élément</th><th>Valeur</th><th>Détail</th></tr>
+<tr><td>Durée de l'étude</td><td class="num">68,00 s</td><td class="num">{TOTAL_FRAMES} images à 60 images/s, 1920 × 1080 px, H.264, sans audio</td></tr>
+<tr><td>Plans</td><td class="num">{len(shots)}</td><td>coupes repérées sur la référence, du 0,00 s au 68,00 s, sans trou</td></tr>
+<tr><td>Légendes</td><td class="num">{len(captions)}</td><td>textes originaux, placés, dimensionnés et animés depuis les paramètres</td></tr>
+<tr><td>Actes narratifs</td><td class="num">7</td><td>accroche, matières, systèmes, confiance, connectivité, produit, titre et marque</td></tr>
+<tr><td>Vérification</td><td>{overall}</td><td>voir la section 10 pour chaque seuil</td></tr>
+</table>
+
+<h2 id="s2">2. Chronologie</h2>
+<p>Barres : plans, colorés par acte. Traits orange : débuts de légendes. Chiffres : numéro du plan.</p>
+<div class="figure">{timeline}</div>
+
+<h2 id="s3">3. Grille de cadrage</h2>
+<p>Cadre 16:9 à l'échelle, points d'ancrage des légendes. Les positions viennent des jetons de mise en page ; les valeurs entre parenthèses sont des fractions de la largeur et de la hauteur.</p>
+<div class="figure">{grid_svg}</div>
+
+<h2 id="s4">4. Système typographique</h2>
+<p>Trois familles, une graisse par rôle, et les tailles au pixel 1080p.</p>
+<table>
+<tr><th>Rôle</th><th>Famille</th><th>Graisse</th><th>Taille</th><th>Remarque</th></tr>
+<tr><td>Légende principale</td><td class="mono">InterVariable</td><td class="num">400</td><td class="num">{esc(tokens['type']['sizeStatement'])}</td><td>centre, interlignage 1, crénage {esc(tokens['type']['tracking'])}</td></tr>
+<tr><td>Sous-titre</td><td class="mono">InterVariable</td><td class="num">400</td><td class="num">{esc(tokens['type']['sizeSub'])}</td><td>phrase de transition</td></tr>
+<tr><td>Note de bas</td><td class="mono">InterVariable</td><td class="num">400</td><td class="num">{esc(tokens['type']['sizeFootnote'])}</td><td>couleur de note, vers 0,92 de la hauteur</td></tr>
+<tr><td>Titre de légende</td><td class="mono">InterVariable</td><td class="num">400</td><td class="num">{esc(tokens['type']['sizeLabel'])}</td><td>en haut du cadre</td></tr>
+<tr><td>Grand titre</td><td class="mono">InterVariable</td><td class="num">400</td><td class="num">{esc(tokens['type']['sizeTitle'])}</td><td>plan d'accroche</td></tr>
+<tr><td>Hero</td><td class="mono">Vogun</td><td class="num">500</td><td class="num">{esc(tokens['type']['sizeHero'])}</td><td>lettres en dégradé, effet de fumée (déplacement puis flou)</td></tr>
+<tr><td>Compteur</td><td class="mono">AnthropicSerif</td><td class="num">400</td><td class="num">{esc(tokens['type']['sizeCounter'])}</td><td>tous les nombres visibles</td></tr>
+<tr><td>Étiquettes</td><td class="mono">AnthropicMono</td><td class="num">400</td><td class="num">{esc(tokens['type']['sizeMono'])}</td><td>interface, badge, code</td></tr>
+</table>
+<table class="mini">
+<tr><th>Jeton</th><th>Valeur</th></tr>
+{''.join(type_rows)}
+</table>
+
+<h2 id="s5">5. Système couleur</h2>
+<p>Jetons de la version produite (à gauche) et valeurs mesurées sur la référence (à droite, comparaison seulement).</p>
+<div class="two">
+<table class="mini">
+<tr><th>Jeton</th><th>Valeur</th><th>Aperçu</th></tr>
+{''.join(colour_rows)}
+</table>
+<div>
+<p>Neutres et accents mesurés sur les plans de la référence :</p>
+<div class="swatches">{ref_swatches}</div>
+</div>
+</div>
+
+<h2 id="s6">6. Mouvement et temps</h2>
+<figure class="figure"><img src="reference-motion.png" alt="Courbes de mouvement de la référence"><figcaption>Énergie de mouvement de la référence, dérivée des mesures : aucune image de la référence n'est affichée.</figcaption></figure>
+<p>Courbes d'animation : {esc(tokens['motion']['easeOut'])} pour les entrées, {esc(tokens['motion']['easeInOut'])} pour les transitions, {esc(tokens['motion']['easeExpo'])} pour les grands déplacements, {esc(tokens['motion']['easeBack'])} pour les pointes. Les durées sont en secondes et en images.</p>
+<table class="mini">
+<tr><th>Jeton</th><th>Durée</th><th>En images</th></tr>
+{''.join(motion_rows)}
+</table>
+<p>Coupes : chaque plan commence entier à son image d'entrée. Un plan qui apparaît par fondu depuis le noir ne se détache pas du plan précédent : l'entrée devient un mouvement.</p>
+
+<h2 id="s7">7. Narratif en sept actes</h2>
+<table>
+<tr><th>Acte</th><th>Nom</th><th>Temps</th><th>Référence, description</th><th>Étude, description</th><th>Message</th></tr>
+{''.join(act_rows)}
+</table>
+
+<h2 id="s8">8. Les 27 plans</h2>
+<p>Chaque plan indique ses temps en secondes et en images, sa coupe, sa description de référence et de l'étude, sa mise en page, ses mouvements dans l'ordre (calculés depuis la chorégraphie), sa dérive continue, ses légendes, son énergie mesurée, sa coupe détectée dans le rendu et un repère sonore.</p>
+{''.join(shot_cards)}
+
+<h2 id="s9">9. Les 30 légendes</h2>
+<p>Lisibilité : taux de mots lus par l'OCR dans la fenêtre de la légende. Écart : différence entre le début déclaré et la première lecture OCR.</p>{caption_note}
+<div class="wide">
+<table>
+<tr><th>Id</th><th>Temps</th><th>Texte</th><th>Placement</th><th>Taille</th><th>Remplissage</th><th>Apparition</th><th>Lisibilité OCR</th><th>Écart</th></tr>
+{''.join(caption_rows)}
+</table>
+</div>
+
+<h2 id="s10">10. Contrôles</h2>
+<h3>10.1 Cohérence du storyboard</h3>
+<table>
+<tr><th>Contrôle</th><th>Résultat</th><th>Détail</th></tr>
+{check_rows}
+</table>
+<h3>10.2 Vérification du rendu contre la référence, {overall}</h3>
+<table>
+<tr><th>Contrôle</th><th>Mesure</th><th>Limite</th><th>Résultat</th></tr>
+{verify_html}
+</table>
+<p class="mono">Rapport complet : verify/report-v3.json · Liste des plans : shot-list.csv · Liste des légendes : caption-list.csv</p>
+
+<h2 id="s11">11. Limites, droits et étapes suivantes</h2>
+<ul>
+<li>Son : aucune piste sonore n'est reprise ni produite. Pour une musique, fournir un fichier dont tu as les droits ; les repères de la section 8 indiquent les coupes en images.</li>
+<li>Images : aucune image de la référence n'est utilisée. Le rendu ne contient que des formes, des dégradés, du texte et des tracés produits par le code.</li>
+<li>Marque : aucun logo, nom de produit ni slogan de la référence. La marque affichée est ZenRay, avec le compte @zenrayst.</li>
+<li>Polices : InterVariable, Vogun, AnthropicSerif et AnthropicMono proviennent de l'installation locale. Vérifier leur licence avant toute diffusion des fichiers de police.</li>
+<li>Structure : une timeline racine unique. Le lint signale 26 avertissements nested_structure_needs_subcomposition, assumés (voir la note de décision dans le feedback du projet).</li>
+<li>Mesure : l'énergie de mouvement est un indicateur de rythme, pas un jugement artistique. La lisibilité OCR est un plancher : elle ne mesure ni le goût ni le contraste perçu.</li>
+<li>Étapes suivantes possibles : remplacer les visuels par tes propres éléments (produit, textes, musique) en gardant ce storyboard, ou adoucir le plan 22 (aplats de couleur) si tu le demandes.</li>
+</ul>
+</main>
+</body>
+</html>
+"""
+
 
 CSS = """
 @font-face { font-family: 'InterVariable'; src: url('../composition/assets/fonts/InterVariable.ttf') format('truetype'); font-weight: 100 900; }
@@ -51,267 +550,158 @@ CSS = """
 @font-face { font-family: 'AnthropicMono'; src: url('../composition/assets/fonts/AnthropicMono-Regular.ttf') format('truetype'); font-weight: 400; }
 :root { --paper: #ffffff; --ink: #161616; --soft: #6b6b6b; --line: #e6e4e1; --accent: #cc7c5e; }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'InterVariable', system-ui, sans-serif; font-weight: 400; line-height: 1.45; }
-main { max-width: 1280px; margin: 0 auto; padding: 48px 32px 96px; }
-h1 { font-size: 40px; letter-spacing: -0.01em; margin: 0 0 8px; }
-h2 { font-size: 24px; margin: 56px 0 12px; border-top: 1px solid var(--line); padding-top: 24px; }
-p, li { font-size: 16px; }
-.lede { color: var(--soft); max-width: 880px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'InterVariable', system-ui, sans-serif; font-weight: 400; line-height: 1.5; }
+main { max-width: 1280px; margin: 0 auto; padding: 48px 32px 120px; }
+h1 { font-size: 36px; letter-spacing: -0.01em; margin: 8px 0 12px; }
+h2 { font-size: 26px; margin: 64px 0 14px; border-top: 1px solid var(--line); padding-top: 28px; }
+h3 { font-size: 18px; margin: 28px 0 10px; }
+p, li { font-size: 15px; }
+.lede { color: var(--soft); max-width: 900px; }
+.notice { background: #fbf6f3; border-left: 3px solid var(--accent); padding: 14px 18px; margin: 18px 0; font-size: 15px; max-width: 980px; }
 .num { font-family: 'AnthropicSerif', Georgia, serif; font-weight: 400; font-variant-numeric: tabular-nums; }
-code, .mono { font-family: 'AnthropicMono', ui-monospace, monospace; font-size: 13px; }
+.mono, code { font-family: 'AnthropicMono', ui-monospace, monospace; font-size: 13px; }
 table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0 24px; }
-th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.mini { width: auto; min-width: 360px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { font-weight: 400; color: var(--soft); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
-.swatches { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0 24px; }
-.sw { width: 132px; }
-.sw span { display: block; height: 64px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--line); }
-.sw code { display: block; margin-top: 6px; color: var(--soft); }
 .pass { color: #2f7a4f; } .fail { color: #a23b2a; }
-.thumbs img { width: 180px; height: auto; border-radius: 8px; box-shadow: 0 0 0 1px var(--line); display: block; }
-.thumbs { display: flex; gap: 8px; }
-.tag { display: inline-block; padding: 2px 8px; border-radius: 99px; background: #f3ece8; color: #7a3d26; font-size: 12px; }
-.warn { background: #fbf6f3; border-left: 3px solid var(--accent); padding: 12px 16px; margin: 16px 0; }
+.chip { display: inline-block; width: 42px; height: 18px; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--line); }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { display: inline-flex; flex-direction: column; width: 120px; }
+.sw i { display: block; height: 52px; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--line); }
+.figure { margin: 16px 0 28px; border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.figure img { max-width: 100%; height: auto; display: block; }
+.scroll { overflow-x: auto; max-width: 100%; width: 100%; }
+p, li, td, th, figcaption { overflow-wrap: anywhere; }
+figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px; }
+.two { display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start; }
 .wide { overflow-x: auto; }
-figure { margin: 12px 0 24px; }
-figure img { max-width: 100%; border-radius: 8px; box-shadow: 0 0 0 1px var(--line); }
-figcaption { color: var(--soft); font-size: 13px; margin-top: 6px; }
+.shot { border-top: 1px solid var(--line); padding: 28px 0 12px; margin-top: 28px; }
+.shot header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px; }
+.shot h3 { margin: 0; font-size: 20px; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 28px; margin-top: 16px; }
+.grid2 figure { margin: 0; }
+.grid2 img { width: 100%; border-radius: 8px; box-shadow: 0 0 0 1px var(--line); display: block; }
+.grid2 figcaption { color: var(--soft); font-size: 12px; margin-top: 6px; }
+.kf li { font-size: 14px; margin-bottom: 3px; }
+.cue { background: #f7f6f4; padding: 10px 14px; border-radius: 8px; }
+@media (max-width: 900px) { .grid2, .two { grid-template-columns: minmax(0, 1fr); } .grid2 > *, .two > * { min-width: 0; } }
 """
 
 
-def fr(value, digits=2):
-    # French decimal comma for every number shown to Matthieu.
-    return f"{value:.{digits}f}".replace(".", ",")
-
-
-def esc(text):
-    return html.escape(str(text), quote=True)
-
-
-def time_range(start, end):
-    return f"<span class=\"num\">{fr(start, 2)}&nbsp;à&nbsp;{fr(end, 2)}</span>"
-
-
-def reference_thumbnails(frames_dir, last_index, shots, out_dir):
-    # Reference thumbnails, kept in scratch: they are third-party frames, used for private comparison only.
-    out_dir.mkdir(parents=True, exist_ok=True)
-    paths = {}
-    for shot in shots:
-        mid = (shot["start"] + shot["end"]) / 2
-        index = min(max(round(mid * 10), 0), last_index)
-        image = Image.open(frames_dir / f"f{index:04d}.jpg").convert("RGB").resize((480, 270), Image.Resampling.LANCZOS)
-        target = out_dir / f"{shot['id']}.jpg"
-        image.save(target, quality=85)
-        paths[shot["id"]] = target
-    return paths
-
-
-def swatch(hex_value, label=None):
-    label_html = f'<div class="mono">{esc(label)}</div>' if label else ""
-    return f'<div class="sw"><span style="background:{esc(hex_value)}"></span><code>{esc(hex_value)}</code>{label_html}</div>'
-
-
-def top_colours(entries, limit):
-    weight = {}
-    for entry in entries:
-        for colour in entry["colours"]:
-            weight[colour["hex"]] = weight.get(colour["hex"], 0.0) + entry["duration"] * colour["share"]
-    return [hex_value for hex_value, _ in sorted(weight.items(), key=lambda kv: kv[1], reverse=True)[:limit]]
-
-
 def main():
-    parser = argparse.ArgumentParser(description="Build the storyboard HTML.")
+    parser = argparse.ArgumentParser(description="Build the detailed study storyboard.")
     parser.add_argument("--params", type=Path, required=True)
+    parser.add_argument("--template", type=Path, required=True)
     parser.add_argument("--analysis", type=Path, required=True)
-    parser.add_argument("--ref-frames", type=Path, required=True)
-    parser.add_argument("--ref-thumbs", type=Path, required=True)
-    parser.add_argument("--ours-dir", type=Path, required=True)
     parser.add_argument("--render", type=Path, required=True)
+    parser.add_argument("--verify-work", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
-    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--ours-dir", type=Path, required=True)
+    parser.add_argument("--out-dir", type=Path, required=True)
     args = parser.parse_args()
 
     timeline = json.loads((args.params / "timeline.json").read_text(encoding="utf-8"))
     tokens = json.loads((args.params / "tokens.json").read_text(encoding="utf-8"))
     ambient = json.loads((args.params / "ambient.json").read_text(encoding="utf-8"))
+    choreography = json.loads((args.params / "choreography.json").read_text(encoding="utf-8"))
+    notes = json.loads((args.params / "storyboard-notes.json").read_text(encoding="utf-8"))
     dna = json.loads((args.analysis / "dna-reference.json").read_text(encoding="utf-8"))
     report = json.loads(args.report.read_text(encoding="utf-8"))
+    template_text = args.template.read_text(encoding="utf-8")
+    motion = tokens["motion"]
+    layout = tokens["layout"]
 
-    _, our_motion = curves(args.render, 60)
-    ours_motion = {}
-    for shot in timeline["shots"]:
-        first, last = int(shot["start"] * 60), max(int(shot["end"] * 60), int(shot["start"] * 60) + 1)
-        window = our_motion[first:last]
-        ours_motion[shot["id"]] = sum(window) / len(window) if window else 0.0
+    _, ours_motion = curves(args.render, FPS)
+    scores = boundary_scores(args.verify_work / "scdet.log")
+    spans = ocr_spans(args.verify_work / "frames10", 10)
+    ocr = {row["id"]: row for row in caption_checks(timeline, spans)}
 
-    frames = sorted(args.ref_frames.glob("f*.jpg"))
-    thumbs = reference_thumbnails(args.ref_frames, len(frames) - 1, timeline["shots"], args.ref_thumbs)
-
-    colours = tokens["color"]
-    ref_neutral = top_colours([{"duration": s["duration"], "colours": s["palette"]} for s in dna["shots"]], 6)
-    ref_accents = top_colours([{"duration": s["duration"], "colours": s["accents"]} for s in dna["shots"]], 8)
-
-    rows_shots = []
-    for shot, reference in zip(timeline["shots"], dna["shots"]):
+    shots = []
+    for index, shot in enumerate(timeline["shots"]):
+        reference = dna["shots"][index]
+        f0, f1 = frames_of(shot["start"]), frames_of(shot["end"])
+        window = ours_motion[f0:f1]
+        ours_mean = sum(window) / len(window) if window else 0.0
+        ref_mean = reference["motion_mean"]
+        near = [s for t, s in scores if abs(t - shot["start"]) <= 0.10] if shot["start"] > 0 else []
+        detected = max(near) if near else None
+        note = notes[shot["id"]]
+        keyframes = [keyframe_line(when, duration, text) for when, duration, text in describe_records(choreography.get(shot["id"], []), shot["start"], tokens)]
+        drift_entry = ambient.get(shot["id"])
+        drift = ambient_text(drift_entry, shot["start"], shot["end"]) if drift_entry else None
         boundary = reference.get("boundary_score")
-        if boundary is None:
-            kind = "début"
+        if shot["start"] == 0:
+            cut_ref = "Début de la vidéo."
+        elif boundary is None:
+            cut_ref = "Coupe sans score mesurable."
         elif boundary >= 15:
-            kind = f"franche ({fr(boundary, 1)})"
+            cut_ref = f"Coupe franche sur la référence (score {fr(boundary, 1)}, image {frames_of(shot['start'])})."
         else:
-            kind = f"douce ({fr(boundary, 1)})"
-        drift = ambient.get(shot["id"])
-        drift_text = f"dérive {esc(drift['property'])} ±{fr(drift['amplitude'], 0)}" if drift else "aucune dérive"
-        rows_shots.append(
-            f"<tr><td class=\"mono\">{shot['id']}</td><td>{esc(shot['name'])}</td>"
-            f"<td>{time_range(shot['start'], shot['end'])}</td>"
-            f"<td class=\"num\">{fr(shot['end'] - shot['start'], 2)}</td>"
-            f"<td>{esc(kind)}</td>"
-            f"<td class=\"num\">{reference['motion_mean']:.4f}</td>"
-            f"<td class=\"num\">{ours_motion[shot['id']]:.4f}</td>"
-            f"<td>{esc(shot['technique'])}<br><span class=\"mono\">{esc(drift_text)}</span></td>"
-            f"<td class=\"thumbs\"><img src=\"{esc(thumbs[shot['id']].as_uri())}\" alt=\"référence {shot['id']}\">"
-            f"<img src=\"ours/{shot['id']}.png\" alt=\"rendu {shot['id']}\"></td></tr>"
-        )
+            cut_ref = f"Coupe douce sur la référence (score {fr(boundary, 1)}, image {frames_of(shot['start'])})."
+        cue = f"Coupe à {fr(shot['start'], 2)} s (image {f0}). " + ("Accent recommandé : coupe franche." if boundary is not None and boundary >= 15 else "Pas d'accent imposé.")
+        plan_captions = []
+        for caption in timeline["captions"]:
+            if shot["start"] <= caption["start"] < shot["end"]:
+                plan_captions.append({
+                    "text": caption["text"], "window": f"{fr(caption['start'], 2)} à {fr(caption['end'], 2)} s, {reveal_text(caption, motion)}",
+                })
+        shots.append({
+            "id": shot["id"], "name": shot["name"], "start": shot["start"], "end": shot["end"],
+            "f0": f0, "f1": f1, "frames": f1 - f0, "technique": note["technique_fr"], "camera": CAMERA_FR.get(shot["camera"], shot["camera"]),
+            "ref_frame": note["reference_frame"], "ref_motion": note["reference_motion"],
+            "study_frame": note["study_frame"], "framing": note["framing"],
+            "keyframes": keyframes, "drift": drift, "captions": plan_captions, "cut_ref": cut_ref,
+            "cue": cue, "ref_motion_mean": ref_mean, "ours_motion_mean": ours_mean,
+            "ratio": (ours_mean / ref_mean) if ref_mean else None, "detected": detected,
+        })
 
-    rows_captions = []
+    caption_rows = []
     for caption in timeline["captions"]:
-        rows_captions.append(
-            f"<tr><td class=\"mono\">{caption['id']}</td><td>{time_range(caption['start'], caption['end'])}</td>"
-            f"<td>{esc(caption['text'])}</td><td class=\"mono\">{esc(caption['placement'])}</td>"
-            f"<td class=\"mono\">{esc(caption['size'])}</td><td class=\"mono\">{esc(caption['fill'])}</td>"
-            f"<td class=\"mono\">{esc(caption['reveal'])}</td></tr>"
-        )
+        x, y = caption_position(caption, layout)
+        row = ocr.get(caption["id"], {})
+        fill_token = caption["fill"]
+        caption_rows.append({
+            "id": caption["id"], "text": caption["text"], "start": caption["start"], "end": caption["end"],
+            "f0": frames_of(caption["start"]), "f1": frames_of(caption["end"]),
+            "placement_text": PLACEMENT_TEXT[caption["placement"]], "x": x, "y": y,
+            "size": caption_size(caption, tokens), "fill_name": fill_token,
+            "fill_hex": tokens["color"][fill_token], "reveal": reveal_text(caption, motion),
+            "recall": row.get("recall"), "timing": row.get("timing_error"),
+        })
 
-    rows_acts = []
-    for number, name, start, end, reference_text, our_text, message in ACTS:
-        rows_acts.append(
-            f"<tr><td class=\"num\">{number}</td><td>{esc(name)}</td><td>{time_range(start, end)}</td>"
-            f"<td>{esc(reference_text)}</td><td>{esc(our_text)}</td><td>{esc(message)}</td></tr>"
-        )
+    checks = checks_for(timeline, tokens, choreography, notes, template_text, report)
+    visual_path = args.params / "visual-checks.json"
+    visual = json.loads(visual_path.read_text(encoding="utf-8")) if visual_path.exists() else {"render": None, "checked": {}}
+    if visual.get("render") != args.render.name:
+        visual = {"render": args.render.name, "checked": {}}  # a visual check made on another render never counts
+    context = {"tokens": tokens, "layout": layout, "motion": motion, "shots": shots,
+               "captions": caption_rows, "checks": checks, "report": report, "visual": visual}
+    args.out_dir.mkdir(parents=True, exist_ok=True)
+    (args.out_dir / "storyboard.html").write_text(wrap_tables(build_html(context)), encoding="utf-8")
 
-    contract = report["contract"]
-    checks = report["checks"]
-
-    def badge(passed):
-        return "<span class=\"pass\">réussi</span>" if passed else "<span class=\"fail\">échoué</span>"
-
-    rows_checks = [
-        ("Durée et format", f"durée {fr(checks['duration']['value'], 3)} s, {checks['duration']['size'][0]}×{checks['duration']['size'][1]}, {fr(checks['duration']['fps'], 0)} images/s",
-         f"durée de référence 68,053 s, tolérance {fr(contract['duration_tolerance_s'], 2)} s", checks["duration"]["pass"]),
-        ("Mouvement image à image", f"corrélation {fr(checks['motion']['frame_correlation'], 3)}", f"au moins {fr(contract['motion_correlation_min'], 2)}", checks["motion"]["frame_correlation"] >= contract["motion_correlation_min"]),
-        ("Mouvement par plan", f"corrélation de rang {fr(checks['motion']['shot_rank_correlation'], 3)}", f"au moins {fr(contract['shot_motion_rank_min'], 2)}", checks["motion"]["shot_rank_correlation"] >= contract["shot_motion_rank_min"]),
-        ("Coupes franches", f"{checks['cuts']['matched']} sur {checks['cuts']['reference_hard_cuts']} retrouvées ({fr(checks['cuts']['rate'] * 100, 0)} %)", f"au moins {fr(contract['hard_cut_match_min'] * 100, 0)} %", checks["cuts"]["rate"] >= contract["hard_cut_match_min"]),
-        ("Lisibilité des légendes (OCR)", f"{checks['captions']['readable']} sur {checks['captions']['captions']} lisibles ({fr(checks['captions']['readable_rate'] * 100, 0)} %)", f"au moins {fr(contract['caption_recall_min'] * 100, 0)} %", checks["captions"]["readable_rate"] >= contract["caption_recall_min"]),
-        ("Timing des légendes", f"écart médian {fr(checks['captions']['timing_median_s'], 2)} s", f"au plus {fr(contract['caption_timing_median_s'], 2)} s", (checks["captions"]["timing_median_s"] or 99) <= contract["caption_timing_median_s"]),
-        ("Couleurs par plan (ΔE CIE76)", f"médiane {fr(checks['palette']['median_delta_e'], 1)}", f"au plus {fr(contract['palette_delta_e_median_max'], 0)}", checks["palette"]["pass"]),
-        ("Taille d'encre des légendes", f"rapport {fr(checks['typography']['ratio'], 3)} ({fr(checks['typography']['render_median_ink_px'], 1)} px contre {fr(checks['typography']['reference_median_ink_px'], 1)} px)", f"entre {fr(contract['ink_ratio_min'], 2)} et {fr(contract['ink_ratio_max'], 2)}", checks["typography"]["pass"]),
-    ]
-    rows_check_html = "".join(
-        f"<tr><td>{esc(name)}</td><td>{esc(value)}</td><td>{esc(limit)}</td><td>{badge(passed)}</td></tr>"
-        for name, value, limit, passed in rows_checks
-    )
-
-    neutral_html = "".join(swatch(c) for c in ref_neutral)
-    accent_html = "".join(swatch(c) for c in ref_accents)
-    ours_html = "".join(swatch(colours[key], label) for key, label in [
-        ("bg", "fond"), ("fg", "texte"), ("fg2", "secondaire"), ("fg3", "note"),
-        ("accent", "accent (argile ZenRay)"), ("accentDeep", "bronze profond"), ("signal", "bleu signal"), ("steel", "acier"),
-    ])
-
-    page = f"""<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Generated by Scripts/BuildStoryboard.py on 10 October 2026. Edit the parameters, then regenerate. -->
-<title>Storyboard, motion design 01</title>
-<style>{CSS}</style>
-</head>
-<body>
-<main>
-<h1>Storyboard : motion design 01, à partir de la référence OneKey Pro 2</h1>
-<p class="lede">Ce document fixe la référence mesurée, puis la version produite plan par plan. Le rendu suit le même déroulé, les mêmes coupes et le même rythme, avec un contenu adapté à la cible motion design. Aucune image ni musique n'est générée : le code, les polices et les mesures suffisent.</p>
-<p class="mono">Projet zenray-motion-design-01 · 10 October 2026</p>
-
-<h2>1. Ce que la référence fait (mesuré)</h2>
-<table>
-<tr><th>Mesure</th><th>Valeur</th><th>Comment elle est obtenue</th></tr>
-<tr><td>Durée et cadence</td><td class="num">68,05 s, 1920 × 1080, 60 images/s, H.264</td><td>ffprobe sur le MP4 de référence</td></tr>
-<tr><td>Piste audio</td><td>AAC 48 kHz stéréo, non reproduite</td><td>pas de musique générée à ce stade</td></tr>
-<tr><td>Coupes détectées</td><td class="num">39 au total, 13 franches (score ≥ 15)</td><td>scdet de ffmpeg, seuil 6</td></tr>
-<tr><td>Plans</td><td class="num">27 plans, du 0 au 68,00 s</td><td>coupes regroupées, micro-coupes du 50 s fusionnées</td></tr>
-<tr><td>Légendes</td><td class="num">30 segments lus à l'OCR</td><td>tesseract sur une image sur dix, puis fusion des lignes</td></tr>
-<tr><td>Mouvement</td><td class="num">pic 0,35 ; plan le plus vif : 50 à 52 s</td><td>différence moyenne entre images, 60 images/s</td></tr>
-<tr><td>Taille d'encre</td><td class="num">88,5 px à 1080p pour les titres de légende</td><td>boîte d'encre mesurée sur les images noires</td></tr>
-</table>
-<figure>
-<img src="reference-motion.png" alt="Courbes de mouvement et de luminance de la référence, traits = coupes">
-<figcaption>Courbes de la référence : orange, mouvement ; bleu, luminance ; traits rouges, coupes détectées. Donnée dérivée, pas une image de la référence.</figcaption>
-</figure>
-
-<h2>2. ADN graphique</h2>
-<p>Couleurs mesurées sur la référence, et couleurs de la version produite (jetons de <span class="mono">params/tokens.json</span>).</p>
-<h3>Référence, neutres</h3>
-<div class="swatches">{neutral_html}</div>
-<h3>Référence, accents</h3>
-<div class="swatches">{accent_html}</div>
-<h3>Version produite</h3>
-<div class="swatches">{ours_html}</div>
-<table>
-<tr><th>Élément</th><th>Référence (mesuré)</th><th>Version produite</th></tr>
-<tr><td>Typographie</td><td>grotesque sans, graisse régulière, centrée, interlignage serré</td><td>InterVariable 400 pour les légendes, Vogun pour le titre hero, AnthropicSerif pour les nombres, AnthropicMono pour les étiquettes</td></tr>
-<tr><td>Légende principale</td><td class="num">88,5 px d'encre à 1080p, centre vertical 0,506</td><td class="num">92 px, centre vertical 0,506, encre mesurée 85,5 px</td></tr>
-<tr><td>Note de bas de page</td><td class="num">environ 28 à 35 px d'encre, vers 0,92 de la hauteur</td><td class="num">30 px, vers 0,92 de la hauteur</td></tr>
-<tr><td>Titre de légende</td><td class="num">73,5 px d'encre, en haut</td><td class="num">64 px, en haut</td></tr>
-<tr><td>Fond</td><td>noir pur, aucune texture de fond</td><td>noir pur, lumière portée par les dégradés</td></tr>
-<tr><td>Mouvement</td><td>caméra vivante, coupes franches, flashs sur le temps</td><td>entrées par translation et échelle, dérive continue, coupes franches, flashs réglés</td></tr>
-</table>
-
-<h2>3. Narratif en sept actes</h2>
-<table>
-<tr><th>Acte</th><th>Nom</th><th>Plage</th><th>Référence (description)</th><th>Version produite</th><th>Message pour la cible</th></tr>
-{''.join(rows_acts)}
-</table>
-
-<h2>4. Les 27 plans</h2>
-<p>Coupe de référence : franche si le score de changement dépasse 15. Mouvement : différence moyenne entre images, référence contre rendu. Les vignettes de référence restent dans le scratchpad de session et ne sont ni publiées ni archivées.</p>
-<div class="wide">
-<table>
-<tr><th>Plan</th><th>Nom</th><th>Plage</th><th>Durée</th><th>Coupe (référence)</th><th>Mouvement réf.</th><th>Mouvement rendu</th><th>Technique</th><th>Référence et rendu</th></tr>
-{''.join(rows_shots)}
-</table>
-</div>
-
-<h2>5. Les 30 légendes</h2>
-<p>Textes de la version produite. Placement, taille et remplissage viennent des jetons ; les textes et les temps viennent de <span class="mono">params/timeline.json</span>.</p>
-<table>
-<tr><th>Id</th><th>Plage</th><th>Texte</th><th>Placement</th><th>Taille</th><th>Remplissage</th><th>Apparition</th></tr>
-{''.join(rows_captions)}
-</table>
-
-<h2>6. Contrat de vérification et résultat</h2>
-<p>Le contrat est écrit en tête de <span class="mono">Scripts/Verify.py</span>. Il mesure la structure et le rythme, pas l'identité des pixels ni des textes. Rapport : <span class="mono">verify/report-v3.json</span>.</p>
-<table>
-<tr><th>Contrôle</th><th>Mesure</th><th>Limite</th><th>Résultat</th></tr>
-{rows_check_html}
-</table>
-
-<h2>7. Limites et droits</h2>
-<div class="warn">Les cadres de la référence servent à la comparaison privée. Ils ne sont ni publiés, ni archivés dans l'atelier, ni repris dans le rendu.</div>
-<ul>
-<li>Pas de musique ni de voix : la piste sonore n'est pas reproduite à ce stade.</li>
-<li>Pas d'image générée : les objets sont dessinés en CSS et en SVG.</li>
-<li>La structure en une seule timeline racine produit 26 avertissements « nested_structure_needs_subcomposition » du lint. Essai de sous-compositions : la timeline d'un plan n'a pas été placée au temps local attendu, donc abandonné pour cette version.</li>
-<li>L'OCR lit mal le texte en fumée et les légendes sur fond chargé : la lisibilité mesurée est un plancher, pas un jugement de goût.</li>
-<li>Polices : InterVariable, Vogun, AnthropicSerif et AnthropicMono proviennent de l'installation locale. Vérifier leur licence avant toute distribution des polices elles-mêmes ; le rendu MP4 ne redistribue pas le fichier de police.</li>
-</ul>
-</main>
-</body>
-</html>
-"""
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(page, encoding="utf-8")
-    print(f"storyboard written: {args.out} ({args.out.stat().st_size} bytes)")
+    with (args.out_dir / "shot-list.csv").open("w", newline="", encoding="utf-8-sig") as handle:
+        writer = csv.writer(handle, delimiter=";")
+        writer.writerow(["plan", "nom", "début_s", "fin_s", "début_image", "fin_image", "durée_images", "coupe_référence",
+                         "énergie_référence", "énergie_étude", "rapport", "coupe_détectée_rendu", "dérive"])
+        for row in shots:
+            writer.writerow([row["id"], row["name"], fr(row["start"], 2), fr(row["end"], 2), row["f0"], row["f1"], row["frames"],
+                             row["cut_ref"], f"{row['ref_motion_mean']:.4f}".replace(".", ","), f"{row['ours_motion_mean']:.4f}".replace(".", ","),
+                             "" if row["ratio"] is None else fr(row["ratio"], 2),
+                             "" if row["detected"] is None else fr(row["detected"], 1), row["drift"] or ""])
+    with (args.out_dir / "caption-list.csv").open("w", newline="", encoding="utf-8-sig") as handle:
+        writer = csv.writer(handle, delimiter=";")
+        writer.writerow(["légende", "début_s", "fin_s", "début_image", "fin_image", "texte", "x_px", "y_px", "taille_px",
+                         "remplissage", "apparition", "lisibilité_ocr", "écart_début_s"])
+        for c in caption_rows:
+            writer.writerow([c["id"], fr(c["start"], 2), fr(c["end"], 2), c["f0"], c["f1"], c["text"], fr(c["x"], 0), fr(c["y"], 0),
+                             fr(c["size"], 0), c["fill_name"] + " " + c["fill_hex"], c["reveal"],
+                             "" if c["recall"] is None else fr(c["recall"], 2),
+                             "" if c["timing"] is None else fr(c["timing"], 2)])
+    (args.out_dir / "checks.json").write_text(json.dumps([{"contrôle": n, "réussi": ok, "détail": d} for n, ok, d in checks],
+                                                         indent=2, ensure_ascii=False), encoding="utf-8")
+    failed = [name for name, ok, _ in checks if not ok]
+    print(f"storyboard: {len(shots)} plans, {len(caption_rows)} légendes, contrôles échoués : {failed or 'aucun'}")
 
 
 if __name__ == "__main__":

@@ -110,7 +110,8 @@
     "smokeSeed": 7,
     "smokeScale": 70,
     "haloBlur": "10px",
-    "smokeBlur": 2
+    "smokeBlur": 2,
+    "captionShadow": "0 2px 22px rgba(0, 0, 0, 0.45)"
   },
   "motion": {
     "easeOut": "power3.out",

@@ -81,30 +81,35 @@
   };
 
   // Each caption gets one reveal preset, then a shared exit that finishes at its end time.
+  // Reveal and exit take a share of the caption's own window, so a short caption keeps a readable hold.
+  // 11 October 2026: before this rule, a 0.6 s caption was still fading in when its exit began.
   const reveal = (tl, caption, line) => {
     const at = caption.start;
     const span = caption.end - caption.start;
+    const fit = (seconds, share) => Math.min(seconds, span * share);
+    const revealLen = fit(motion.revealDur, 0.3);
+    const exitLen = fit(motion.exitDur, 0.15);
     switch (caption.reveal) {
       case 'rise':
-        tl.fromTo(line, { y: motion.riseDistance, opacity: 0 }, { y: 0, opacity: 1, duration: motion.revealDur, ease: motion.easeOut }, at);
+        tl.fromTo(line, { y: motion.riseDistance, opacity: 0 }, { y: 0, opacity: 1, duration: revealLen, ease: motion.easeOut }, at);
         break;
       case 'fade':
-        tl.fromTo(line, { opacity: 0 }, { opacity: 1, duration: motion.fadeDur, ease: motion.easeInOut }, at);
+        tl.fromTo(line, { opacity: 0 }, { opacity: 1, duration: fit(motion.fadeDur, 0.3), ease: motion.easeInOut }, at);
         break;
       case 'blur':
-        tl.fromTo(line, { opacity: 0, filter: `blur(${motion.blurAmount})` }, { opacity: 1, filter: 'blur(0px)', duration: motion.revealDur, ease: motion.easeOut }, at);
+        tl.fromTo(line, { opacity: 0, filter: `blur(${motion.blurAmount})` }, { opacity: 1, filter: 'blur(0px)', duration: revealLen, ease: motion.easeOut }, at);
         break;
       case 'wipe':
-        tl.fromTo(line, { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: motion.revealDur, ease: motion.easeInOut }, at);
+        tl.fromTo(line, { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: revealLen, ease: motion.easeInOut }, at);
         break;
       case 'sweep':
-        sweep(tl, line, at, motion.sweepDur);
+        sweep(tl, line, at, fit(motion.sweepDur, 0.4));
         break;
       case 'split-left':
-        tl.fromTo(line, { x: -motion.splitOffset, opacity: 0 }, { x: 0, opacity: 1, duration: motion.revealDur, ease: motion.easeOut }, at);
+        tl.fromTo(line, { x: -motion.splitOffset, opacity: 0 }, { x: 0, opacity: 1, duration: revealLen, ease: motion.easeOut }, at);
         break;
       case 'split-right':
-        tl.fromTo(line, { x: motion.splitOffset, opacity: 0 }, { x: 0, opacity: 1, duration: motion.revealDur, ease: motion.easeOut }, at);
+        tl.fromTo(line, { x: motion.splitOffset, opacity: 0 }, { x: 0, opacity: 1, duration: revealLen, ease: motion.easeOut }, at);
         break;
       case 'typewriter':
         typewriter(tl, line, at, span * motion.typeFraction);
@@ -112,7 +117,7 @@
       default:
         throw new Error(`Unknown reveal ${caption.reveal} on ${caption.id}`);
     }
-    tl.to(line, { opacity: 0, duration: motion.exitDur, ease: motion.easeInOut }, caption.end - motion.exitDur);
+    tl.to(line, { opacity: 0, duration: exitLen, ease: motion.easeInOut }, caption.end - exitLen);
   };
 
   // One choreography record, placed at base + at. Ops are prefixed with "$".

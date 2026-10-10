@@ -1,4 +1,4 @@
-/* Cooked by Scripts/Cook.mjs at 2026-10-10T21:44:47.666Z. Edit params/tokens.json. */
+/* Cooked by Scripts/Cook.mjs at 2026-10-10T22:11:12.295Z. Edit params/tokens.json. */
 :root {
   --zr-color-bg: #000000;
   --zr-color-fg: #ffffff;
@@ -95,4 +95,5 @@
   --zr-effects-smoke-scale: 70;
   --zr-effects-halo-blur: 10px;
   --zr-effects-smoke-blur: 2;
+  --zr-effects-caption-shadow: 0 2px 22px rgba(0, 0, 0, 0.45);
 }

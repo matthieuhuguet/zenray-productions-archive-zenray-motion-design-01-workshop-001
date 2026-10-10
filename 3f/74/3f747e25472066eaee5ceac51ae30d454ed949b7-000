@@ -1,4 +1,4 @@
-/* Cooked by Scripts/Cook.mjs at 2026-10-10T21:44:47.666Z. Edit template/index.html. */
+/* Cooked by Scripts/Cook.mjs at 2026-10-10T22:11:12.295Z. Edit template/index.html. */
 @font-face { font-family: 'InterVariable'; src: url('assets/fonts/InterVariable.ttf') format('truetype'); font-weight: 100 900; font-style: normal; }
       @font-face { font-family: 'Vogun'; src: url('assets/fonts/Vogun-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; }
       @font-face { font-family: 'AnthropicSerif'; src: url('assets/fonts/AnthropicSerif-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
@@ -14,7 +14,8 @@
       .svg-full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
 
       /* Captions: one full-frame clip per caption; the line sits at --cx and --cy (fractions of the frame). */
-      .caption-line { position: absolute; inset: auto; max-width: var(--zr-layout-caption-max-width); left: calc(var(--cx) * 100%); top: calc(var(--cy) * 100%); white-space: nowrap; font-weight: 400; letter-spacing: var(--zr-type-tracking); line-height: 1; }
+      .caption-line { position: absolute; inset: auto; max-width: var(--zr-layout-caption-max-width); left: calc(var(--cx) * 100%); top: calc(var(--cy) * 100%); white-space: nowrap; font-weight: 400; letter-spacing: var(--zr-type-tracking); line-height: 1;   text-shadow: var(--zr-effects-caption-shadow);
+}
       .size-title-big { font-size: var(--zr-type-size-title); }
       .size-statement { font-size: var(--zr-type-size-statement); }
       .size-sub { font-size: var(--zr-type-size-sub); }

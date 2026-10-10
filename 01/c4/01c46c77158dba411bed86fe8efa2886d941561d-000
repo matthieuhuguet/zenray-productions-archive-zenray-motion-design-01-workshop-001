@@ -1,4 +1,4 @@
-// Cooked by Scripts/Cook.mjs at 2026-10-10T21:44:47.666Z. Edit params/*.json.
+// Cooked by Scripts/Cook.mjs at 2026-10-10T22:11:12.295Z. Edit params/*.json.
 window.ZR_TOKENS = {
   "meta": {
     "id": "zenray-motion-design-01",
@@ -111,7 +111,8 @@ window.ZR_TOKENS = {
     "smokeSeed": 7,
     "smokeScale": 70,
     "haloBlur": "10px",
-    "smokeBlur": 2
+    "smokeBlur": 2,
+    "captionShadow": "0 2px 22px rgba(0, 0, 0, 0.45)"
   },
   "motion": {
     "easeOut": "power3.out",
@@ -358,7 +359,7 @@ window.ZR_TIMELINE = {
   "captions": [
     {
       "id": "C00",
-      "text": "Motion, in code.",
+      "text": "Ready.",
       "start": 4.3,
       "end": 4.9,
       "placement": "title-big",
@@ -368,7 +369,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C01",
-      "text": "Every frame is code.",
+      "text": "Small. Quiet. Sure.",
       "start": 4.9,
       "end": 6.3,
       "placement": "centre",
@@ -378,7 +379,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C02",
-      "text": "Lit from every edge.",
+      "text": "Light at every edge.",
       "start": 7.5,
       "end": 8.7,
       "placement": "bottom",
@@ -388,7 +389,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C03",
-      "text": "Specular, animated.",
+      "text": "Glass that glows.",
       "start": 10.2,
       "end": 11.65,
       "placement": "centre-left",
@@ -398,7 +399,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C04",
-      "text": "Edge-lit glass.",
+      "text": "Confirm.",
       "start": 14.1,
       "end": 14.6,
       "placement": "centre",
@@ -408,7 +409,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C05",
-      "text": "Frames measured, not guessed.",
+      "text": "Every step, checked.",
       "start": 13.2,
       "end": 13.9,
       "placement": "footnote",
@@ -418,7 +419,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C06",
-      "text": "Layers in motion.",
+      "text": "Layers, in place.",
       "start": 16.1,
       "end": 17.1,
       "placement": "bottom",
@@ -428,7 +429,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C07",
-      "text": "Four timelines, one clock.",
+      "text": "One tap. One beat.",
       "start": 17.5,
       "end": 18.1,
       "placement": "bottom",
@@ -438,7 +439,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C08",
-      "text": "60 fps, frame accurate.",
+      "text": "Sealed, offline, always ready.",
       "start": 17.5,
       "end": 19.4,
       "placement": "footnote",
@@ -448,7 +449,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C09",
-      "text": "Scrub",
+      "text": "Tap",
       "start": 20.3,
       "end": 22.6,
       "placement": "split-left",
@@ -458,7 +459,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C10",
-      "text": "to any frame.",
+      "text": "to unlock.",
       "start": 20.3,
       "end": 22.6,
       "placement": "split-right",
@@ -468,7 +469,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C11",
-      "text": "Preview before you render.",
+      "text": "Hold steady while it reads.",
       "start": 23.2,
       "end": 25.3,
       "placement": "bottom",
@@ -478,7 +479,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C12",
-      "text": "See exactly what you render.",
+      "text": "Scan the code to begin.",
       "start": 25.4,
       "end": 27.1,
       "placement": "centre",
@@ -488,7 +489,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C13",
-      "text": "Lost in the timeline?",
+      "text": "Something missing?",
       "start": 27.2,
       "end": 28.4,
       "placement": "centre",
@@ -498,7 +499,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C14",
-      "text": "No worries. Lint it.",
+      "text": "No hurry. Try again.",
       "start": 28.4,
       "end": 29.5,
       "placement": "centre",
@@ -508,7 +509,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C15",
-      "text": "Runs in headless Chrome.",
+      "text": "Works from any angle.",
       "start": 29.6,
       "end": 31.7,
       "placement": "bottom",
@@ -518,7 +519,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C16",
-      "text": "Frames, piped to FFmpeg.",
+      "text": "A signal, sent and checked.",
       "start": 31.9,
       "end": 34,
       "placement": "bottom",
@@ -528,7 +529,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C17",
-      "text": "Plain HTML, versioned.",
+      "text": "Thin, light, sealed.",
       "start": 36.9,
       "end": 39.1,
       "placement": "bottom",
@@ -538,7 +539,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C18",
-      "text": "Works with git.",
+      "text": "Made to travel.",
       "start": 37.6,
       "end": 39.2,
       "placement": "footnote",
@@ -548,7 +549,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C19",
-      "text": "Render offline.",
+      "text": "Ready to go anywhere.",
       "start": 40.7,
       "end": 44,
       "placement": "bottom",
@@ -558,7 +559,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C20",
-      "text": "Deterministic output.",
+      "text": "Quiet, precise, certain.",
       "start": 45.2,
       "end": 48.9,
       "placement": "bottom",
@@ -568,7 +569,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C21",
-      "text": "Live counters.",
+      "text": "Live numbers, live light.",
       "start": 51.9,
       "end": 54.1,
       "placement": "bottom",
@@ -578,7 +579,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C22",
-      "text": "All new",
+      "text": "Refined",
       "start": 54,
       "end": 55.4,
       "placement": "left-small",
@@ -588,7 +589,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C23",
-      "text": "easing 2",
+      "text": "for every hand.",
       "start": 54,
       "end": 55.4,
       "placement": "left-statement",
@@ -598,7 +599,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C24",
-      "text": "Open source, Apache 2.0.",
+      "text": "Designed to disappear.",
       "start": 55.4,
       "end": 56.6,
       "placement": "centre",
@@ -608,7 +609,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C25",
-      "text": "Smoother. Sharper.",
+      "text": "Lighter. Clearer. Calmer.",
       "start": 56.6,
       "end": 58,
       "placement": "centre",
@@ -618,7 +619,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C26",
-      "text": "Motion design, in code",
+      "text": "Next step.",
       "start": 58,
       "end": 59.53,
       "placement": "title",
@@ -628,7 +629,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C27",
-      "text": "Motion design, in code",
+      "text": "Your turn.",
       "start": 60.8,
       "end": 62,
       "placement": "title",

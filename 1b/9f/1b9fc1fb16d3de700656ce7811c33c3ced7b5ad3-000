@@ -1,0 +1,191 @@
+{
+  "S01": {
+    "reference_frame": "Fond noir. Un petit disque lumineux au centre, aux tons chauds et blancs, bord diffus, à peine visible au début.",
+    "reference_motion": "Le disque grossit et se transforme en une forme haute, à halo bleuté.",
+    "study_frame": "Fond noir. Un orbe chaud centré, halo doux, qui grandit et dérive légèrement.",
+    "framing": "Centre de l'image, diamètre 340 px.",
+    "technique_fr": "Un orbe grandit avec un halo, dérive horizontale continue."
+  },
+  "S02": {
+    "reference_frame": "Une forme verticale à dégradé bleu et blanc, centrée, avec des bords nets en haut. Un petit appareil apparaît au centre.",
+    "reference_motion": "La forme s'élargit et l'appareil s'élève dans le cadre.",
+    "study_frame": "Forme verticale à dégradé bronze vers bleu : le disque se déforme en arche, sans appareil encore visible.",
+    "framing": "Centre, arche de 520 × 820 px après la déformation.",
+    "technique_fr": "Le disque se déforme en arche : rayons et dimensions animés."
+  },
+  "S03": {
+    "reference_frame": "Un appareil compact en plan rapproché, écran sombre avec une marque lumineuse. Une main tient l'appareil sur le côté. Un titre très large se superpose à l'écran.",
+    "reference_motion": "L'appareil se redresse et se referme doucement, le titre apparaît par étapes.",
+    "study_frame": "Appareil sombre à cadre métallique qui se lève et s'incline. Écran de timeline à quatre pistes et une tête de lecture. Titre « Ready. » au-dessus.",
+    "framing": "Centre, appareil de 460 × 980 px.",
+    "technique_fr": "Appareil qui se lève et s'incline en 3D, pistes qui se remplissent, tête de lecture qui avance."
+  },
+  "S04": {
+    "reference_frame": "Fond noir, une ligne de texte blanc de taille moyenne au centre.",
+    "reference_motion": "Un reflet de lumière parcourt le texte de gauche à droite.",
+    "study_frame": "Fond noir, phrase « Small. Quiet. Sure. » au centre avec un balayage de lumière dans les lettres.",
+    "framing": "Centre vertical à 0,506 de la hauteur.",
+    "technique_fr": "Phrase avec balayage de lumière dans les lettres."
+  },
+  "S05": {
+    "reference_frame": "Gros plan d'un bord métallique argenté, lumière rasante en diagonale, fond sombre.",
+    "reference_motion": "La caméra avance vers le bord métallique.",
+    "study_frame": "Barre métallique étirée (1500 × 260 px), reflet blanc qui traverse, la barre avance en poussant.",
+    "framing": "Centre, barre en plan large.",
+    "technique_fr": "Barre métallique qui avance en poussant, reflet qui la traverse."
+  },
+  "S06": {
+    "reference_frame": "Même bord métallique, avec une légende courte en bas du cadre.",
+    "reference_motion": "Le reflet glisse le long du bord, la légende apparaît en fondu.",
+    "study_frame": "Même barre, reflet continu, légende « Light at every edge. » en bas du cadre.",
+    "framing": "Barre au centre, légende au tiers bas (0,83 de la hauteur).",
+    "technique_fr": "Reflet continu sur la barre, légende qui monte en fondu."
+  },
+  "S07": {
+    "reference_frame": "Gros plan d'une découpe de connecteur sur le bord métallique, lumière sur le relief.",
+    "reference_motion": "Léger mouvement de caméra : le connecteur bouge par rapport au bord, plus vite que le fond.",
+    "study_frame": "Connecteur arrondi à trois pastilles posé sur la barre. Deux couches à vitesses différentes, effet de parallaxe.",
+    "framing": "Centre, connecteur de 360 × 160 px.",
+    "technique_fr": "Connecteur et barre à deux vitesses, dérive en rotation."
+  },
+  "S08": {
+    "reference_frame": "Surface cuivrée réfléchissante, légende blanche à gauche du centre.",
+    "reference_motion": "Une bande de reflet traverse l'image, la légende se révèle de gauche à droite.",
+    "study_frame": "Fond bronze en dégradé radial. Une bande d'accent traverse l'image. « Glass that glows. » se révèle par un masque.",
+    "framing": "Légende centrée à 0,39 de la largeur.",
+    "technique_fr": "Bande d'accent qui traverse le fond bronze, légende révélée par un masque."
+  },
+  "S09": {
+    "reference_frame": "Surface ambrée en dégradé, sans texte.",
+    "reference_motion": "Panoramique lent sur la surface.",
+    "study_frame": "Plan en dégradé argile vers bronze (2200 × 900 px), panoramique lent de 240 px vers la gauche.",
+    "framing": "Plan large, bords hors cadre.",
+    "technique_fr": "Panoramique lent sur un plan en dégradé."
+  },
+  "S10": {
+    "reference_frame": "Fond sombre, une courte note en bas du cadre et un mot de grande taille au centre.",
+    "reference_motion": "Des traces lumineuses horizontales traversent le cadre, le mot se révèle en fondu.",
+    "study_frame": "Trois traînées de lumière horizontales. Note « Every step, checked. » en bas, puis « Confirm. » au centre.",
+    "framing": "Traînées à 30 %, 46 % et 62 % de la hauteur.",
+    "technique_fr": "Traînées lumineuses horizontales, notes en fondu."
+  },
+  "S11": {
+    "reference_frame": "Écran d'appareil avec une interface, et un volume 3D de couches translucides dessinées en traits lumineux verts et bleus.",
+    "reference_motion": "Les couches tournent et se déplacent en profondeur, les traits lumineux se tracent.",
+    "study_frame": "Quatre couches translucides en 3D, traces bleues qui se tracent, étiquette « Standby » et légende « Layers, in place. » en bas.",
+    "framing": "Volume centré, 1100 × 640 px.",
+    "technique_fr": "Couches 3D en profondeur, traces lumineuses qui se tracent, dérive en rotation."
+  },
+  "S12": {
+    "reference_frame": "Deux bandes de couleur décalées, trame de glitch.",
+    "reference_motion": "Coupure éclair de deux images, retour au plan suivant.",
+    "study_frame": "Éclair blanc très bref (opacité 0,15) et deux tranches horizontales décalées.",
+    "framing": "Plein cadre, tranches à 380 px et 640 px.",
+    "technique_fr": "Éclair et tranches décalées, deux images seulement."
+  },
+  "S13": {
+    "reference_frame": "Gros plan de puces sur une carte électronique, bords lumineux, petite note en bas du cadre.",
+    "reference_motion": "Les puces s'éclairent en séquence.",
+    "study_frame": "Quatre puces en grille 2 × 2 à reflets bleus, qui s'éclairent en séquence. Note « Sealed, offline, always ready. » en bas.",
+    "framing": "Grille centrée, 760 × 760 px.",
+    "technique_fr": "Grille de puces qui s'éclairent en séquence, dérive en rotation."
+  },
+  "S14": {
+    "reference_frame": "Carte électronique sombre, puce lumineuse au centre, traces qui partent des bords.",
+    "reference_motion": "Déplacement lent ; une légende en deux parties apparaît de part et d'autre du centre.",
+    "study_frame": "Circuit en tons acier, traces qui se remplissent, « Tap » à gauche et « to unlock. » à droite, puce centrale.",
+    "framing": "Légende gauche à 0,22 de la largeur, légende droite à 0,76.",
+    "technique_fr": "Traces qui se remplissent, circuit en glissement lent, légendes qui entrent de part et d'autre."
+  },
+  "S15": {
+    "reference_frame": "Écran d'appareil étroit avec une coche de validation au centre.",
+    "reference_motion": "La coche apparaît, puis une légende prend place en bas.",
+    "study_frame": "Appareil étroit (380 × 810 px) avec une coche qui se trace en couleur d'accent. « Hold steady while it reads. » en bas.",
+    "framing": "Appareil au centre, légende au tiers bas.",
+    "technique_fr": "Appareil qui apparaît en échelle, coche tracée."
+  },
+  "S16": {
+    "reference_frame": "Texte blanc sur fond noir, lignes qui se succèdent.",
+    "reference_motion": "Une phrase se frappe lettre à lettre, puis des lignes apparaissent en flou et se remplacent.",
+    "study_frame": "Frappe de « Scan the code to begin. », puis « Something missing? » et « No hurry. Try again. » en flou.",
+    "framing": "Lignes centrées.",
+    "technique_fr": "Frappe caractère par caractère, puis fondus flous successifs."
+  },
+  "S17": {
+    "reference_frame": "Petit traceur posé sur un tissu bleu-violet, anneau lumineux autour.",
+    "reference_motion": "L'objet bouge un peu sur la surface, une légende apparaît en bas.",
+    "study_frame": "Palet bleu lumineux à reflet, anneaux qui s'élargissent. « Works from any angle. » en bas.",
+    "framing": "Palet centré, 220 px.",
+    "technique_fr": "Palet lumineux avec anneaux qui s'élargissent puis s'éteignent."
+  },
+  "S18": {
+    "reference_frame": "Socle lumineux avec une légende en bas du cadre.",
+    "reference_motion": "Une onde de charge se propage autour du socle.",
+    "study_frame": "Socle (520 × 320 px) avec trois arcs concentriques qui rayonnent. « A signal, sent and checked. » en bas.",
+    "framing": "Socle centré, arcs au-dessus.",
+    "technique_fr": "Socle qui monte, trois arcs qui rayonnent."
+  },
+  "S19": {
+    "reference_frame": "Une carte tenue dans une main, sur fond sombre.",
+    "reference_motion": "La carte se déplace et se retourne.",
+    "study_frame": "Carte bleue (640 × 400 px) qui glisse depuis la gauche en flou, puis se retourne. « Thin, light, sealed. » et note « Made to travel. »",
+    "framing": "Carte centrée.",
+    "technique_fr": "Carte qui glisse depuis la gauche en flou, puis se retourne en 3D, dérive verticale."
+  },
+  "S20": {
+    "reference_frame": "Écran d'appareil avec un menu d'applications, et un code matriciel affiché sur un ordinateur.",
+    "reference_motion": "Les éléments de menu arrivent un à un, le code matriciel se construit.",
+    "study_frame": "Appareil à menu de six entrées à gauche, matrice QR de 25 × 25 modules qui s'assemble à droite. « Ready to go anywhere. » en bas.",
+    "framing": "Appareil à -330 px du centre, matrice à +380 px.",
+    "technique_fr": "Éléments de menu qui entrent en décalage, matrice QR qui s'assemble, dérive verticale du menu."
+  },
+  "S21": {
+    "reference_frame": "Appareil sur fond bleu-violet, anneau lumineux autour.",
+    "reference_motion": "Des ondes concentriques partent de l'appareil.",
+    "study_frame": "Appareil étroit sur dégradé acier vers bleu profond, ondes qui partent du centre. « Quiet, precise, certain. » en bas.",
+    "framing": "Appareil centré, anneaux de 520 px.",
+    "technique_fr": "Appareil en échelle, ondes qui s'élargissent deux fois."
+  },
+  "S22": {
+    "reference_frame": "Une succession d'images très courtes : anneau de données, appareil incliné, lumière bleue.",
+    "reference_motion": "Coupes rapides et flashs au rythme.",
+    "study_frame": "Cinq aplats de couleur (argile, bleu, acier, bronze clair, bronze profond) coupés toutes les 0,25 s, avec flashs.",
+    "framing": "Plein cadre.",
+    "technique_fr": "Cinq aplats coupés toutes les 0,25 s, flashs synchronisés."
+  },
+  "S23": {
+    "reference_frame": "Un anneau de données, deux panneaux, une légende d'interface, une courbe.",
+    "reference_motion": "Compteur, panneaux qui pivotent, courbe qui se trace.",
+    "study_frame": "Anneau-compteur de 0 à 1 240 en chiffres sérif, deux panneaux qui pivotent, badge « VERIFIED », courbe d'aisance. Légendes « Live numbers, live light. », « Refined », « for every hand. », « Designed to disappear. », « Lighter. Clearer. Calmer. »",
+    "framing": "Anneau centré, courbe au tiers bas.",
+    "technique_fr": "Compteur, anneau, panneaux qui pivotent, badge, courbe d'aisance tracée par un point mobile."
+  },
+  "S24": {
+    "reference_frame": "Fond noir, petit titre en haut, grand motif texturé en arrière-plan.",
+    "reference_motion": "Le motif se forme lentement.",
+    "study_frame": "Titre « Next step. » en haut, mot « SURE » en lettres de fumée qui se forment à faible opacité.",
+    "framing": "Titre à 0,149 de la hauteur, mot centré.",
+    "technique_fr": "Titre en fondu, mot en fumée qui apparaît à faible opacité."
+  },
+  "S25": {
+    "reference_frame": "Appareil gris au centre, sol réfléchissant, motif texturé derrière.",
+    "reference_motion": "Léger mouvement de l'appareil.",
+    "study_frame": "Appareil gris (460 × 980 px) sur un sol réfléchissant, mot « SURE » en fumée derrière, légère rotation.",
+    "framing": "Appareil centré.",
+    "technique_fr": "Appareil qui monte sur un sol réfléchissant, mot en fumée, rotation lente."
+  },
+  "S26": {
+    "reference_frame": "Variante chaude du même cadre.",
+    "reference_motion": "Entrée douce du motif.",
+    "study_frame": "Mot « SURE » en dégradé bronze, sol chaud, titre « Next step. » en haut.",
+    "framing": "Mot centré, sol au bas du cadre.",
+    "technique_fr": "Mot en dégradé bronze, sol chaud qui apparaît."
+  },
+  "S27": {
+    "reference_frame": "Fond noir, une marque graphique tracée au centre, puis fond noir.",
+    "reference_motion": "La marque se trace, puis disparaît.",
+    "study_frame": "Marque en anneau et barre tracés, point d'accent au sommet. « ZenRay » sous la marque, puis « @zenrayst ».",
+    "framing": "Marque centrée, 300 px.",
+    "technique_fr": "Anneau et barre tracés, point d'accent qui apparaît, marque et compte en fondu."
+  }
+}
