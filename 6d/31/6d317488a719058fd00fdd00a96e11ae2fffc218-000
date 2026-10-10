@@ -1,0 +1,40 @@
+{
+  "note": "11 October 2026, 00:50 CEST: parameters of the sound layer. Cut types come from the storyboard shot-list (coupe_référence): hard = 'Coupe franche' (reference score of at least 15), soft = any other cut, none = the start of the film. No music and no reference audio.",
+  "sampleRate": 48000,
+  "seed": 7,
+  "levels": {
+    "thumpPeak": 0.6,
+    "whooshPeak": 0.3,
+    "tickPeak": 0.2,
+    "ceiling": 0.89
+  },
+  "cuts": {
+    "S01": "none",
+    "S02": "soft",
+    "S03": "soft",
+    "S04": "soft",
+    "S05": "hard",
+    "S06": "hard",
+    "S07": "hard",
+    "S08": "soft",
+    "S09": "hard",
+    "S10": "hard",
+    "S11": "hard",
+    "S12": "soft",
+    "S13": "soft",
+    "S14": "hard",
+    "S15": "soft",
+    "S16": "soft",
+    "S17": "soft",
+    "S18": "soft",
+    "S19": "soft",
+    "S20": "hard",
+    "S21": "hard",
+    "S22": "hard",
+    "S23": "soft",
+    "S24": "soft",
+    "S25": "hard",
+    "S26": "hard",
+    "S27": "soft"
+  }
+}

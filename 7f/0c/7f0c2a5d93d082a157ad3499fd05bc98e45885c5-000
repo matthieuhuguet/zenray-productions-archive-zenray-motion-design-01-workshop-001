@@ -1,0 +1,136 @@
+#!/usr/bin/env python3
+# 11 October 2026, 00:50 CEST: check the sound layer of a final MP4 against its event list.
+# Decodes the audio with ffmpeg, finds the onset of every event, and checks format, duration, level and the untouched picture.
+# Exit code 0 when every check passes, 1 when one fails. A deliberately shifted copy must fail (see the control in the session).
+# Run: ~/.venvs/motion-design/bin/python -I Scripts/VerifySound.py <mp4> --events <json> [--video-ref <mp4>] [--out <json>]
+import argparse
+import json
+import math
+import subprocess
+import sys
+from array import array
+from pathlib import Path
+
+FRAME = 1 / 60
+WINDOW = 96  # 2 ms at 48 kHz
+TOLERANCE = FRAME + 0.001  # one picture frame, plus a millisecond for the encoder
+
+
+def probe(path):
+    out = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration:stream=codec_type,codec_name,channels,sample_rate",
+         "-of", "json", str(path)],
+        capture_output=True, text=True, check=True).stdout
+    return json.loads(out)
+
+
+def decode(path, rate):
+    raw = subprocess.run(
+        ["ffmpeg", "-v", "error", "-i", str(path), "-map", "0:a:0", "-ac", "1", "-ar", str(rate), "-f", "s16le", "-"],
+        capture_output=True, check=True).stdout
+    samples = array("h")
+    samples.frombytes(raw)
+    if sys.byteorder != "little":
+        samples.byteswap()
+    return samples
+
+
+def picture_hash(path):
+    return subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-map", "0:v:0", "-f", "framemd5", "-"],
+                          capture_output=True, text=True, check=True).stdout
+
+
+def onset(samples, rate, time_s):
+    # Windows are 2 ms. The pre-level is the loudest window just before the event, so a tail from a neighbouring
+    # event does not count as the onset. The onset is the first window that reaches 15 % of the way from the
+    # pre-level to the loudest window within 120 ms after the event.
+    base = int(round(time_s * rate))
+    if base < 4 * WINDOW or base + 61 * WINDOW >= len(samples):
+        return None, 0.0
+
+    def level(index):
+        energy = sum(value * value for value in samples[index:index + WINDOW]) / WINDOW
+        return math.sqrt(energy)
+
+    pre = max(level(base - k * WINDOW) for k in (1, 2, 3))
+    after = [level(base + k * WINDOW) for k in range(61)]
+    peak = max(after)
+    if peak < 0.002 * 32767 or peak <= pre:
+        return None, peak
+    threshold = pre + 0.15 * (peak - pre)
+    k = next(index for index, value in enumerate(after) if value >= threshold)
+    return time_s + k * WINDOW / rate, peak
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Verify the sound layer of a final MP4.")
+    parser.add_argument("mp4", type=Path)
+    parser.add_argument("--events", type=Path, required=True)
+    parser.add_argument("--video-ref", type=Path)
+    parser.add_argument("--out", type=Path)
+    args = parser.parse_args()
+
+    events_doc = json.loads(args.events.read_text(encoding="utf-8"))
+    rate = events_doc["rate"]
+    info = probe(args.mp4)
+    audio = next((stream for stream in info["streams"] if stream.get("codec_type") == "audio"), {})
+    samples = decode(args.mp4, rate)
+    audio_seconds = len(samples) / rate
+    peak = max(max(samples), -min(samples))
+
+    checks = [
+        {"name": "AAC audio stream present", "pass": audio.get("codec_name") == "aac",
+         "detail": str(audio.get("codec_name"))},
+        {"name": "stereo at 48 kHz", "pass": audio.get("channels") == 2 and str(audio.get("sample_rate")) == str(rate),
+         "detail": f"{audio.get('channels')} channels, {audio.get('sample_rate')} Hz"},
+        {"name": "duration matches the picture", "pass": abs(audio_seconds - events_doc["durationSeconds"]) <= 0.05,
+         "detail": f"{audio_seconds:.3f} s"},
+        {"name": "no clipping (peak below 0.98 of full scale)", "pass": peak <= 0.98 * 32767,
+         "detail": f"{peak / 32767:.3f}"},
+    ]
+
+    offsets, missing = [], []
+    for event in events_doc["events"]:
+        found, _ = onset(samples, rate, event["time"])
+        if found is None:
+            missing.append(event["time"])
+        else:
+            offsets.append(found - event["time"])
+    worst = max((abs(offset) for offset in offsets), default=None)
+    checks.append({"name": "every event is audible", "pass": not missing,
+                   "detail": f"{len(events_doc['events']) - len(missing)} of {len(events_doc['events'])}"})
+    checks.append({"name": "onsets within one picture frame", "pass": not missing and worst is not None and worst <= TOLERANCE,
+                   "detail": f"largest gap {worst * 1000:.1f} ms, tolerance {TOLERANCE * 1000:.1f} ms" if worst is not None else "no onset"})
+
+    picture_identical = None
+    if args.video_ref:
+        picture_identical = picture_hash(args.mp4) == picture_hash(args.video_ref)
+        checks.append({"name": "picture unchanged (frame hashes identical)", "pass": picture_identical,
+                       "detail": "identical" if picture_identical else "different"})
+
+    passed = all(check["pass"] for check in checks)
+    for check in checks:
+        print("PASS" if check["pass"] else "FAIL", check["name"], "-", check["detail"])
+    print("OVERALL", "PASS" if passed else "FAIL")
+    if args.out:
+        values = {
+            "codec": audio.get("codec_name"),
+            "channels": audio.get("channels"),
+            "sampleRate": int(audio.get("sample_rate") or 0),
+            "audioSeconds": round(audio_seconds, 3),
+            "peakFullScale": round(peak / 32767, 4),
+            "events": len(events_doc["events"]),
+            "audible": len(events_doc["events"]) - len(missing),
+            "maxGapMs": round(worst * 1000, 1) if worst is not None else None,
+            "toleranceMs": round(TOLERANCE * 1000, 1),
+            "pictureIdentical": picture_identical,
+        }
+        report = {"mp4": str(args.mp4), "passed": passed, "checks": checks, "values": values,
+                  "offsets_ms": [round(offset * 1000, 1) for offset in offsets]}
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return 0 if passed else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

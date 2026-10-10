@@ -72,6 +72,7 @@ ACTS = [
      "Titre, « SURE » en fumée et en bronze, marque tracée, compte.", "Le même rythme, avec son propre contenu."),
 ]
 ACT_COLOUR_TOKEN = ["accent", "bronzeLight", "signal", "steel", "signalDeep", "accentDeep", "fg2"]
+SOUND_CUE = {"hard": "Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.", "soft": "Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.", "none": "Aucun son au début du film."}
 CAMERA_FR = {"static": "fixe", "push": "poussée", "drift": "dérive", "parallax": "parallaxe", "wipe": "balayage", "pan": "panoramique", "stack": "empilement", "cut": "coupe", "swipe": "glissement", "mixed": "mixte"}
 
 
@@ -368,7 +369,7 @@ def build_html(context):
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">{row['ref_motion_mean']:.4f}</td><td class="num">{row['ours_motion_mean']:.4f}</td><td class="num">{ratio}</td><td>{detected}</td></tr>
 </table>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> {esc(row['cue'])}</p>
+<p class="cue"><strong>Son du film.</strong> {esc(row['cue'])}</p>
 </div></div></article>""")
     caption_rows = []
     for c in captions:
@@ -406,6 +407,18 @@ def build_html(context):
         ("Couleurs par plan (ΔE médian)", fr(verify["palette"]["median_delta_e"], 2), f"au plus {fr(contract['palette_delta_e_median_max'], 0)}", verify["palette"]["pass"]),
         ("Taille d'encre des légendes", fr(verify["typography"]["ratio"], 3), f"entre {fr(contract['ink_ratio_min'], 2)} et {fr(contract['ink_ratio_max'], 2)}", verify["typography"]["pass"]),
     ]
+    sound_report = context.get("sound_report")
+    if sound_report:
+        values = sound_report["values"]
+        duration_s = verify["duration"]["value"]
+        verify_rows += [
+            ("Son : format", f"{str(values['codec']).upper()}, {values['channels']} voies, {values['sampleRate'] // 1000} {values['sampleRate'] % 1000:03d} Hz", "AAC, stéréo, 48 000 Hz", values["codec"] == "aac" and values["channels"] == 2 and values["sampleRate"] == 48000),
+            ("Son : durée", f"{fr(values['audioSeconds'], 2)} s", f"{fr(duration_s, 2)} s à 0,05 s près", abs(values["audioSeconds"] - duration_s) <= 0.05),
+            ("Son : crête", fr(values["peakFullScale"], 3), "au plus 0,98 du plein niveau", values["peakFullScale"] <= 0.98),
+            ("Son : événements audibles", f"{values['audible']} sur {values['events']}", "tous", values["audible"] == values["events"]),
+            ("Son : écart maximal au départ", "aucun" if values["maxGapMs"] is None else f"{fr(values['maxGapMs'], 1)} ms", f"au plus {fr(values['toleranceMs'], 1)} ms, soit une image", values["maxGapMs"] is not None and values["maxGapMs"] <= values["toleranceMs"]),
+            ("Son : image inchangée", "identique" if values["pictureIdentical"] else "différente", "identique à la vidéo muette v6", bool(values["pictureIdentical"])),
+        ]
     verify_html = "".join(
         f"<tr><td>{esc(name)}</td><td class=\"num\">{esc(value)}</td><td>{esc(limit)}</td>"
         f"<td>{badge(ok)}</td></tr>"
@@ -441,7 +454,7 @@ def build_html(context):
 <h2 id="s1">1. Lecture rapide</h2>
 <table>
 <tr><th>Élément</th><th>Valeur</th><th>Détail</th></tr>
-<tr><td>Durée de l'étude</td><td class="num">68,00 s</td><td class="num">{TOTAL_FRAMES} images à 60 images/s, 1920 × 1080 px, H.264, sans audio</td></tr>
+<tr><td>Durée de l'étude</td><td class="num">68,00 s</td><td class="num">{TOTAL_FRAMES} images à 60 images/s, 1920 × 1080 px, H.264 ; son AAC stéréo 48 kHz, fait en code, sans musique</td></tr>
 <tr><td>Plans</td><td class="num">{len(shots)}</td><td>coupes repérées sur la référence, du 0,00 s au 68,00 s, sans trou</td></tr>
 <tr><td>Légendes</td><td class="num">{len(captions)}</td><td>textes originaux, placés, dimensionnés et animés depuis les paramètres</td></tr>
 <tr><td>Actes narratifs</td><td class="num">7</td><td>accroche, matières, systèmes, confiance, connectivité, produit, titre et marque</td></tr>
@@ -530,7 +543,7 @@ def build_html(context):
 
 <h2 id="s11">11. Limites, droits et étapes suivantes</h2>
 <ul>
-<li>Son : aucune piste sonore n'est reprise ni produite. Pour une musique, fournir un fichier dont tu as les droits ; les repères de la section 8 indiquent les coupes en images.</li>
+<li>Son : aucune musique, et aucun son de la référence. La couche sonore est faite en code : un coup grave à chaque coupe franche, un souffle à chaque coupe douce, un clic à chaque instant d'apparition de légende. Pour une musique, fournir un fichier dont tu as les droits ; les repères de la section 8 indiquent les coupes en images.</li>
 <li>Images : aucune image de la référence n'est utilisée. Le rendu ne contient que des formes, des dégradés, du texte et des tracés produits par le code.</li>
 <li>Marque : aucun logo, nom de produit ni slogan de la référence. La marque affichée est ZenRay, avec le compte @zenrayst.</li>
 <li>Polices : InterVariable, Vogun, AnthropicSerif et AnthropicMono proviennent de l'installation locale. Vérifier leur licence avant toute diffusion des fichiers de police.</li>
@@ -601,6 +614,7 @@ def main():
     parser.add_argument("--ours-dir", type=Path, required=True)
     parser.add_argument("--out-dir", type=Path, required=True)
     args = parser.parse_args()
+    sound_cuts = json.loads((args.params / "sound.json").read_text(encoding="utf-8"))["cuts"]
 
     timeline = json.loads((args.params / "timeline.json").read_text(encoding="utf-8"))
     tokens = json.loads((args.params / "tokens.json").read_text(encoding="utf-8"))
@@ -640,7 +654,7 @@ def main():
             cut_ref = f"Coupe franche sur la référence (score {fr(boundary, 1)}, image {frames_of(shot['start'])})."
         else:
             cut_ref = f"Coupe douce sur la référence (score {fr(boundary, 1)}, image {frames_of(shot['start'])})."
-        cue = f"Coupe à {fr(shot['start'], 2)} s (image {f0}). " + ("Accent recommandé : coupe franche." if boundary is not None and boundary >= 15 else "Pas d'accent imposé.")
+        cue = f"Coupe à {fr(shot['start'], 2)} s (image {f0}). " + SOUND_CUE[sound_cuts.get(shot["id"], "none")]
         plan_captions = []
         for caption in timeline["captions"]:
             if shot["start"] <= caption["start"] < shot["end"]:
@@ -672,12 +686,14 @@ def main():
         })
 
     checks = checks_for(timeline, tokens, choreography, notes, template_text, report)
+    sound_path = args.report.parent / "sound-report.json"
+    sound_report = json.loads(sound_path.read_text(encoding="utf-8")) if sound_path.exists() else None
     visual_path = args.params / "visual-checks.json"
     visual = json.loads(visual_path.read_text(encoding="utf-8")) if visual_path.exists() else {"render": None, "checked": {}}
     if visual.get("render") != args.render.name:
         visual = {"render": args.render.name, "checked": {}}  # a visual check made on another render never counts
     context = {"tokens": tokens, "layout": layout, "motion": motion, "shots": shots,
-               "captions": caption_rows, "checks": checks, "report": report, "visual": visual}
+               "captions": caption_rows, "checks": checks, "report": report, "visual": visual, "sound_report": sound_report}
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "storyboard.html").write_text(wrap_tables(build_html(context)), encoding="utf-8")
 

@@ -1,0 +1,145 @@
+#!/usr/bin/env python3
+# 11 October 2026, 00:50 CEST: sound layer of the study, made only from code.
+# No music and no reference audio: a thump on each hard cut, a soft whoosh on each soft cut, a tick on each caption reveal.
+# Reads params/timeline.json, params/sound.json and params/tokens.json, writes a stereo 16-bit WAV as long as the picture,
+# and an events file that VerifySound.py compares with the decoded audio.
+# Run from the atelier: ~/.venvs/motion-design/bin/python -I Scripts/MakeSound.py --out renders/sound-v1.wav --events verify/sound-events.json
+import argparse
+import json
+import math
+import random
+import sys
+import wave
+from array import array
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def load(relative):
+    return json.loads((ROOT / relative).read_text(encoding="utf-8"))
+
+
+def thump(rate, rng):
+    # Sine sweep from 120 Hz down to 42 Hz over 0.45 s, with a short high-passed click on the attack.
+    span = 0.45
+    f0, f1 = 120.0, 42.0
+    k = math.log(f1 / f0)
+    previous = 0.0
+    samples = []
+    for n in range(int(span * rate)):
+        t = n / rate
+        phase = 2 * math.pi * f0 * span / k * ((f1 / f0) ** (t / span) - 1)
+        body = math.sin(phase) * min(1.0, t / 0.002) * math.exp(-t / 0.12)
+        noise = rng.uniform(-1.0, 1.0)
+        click = (noise - previous) * math.exp(-t / 0.004) if t < 0.03 else 0.0
+        previous = noise
+        samples.append(body + 0.35 * click)
+    return samples
+
+
+def whoosh(rate, rng):
+    # Low-passed noise whose cutoff rises from 300 Hz to 2.5 kHz: fast attack, long tail.
+    span = 0.6
+    state = 0.0
+    samples = []
+    for n in range(int(span * rate)):
+        t = n / rate
+        cutoff = 300.0 + 2200.0 * (t / span)
+        alpha = 1.0 - math.exp(-2.0 * math.pi * cutoff / rate)
+        state += alpha * (rng.uniform(-1.0, 1.0) - state)
+        envelope = min(1.0, t / 0.02) * math.exp(-max(0.0, t - 0.02) / 0.18)
+        samples.append(state * envelope)
+    return samples
+
+
+def tick(rate):
+    # A 2.4 kHz sine that starts at once and dies in about 40 ms.
+    samples = []
+    for n in range(int(0.06 * rate)):
+        t = n / rate
+        samples.append(math.sin(2 * math.pi * 2400.0 * t) * min(1.0, t / 0.0005) * math.exp(-t / 0.012))
+    return samples
+
+
+def scaled(samples, peak):
+    top = max(abs(value) for value in samples) or 1.0
+    return [value * peak / top for value in samples]
+
+
+def add(buffer, start, samples):
+    end = min(len(buffer), start + len(samples))
+    for index in range(max(0, start), end):
+        buffer[index] += samples[index - start]
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Write the sound layer of the study from code.")
+    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--events", type=Path, required=True)
+    args = parser.parse_args()
+
+    timeline = load("params/timeline.json")
+    sound = load("params/sound.json")
+    tokens = load("params/tokens.json")
+    rate = sound["sampleRate"]
+    levels = sound["levels"]
+    total = int(round(tokens["meta"]["durationSeconds"] * rate))
+    buffer = [0.0] * total
+    rng = random.Random(sound["seed"])
+    shot_start = {shot["id"]: shot["start"] for shot in timeline["shots"]}
+    events = []
+
+    for shot in timeline["shots"]:
+        kind = sound["cuts"].get(shot["id"], "none")
+        if kind == "hard":
+            wave_samples = scaled(thump(rate, rng), levels["thumpPeak"])
+        elif kind == "soft":
+            wave_samples = scaled(whoosh(rate, rng), levels["whooshPeak"])
+        else:
+            continue
+        add(buffer, round(shot_start[shot["id"]] * rate), wave_samples)
+        events.append({"time": shot_start[shot["id"]], "kind": kind, "id": shot["id"]})
+
+    tick_wave = scaled(tick(rate), levels["tickPeak"])
+    caption_ids = {}
+    for caption in timeline["captions"]:
+        caption_ids.setdefault(round(caption["start"], 3), []).append(caption["id"])
+    for time_s in sorted(caption_ids):
+        add(buffer, round(time_s * rate), tick_wave)
+        events.append({"time": time_s, "kind": "caption", "id": "+".join(caption_ids[time_s])})
+
+    peak = max(abs(value) for value in buffer)
+    if peak > levels["ceiling"]:
+        gain = levels["ceiling"] / peak
+        buffer = [value * gain for value in buffer]
+    fade = int(0.02 * rate)
+    for index in range(fade):
+        buffer[index] *= index / fade
+        buffer[total - 1 - index] *= index / fade
+
+    pcm = array("h", (round(max(-1.0, min(1.0, value)) * 32767) for value in buffer))
+    stereo = array("h", [0]) * (2 * total)
+    stereo[0::2] = pcm
+    stereo[1::2] = pcm
+    if sys.byteorder != "little":
+        stereo.byteswap()
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    with wave.open(str(args.out), "wb") as handle:
+        handle.setnchannels(2)
+        handle.setsampwidth(2)
+        handle.setframerate(rate)
+        handle.writeframes(stereo.tobytes())
+
+    events.sort(key=lambda event: event["time"])
+    args.events.parent.mkdir(parents=True, exist_ok=True)
+    args.events.write_text(json.dumps({"rate": rate, "durationSeconds": total / rate, "events": events},
+                                      indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    counts = {kind: sum(1 for event in events if event["kind"] == kind) for kind in ("hard", "soft", "caption")}
+    final_peak = max(abs(value) for value in buffer)
+    print(f"sound: {len(events)} events, {counts['hard']} hard cuts, {counts['soft']} soft cuts, "
+          f"{counts['caption']} caption ticks, peak {final_peak:.3f}")
+
+
+if __name__ == "__main__":
+    main()
