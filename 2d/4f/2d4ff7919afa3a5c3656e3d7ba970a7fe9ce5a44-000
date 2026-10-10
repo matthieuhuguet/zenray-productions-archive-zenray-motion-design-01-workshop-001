@@ -20,7 +20,8 @@
       .svg-full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
 
       /* Captions: one full-frame clip per caption; the line sits at --cx and --cy (fractions of the frame). */
-      .caption-line { position: absolute; inset: auto; max-width: var(--zr-layout-caption-max-width); left: calc(var(--cx) * 100%); top: calc(var(--cy) * 100%); white-space: nowrap; font-weight: 400; letter-spacing: var(--zr-type-tracking); line-height: 1; }
+      .caption-line { position: absolute; inset: auto; max-width: var(--zr-layout-caption-max-width); left: calc(var(--cx) * 100%); top: calc(var(--cy) * 100%); white-space: nowrap; font-weight: 400; letter-spacing: var(--zr-type-tracking); line-height: 1;   text-shadow: var(--zr-effects-caption-shadow);
+}
       .size-title-big { font-size: var(--zr-type-size-title); }
       .size-statement { font-size: var(--zr-type-size-statement); }
       .size-sub { font-size: var(--zr-type-size-sub); }
@@ -170,7 +171,7 @@
       <div class="stage">
         <div class="device" id="device-main" data-center>
           <div class="device-screen">
-            <div class="ui-label">Timeline</div>
+            <div class="ui-label">Status</div>
             <div class="ruler"></div>
             <div class="track t1"><i></i></div>
             <div class="track t2"><i></i></div>
@@ -221,7 +222,7 @@
       <!-- @shot:S11 -->
       <div class="stage">
         <div class="layers" id="layers">
-          <div class="layer" id="layer-1"><span class="layer-label">Preview ready</span></div>
+          <div class="layer" id="layer-1"><span class="layer-label">Standby</span></div>
           <div class="layer" id="layer-2"></div>
           <div class="layer" id="layer-3"></div>
           <div class="layer" id="layer-4"></div>
@@ -290,7 +291,7 @@
       <div class="swipe" id="swipe">
         <div class="stage">
           <div class="card" id="card" data-center>
-            <div class="card-face front"><div class="card-stripe"></div><span class="card-mono">PLAIN HTML</span></div>
+            <div class="card-face front"><div class="card-stripe"></div><span class="card-mono">OFFLINE</span></div>
             <div class="card-face back"></div>
           </div>
         </div>
@@ -300,13 +301,13 @@
       <!-- @shot:S20 -->
       <div class="device" id="device-menu" data-center>
         <div class="device-screen">
-          <div class="ui-label">Workspace</div>
+          <div class="ui-label">Home</div>
           <ul class="menu">
-            <li class="menu-item">Preview</li>
-            <li class="menu-item">Lint</li>
-            <li class="menu-item">Render</li>
-            <li class="menu-item">Export</li>
-            <li class="menu-item">Assets</li>
+            <li class="menu-item">Activity</li>
+            <li class="menu-item">Scan</li>
+            <li class="menu-item">Send</li>
+            <li class="menu-item">Share</li>
+            <li class="menu-item">Accounts</li>
             <li class="menu-item">Settings</li>
           </ul>
         </div>
@@ -322,7 +323,7 @@
       <div class="ripple" id="ripple-2" data-center></div>
       <div class="ripple" id="ripple-3" data-center></div>
       <div class="device small" id="device-passkey" data-center>
-        <div class="device-screen"><div class="ui-label">Passkey</div></div>
+        <div class="device-screen"><div class="ui-label">Access</div></div>
       </div>
       <!-- @end:S21 -->
 
@@ -346,9 +347,9 @@
           <circle class="ring-value" id="ring-value" cx="320" cy="320" r="{{device.ringRadius}}" />
         </svg>
         <div class="counter" id="counter" data-center>0</div>
-        <div class="counter-label" id="counter-label" data-center>frames</div>
+        <div class="counter-label" id="counter-label" data-center>units</div>
       </div>
-      <div class="badge" id="badge" data-center>LICENSE Apache-2.0</div>
+      <div class="badge" id="badge" data-center>VERIFIED</div>
       <div class="ease-wrap" id="ease-wrap" data-center>
         <svg viewBox="0 0 640 320">
           <path class="ease-grid" d="M0 320 H640 M0 0 V320" />
@@ -359,18 +360,18 @@
       <!-- @end:S23 -->
 
       <!-- @shot:S24 -->
-      <div class="smoke-word" id="smoke-title" data-center>HTML</div>
+      <div class="smoke-word" id="smoke-title" data-center>SURE</div>
       <!-- @end:S24 -->
 
       <!-- @shot:S25 -->
       <div class="floor" id="floor-a"></div>
-      <div class="smoke-word" id="smoke-a" data-center>HTML</div>
+      <div class="smoke-word" id="smoke-a" data-center>SURE</div>
       <div class="device" id="hero-device" data-center></div>
       <!-- @end:S25 -->
 
       <!-- @shot:S26 -->
       <div class="floor warm" id="floor-b"></div>
-      <div class="smoke-word smoke-accent" id="smoke-b" data-center>HTML</div>
+      <div class="smoke-word smoke-accent" id="smoke-b" data-center>SURE</div>
       <!-- @end:S26 -->
 
       <!-- @shot:S27 -->

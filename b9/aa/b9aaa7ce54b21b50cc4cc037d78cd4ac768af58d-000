@@ -1,0 +1,42 @@
+[
+  {
+    "contrôle": "Plans contigus, sans trou ni recouvrement",
+    "réussi": true,
+    "détail": "27 plans"
+  },
+  {
+    "contrôle": "Durée totale en images",
+    "réussi": true,
+    "détail": "4080 images sur 4080"
+  },
+  {
+    "contrôle": "Notes présentes pour chaque plan",
+    "réussi": true,
+    "détail": "27 sur 27"
+  },
+  {
+    "contrôle": "Cibles de la chorégraphie présentes dans le gabarit",
+    "réussi": true,
+    "détail": "aucune cible manquante"
+  },
+  {
+    "contrôle": "Jetons référencés résolus",
+    "réussi": true,
+    "détail": "tous résolus"
+  },
+  {
+    "contrôle": "Couleurs en hexadécimal valide",
+    "réussi": true,
+    "détail": "toutes valides"
+  },
+  {
+    "contrôle": "Légendes dans la durée de la vidéo",
+    "réussi": true,
+    "détail": "toutes dans la durée"
+  },
+  {
+    "contrôle": "Durée du rendu mesurée",
+    "réussi": true,
+    "détail": "68,000 s"
+  }
+]

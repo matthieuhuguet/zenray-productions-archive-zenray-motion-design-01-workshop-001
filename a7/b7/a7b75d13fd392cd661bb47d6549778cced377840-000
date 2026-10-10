@@ -1,0 +1,28 @@
+﻿plan;nom;début_s;fin_s;début_image;fin_image;durée_images;coupe_référence;énergie_référence;énergie_étude;rapport;coupe_détectée_rendu;dérive
+S01;orb-ignition;0,00;1,90;0;114;114;Début de la vidéo.;0,0079;0,0005;0,06;;#orb : dérive x de -160 à 160 px sur toute la durée du plan (de 0,00 s à 1,90 s), sans accélération
+S02;arch-morph;1,90;3,20;114;192;78;Coupe sans score mesurable.;0,0044;0,0010;0,23;;#arch : dérive y de -50 à 50 px sur toute la durée du plan (de 1,90 s à 3,20 s), sans accélération
+S03;device-rise;3,20;4,90;192;294;102;Coupe sans score mesurable.;0,0022;0,0018;0,79;;#device-main : dérive rotationY de -4 à 4 degrés sur toute la durée du plan (de 3,20 s à 4,90 s), sans accélération
+S04;statement-sweep;4,90;6,28;294;377;83;Coupe sans score mesurable.;0,0014;0,0005;0,34;;
+S05;slab-push;6,28;7,45;377;447;70;Coupe franche sur la référence (score 25,8, image 377).;0,0082;0,0026;0,31;;#slab-a : dérive x de -200 à 200 px sur toute la durée du plan (de 6,28 s à 7,45 s), sans accélération
+S06;slab-lit;7,45;8,73;447;524;77;Coupe franche sur la référence (score 17,8, image 447).;0,0067;0,0029;0,43;6,9;#slab-b : dérive x de -180 à 180 px sur toute la durée du plan (de 7,45 s à 8,73 s), sans accélération
+S07;connector-parallax;8,73;10,20;524;612;88;Coupe franche sur la référence (score 23,9, image 524).;0,0074;0,0011;0,15;;#connector : dérive rotation de -25 à 25 degrés sur toute la durée du plan (de 8,73 s à 10,20 s), sans accélération
+S08;specular-wipe;10,20;11,65;612;699;87;Coupe douce sur la référence (score 10,0, image 612).;0,0053;0,0082;1,55;17,6;
+S09;plane-pan;11,65;13,25;699;795;96;Coupe franche sur la référence (score 22,6, image 699).;0,0054;0,0025;0,47;16,1;
+S10;glass-streaks;13,25;14,60;795;876;81;Coupe franche sur la référence (score 20,5, image 795).;0,0123;0,0026;0,21;16,3;
+S11;layers-stack;14,60;18,08;876;1085;209;Coupe franche sur la référence (score 17,4, image 876).;0,0089;0,0006;0,07;;#layers : dérive rotationY de -25 à 25 degrés sur toute la durée du plan (de 14,60 s à 18,08 s), sans accélération
+S12;flash-glitch;18,08;18,28;1085;1097;12;Coupe douce sur la référence (score 6,6, image 1085).;0,0207;0,0615;2,97;32,3;
+S13;chip-grid;18,28;19,60;1097;1176;79;Coupe douce sur la référence (score 6,0, image 1097).;0,0074;0,0032;0,43;6,7;#chip-grid : dérive rotation de -15 à 15 degrés sur toute la durée du plan (de 18,28 s à 19,60 s), sans accélération
+S14;pcb-split;19,60;22,57;1176;1354;178;Coupe franche sur la référence (score 16,5, image 1176).;0,0028;0,0007;0,26;6,4;
+S15;confirm-check;22,57;25,40;1354;1524;170;Coupe douce sur la référence (score 13,9, image 1354).;0,0047;0,0010;0,21;6,4;#device-confirm : dérive y de -120 à 120 px sur toute la durée du plan (de 22,57 s à 25,40 s), sans accélération
+S16;typewriter;25,40;29,53;1524;1772;248;Coupe douce sur la référence (score 11,8, image 1524).;0,0011;0,0002;0,19;;
+S17;puck-ping;29,53;31,80;1772;1908;136;Coupe douce sur la référence (score 11,3, image 1772).;0,0039;0,0013;0,34;;#puck : dérive y de -120 à 120 px sur toute la durée du plan (de 29,53 s à 31,80 s), sans accélération
+S18;wireless-arcs;31,80;34,57;1908;2074;166;Coupe douce sur la référence (score 11,3, image 1908).;0,0044;0,0020;0,47;;#pad : dérive rotation de -4 à 4 degrés sur toute la durée du plan (de 31,80 s à 34,57 s), sans accélération
+S19;card-swipe;34,57;39,40;2074;2364;290;Coupe douce sur la référence (score 13,6, image 2074).;0,0052;0,0009;0,17;;#swipe : dérive y de -60 à 60 px sur toute la durée du plan (de 34,57 s à 39,40 s), sans accélération
+S20;qr-assembly;39,40;44,25;2364;2655;291;Coupe franche sur la référence (score 20,0, image 2364).;0,0029;0,0014;0,50;13,8;#device-menu : dérive y de -100 à 100 px sur toute la durée du plan (de 39,40 s à 44,25 s), sans accélération
+S21;ripple-passkey;44,25;50,20;2655;3012;357;Coupe franche sur la référence (score 19,7, image 2655).;0,0048;0,0017;0,35;17,0;#device-passkey : dérive rotation de -4 à 4 degrés sur toute la durée du plan (de 44,25 s à 50,20 s), sans accélération
+S22;beat-cuts;50,20;51,73;3012;3104;92;Coupe franche sur la référence (score 16,0, image 3012).;0,0280;0,0232;0,83;51,2;
+S23;counters-easing;51,73;58,00;3104;3480;376;Coupe douce sur la référence (score 8,8, image 3104).;0,0023;0,0019;0,83;22,4;
+S24;title-hint;58,00;59,53;3480;3572;92;Coupe douce sur la référence (score 11,9, image 3480).;0,0019;0,0006;0,34;;
+S25;hero-a;59,53;60,80;3572;3648;76;Coupe franche sur la référence (score 25,0, image 3572).;0,0047;0,0027;0,56;6,6;#hero-device : dérive rotationY de -12 à 12 degrés sur toute la durée du plan (de 59,53 s à 60,80 s), sans accélération
+S26;hero-b;60,80;62,00;3648;3720;72;Coupe franche sur la référence (score 30,2, image 3648).;0,0051;0,0026;0,51;10,1;
+S27;logo-outro;62,00;68,00;3720;4080;360;Coupe douce sur la référence (score 9,3, image 3720).;0,0003;0,0002;0,66;;

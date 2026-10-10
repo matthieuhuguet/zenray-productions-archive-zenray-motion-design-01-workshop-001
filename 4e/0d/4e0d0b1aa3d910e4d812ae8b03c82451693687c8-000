@@ -1,0 +1,31 @@
+﻿légende;début_s;fin_s;début_image;fin_image;texte;x_px;y_px;taille_px;remplissage;apparition;lisibilité_ocr;écart_début_s
+C00;4,30;4,90;258;294;Ready.;960;546;190;fg #ffffff;"fondu, 0,18 s (réduite pour tenir dans la fenêtre) ; sortie de 0,09 s avant la fin";0,00;
+C01;4,90;6,30;294;378;Small. Quiet. Sure.;960;546;92;fg #ffffff;"balayage de lumière dans le texte, 0,56 s (réduite pour tenir dans la fenêtre) ; sortie de 0,21 s avant la fin";1,00;0,00
+C02;7,50;8,70;450;522;Light at every edge.;960;896;92;fg2 #d8d8d8;"montée de 40 px avec fondu, 0,36 s (réduite pour tenir dans la fenêtre) ; sortie de 0,18 s avant la fin";1,00;0,10
+C03;10,20;11,65;612;699;Glass that glows.;749;546;92;fg #ffffff;"masque de gauche à droite, 0,44 s (réduite pour tenir dans la fenêtre) ; sortie de 0,22 s avant la fin";1,00;0,20
+C04;14,10;14,60;846;876;Confirm.;960;546;92;fg #ffffff;"fondu, 0,15 s (réduite pour tenir dans la fenêtre) ; sortie de 0,07 s avant la fin";1,00;0,10
+C05;13,20;13,90;792;834;Every step, checked.;960;994;30;fg3 #b6b4b1;"fondu, 0,21 s (réduite pour tenir dans la fenêtre) ; sortie de 0,11 s avant la fin";1,00;0,10
+C06;16,10;17,10;966;1026;Layers, in place.;960;896;92;fg2 #d8d8d8;"montée de 40 px avec fondu, 0,30 s (réduite pour tenir dans la fenêtre) ; sortie de 0,15 s avant la fin";0,00;
+C07;17,50;18,10;1050;1086;One tap. One beat.;960;896;92;fg2 #d8d8d8;"montée de 40 px avec fondu, 0,18 s (réduite pour tenir dans la fenêtre) ; sortie de 0,09 s avant la fin";0,33;
+C08;17,50;19,40;1050;1164;Sealed, offline, always ready.;960;994;30;fg3 #b6b4b1;"fondu, 0,40 s ; sortie de 0,28 s avant la fin";1,00;0,60
+C09;20,30;22,60;1218;1356;Tap;422;546;92;fg #ffffff;"glissement depuis la gauche, 0,69 s (réduite pour tenir dans la fenêtre) ; sortie de 0,30 s avant la fin";1,00;0,10
+C10;20,30;22,60;1218;1356;to unlock.;1459;546;92;fg #ffffff;"glissement depuis la droite, 0,69 s (réduite pour tenir dans la fenêtre) ; sortie de 0,30 s avant la fin";0,50;0,00
+C11;23,20;25,30;1392;1518;Hold steady while it reads.;960;896;92;fg2 #d8d8d8;"montée de 40 px avec fondu, 0,63 s (réduite pour tenir dans la fenêtre) ; sortie de 0,30 s avant la fin";1,00;0,00
+C12;25,40;27,10;1524;1626;Scan the code to begin.;960;546;92;fg #ffffff;"frappe caractère par caractère, 1,19 s ; sortie de 0,26 s avant la fin";1,00;0,70
+C13;27,20;28,40;1632;1704;Something missing?;960;546;92;fg2 #d8d8d8;"flou vers net, 0,36 s (réduite pour tenir dans la fenêtre) ; sortie de 0,18 s avant la fin";1,00;0,10
+C14;28,40;29,50;1704;1770;No hurry. Try again.;960;546;72;fg2 #d8d8d8;"flou vers net, 0,33 s (réduite pour tenir dans la fenêtre) ; sortie de 0,17 s avant la fin";1,00;0,10
+C15;29,60;31,70;1776;1902;Works from any angle.;960;896;92;fg #ffffff;"montée de 40 px avec fondu, 0,63 s (réduite pour tenir dans la fenêtre) ; sortie de 0,30 s avant la fin";1,00;0,00
+C16;31,90;34,00;1914;2040;A signal, sent and checked.;960;896;92;fg2 #d8d8d8;"montée de 40 px avec fondu, 0,63 s (réduite pour tenir dans la fenêtre) ; sortie de 0,30 s avant la fin";1,00;0,10
+C17;36,90;39,10;2214;2346;Thin, light, sealed.;960;896;92;fg2 #d8d8d8;"montée de 40 px avec fondu, 0,66 s (réduite pour tenir dans la fenêtre) ; sortie de 0,30 s avant la fin";1,00;0,00
+C18;37,60;39,20;2256;2352;Made to travel.;960;994;30;fg3 #b6b4b1;"fondu, 0,40 s ; sortie de 0,24 s avant la fin";1,00;0,20
+C19;40,70;44,00;2442;2640;Ready to go anywhere.;960;896;92;fg #ffffff;"montée de 40 px avec fondu, 0,70 s ; sortie de 0,30 s avant la fin";1,00;0,10
+C20;45,20;48,90;2712;2934;Quiet, precise, certain.;960;896;92;fg2 #d8d8d8;"montée de 40 px avec fondu, 0,70 s ; sortie de 0,30 s avant la fin";0,33;
+C21;51,90;54,10;3114;3246;Live numbers, live light.;960;896;92;fg #ffffff;"montée de 40 px avec fondu, 0,66 s (réduite pour tenir dans la fenêtre) ; sortie de 0,30 s avant la fin";1,00;0,00
+C22;54,00;55,40;3240;3324;Refined;257;447;40;fg2 #d8d8d8;"fondu, 0,40 s ; sortie de 0,21 s avant la fin";1,00;0,20
+C23;54,00;55,40;3240;3324;for every hand.;438;544;92;fg #ffffff;"montée de 40 px avec fondu, 0,42 s (réduite pour tenir dans la fenêtre) ; sortie de 0,21 s avant la fin";1,00;0,00
+C24;55,40;56,60;3324;3396;Designed to disappear.;960;546;92;fg #ffffff;"fondu, 0,36 s (réduite pour tenir dans la fenêtre) ; sortie de 0,18 s avant la fin";1,00;0,20
+C25;56,60;58,00;3396;3480;Lighter. Clearer. Calmer.;960;546;72;fg2 #d8d8d8;"fondu, 0,40 s ; sortie de 0,21 s avant la fin";1,00;0,20
+C26;58,00;59,53;3480;3572;Next step.;960;161;64;fg #ffffff;"fondu, 0,40 s ; sortie de 0,23 s avant la fin";0,00;
+C27;60,80;62,00;3648;3720;Your turn.;960;161;64;fg #ffffff;"fondu, 0,36 s (réduite pour tenir dans la fenêtre) ; sortie de 0,18 s avant la fin";0,00;
+C28;63,50;66,00;3810;3960;ZenRay;960;713;72;fg #ffffff;"fondu, 0,40 s ; sortie de 0,30 s avant la fin";1,00;0,20
+C29;65,00;67,00;3900;4020;@zenrayst;960;799;30;fg3 #b6b4b1;"fondu, 0,40 s ; sortie de 0,30 s avant la fin";1,00;0,30
