@@ -1,0 +1,28 @@
+{
+  "project": "zenray-motion-design-01",
+  "updated": "10 October 2026, 23:58 CEST",
+  "goal_x": "Video identical to the OneKey Pro 2 reference in structure and rhythm (68 s, 27 shots, caption times, motion energy, measured colours), content adapted to motion design; no generated image or music.",
+  "status": "in_progress",
+  "done": [
+    "Reference analysed: 39 scdet cuts, 27 shots, 30 OCR caption spans, motion curve at 60 fps, palette and ink sizes measured",
+    "Params written: params/tokens.json, params/timeline.json, params/choreography.json (97 records)",
+    "Cook pipeline: Scripts/Cook.mjs writes composition/ from params and template/ (lint 0 errors, 26 structure warnings accepted)",
+    "Snapshots checked on 27 mid-shot times and fixed: arch, card flip, ease curve, bronze hero, smoke blur, QR pace",
+    "Full render started: renders/zenray-motion-design-01-v1.mp4 (60 fps, looks quality, 8 workers)"
+  ],
+  "next": [
+    "Confirm render exit code and ffprobe duration (target 68.0 s, 1920x1080, 60 fps)",
+    "Write Scripts/Verify.py: duration, caption OCR timing, shot boundary matches, motion correlation, palette Delta E, typography ink sizes",
+    "Build storyboard/storyboard.html from params and analysis JSON (generated, not hand-written)",
+    "Write the skill zenray-motion-design-hyperframes, index it in zenray-edit section Montage / motion design, skill-sync",
+    "Update Memory1/Projects/zenray-motion-design-01/Project1.md and progress journal; commit Memory1 with explicit paths",
+    "Stop the Hyperframes preview on port 4601 before the final answer"
+  ],
+  "paths": {
+    "composition": "composition/index.html",
+    "params": "params/",
+    "cook": "Scripts/Cook.mjs",
+    "render": "renders/zenray-motion-design-01-v1.mp4",
+    "reference_scratch": "/private/tmp/claude-501/-Users-zenray--claude-Memory1/e067e0eb-400b-4769-9366-225560e7a0e4/scratchpad"
+  }
+}

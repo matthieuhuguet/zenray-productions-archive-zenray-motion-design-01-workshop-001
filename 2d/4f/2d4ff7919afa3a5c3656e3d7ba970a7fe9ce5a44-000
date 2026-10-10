@@ -91,6 +91,7 @@
       .ping { width: 220px; height: 220px; border-radius: 50%; box-shadow: inset 0 0 0 4px var(--zr-color-trail); }
       .pad { width: var(--zr-device-pad); height: var(--zr-device-pad-height); border-radius: 48px; background: linear-gradient(180deg, var(--zr-color-pad-top) 0%, var(--zr-color-pad-bottom) 100%); box-shadow: inset 0 0 0 2px var(--zr-color-rim), 0 40px 80px -30px var(--zr-color-shadow); }
       .arc { fill: none; stroke: var(--zr-color-trail); stroke-width: 10; stroke-linecap: round; transform-box: fill-box; transform-origin: 50% 100%; }
+      .swipe { position: absolute; inset: 0; }
       .card { width: var(--zr-device-card); height: var(--zr-device-card-height); border-radius: 40px; transform-style: preserve-3d; }
       .card-face { position: absolute; inset: 0; border-radius: 40px; backface-visibility: hidden; }
       .card-face.front { background: linear-gradient(135deg, var(--zr-color-signal) 0%, var(--zr-color-signal-deep) 60%, var(--zr-color-bg) 100%); }
@@ -127,7 +128,7 @@
       .counter-label { position: absolute; font-family: var(--zr-type-mono); font-size: var(--zr-type-size-mono); color: var(--zr-color-fg2); white-space: nowrap; }
       #counter-label { top: calc(50% + 120px); }
       .badge { position: absolute; top: 72%; padding: 26px 44px; border-radius: 99px; background: var(--zr-color-glass); font-family: var(--zr-type-mono); font-size: var(--zr-type-size-small); color: var(--zr-color-fg); white-space: nowrap; }
-      .ease-wrap { position: absolute; width: 1280px; height: 640px; top: 76%; }
+      .ease-wrap { position: absolute; width: 1280px; height: 640px; top: 66%; }
       .ease-wrap svg { position: absolute; inset: 0; width: 100%; height: 100%; }
       .ease-grid { fill: none; stroke: var(--zr-color-glass); stroke-width: 2; }
       .ease-path { fill: none; stroke: var(--zr-color-accent); stroke-width: 6; stroke-linecap: round; }
@@ -135,7 +136,7 @@
 
       /* Smoke display type, floors and the logo mark. */
       .smoke-word { position: absolute; font-family: var(--zr-type-display); font-size: var(--zr-type-size-hero); line-height: 1; letter-spacing: 0.02em; white-space: nowrap; color: transparent; background: linear-gradient(180deg, var(--zr-color-smoke-light) 0%, var(--zr-color-smoke-dark) 100%); -webkit-background-clip: text; background-clip: text; filter: url(#smoke-filter); opacity: 0; }
-      .smoke-word.bronze { background: linear-gradient(180deg, var(--zr-color-bronze-light) 0%, var(--zr-color-accent-deep) 60%, var(--zr-color-floor-warm) 100%); }
+      .smoke-word.smoke-accent { filter: none; background: linear-gradient(180deg, var(--zr-color-bronze-light) 0%, var(--zr-color-accent-deep) 60%, var(--zr-color-floor-warm) 100%); -webkit-background-clip: text; background-clip: text; }
       .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 360px; background: linear-gradient(180deg, var(--zr-color-floor) 0%, var(--zr-color-bg) 100%); opacity: 0; }
       .floor.warm { background: linear-gradient(180deg, var(--zr-color-floor-warm) 0%, var(--zr-color-bg) 100%); }
       .logo { position: absolute; width: var(--zr-device-logo); height: var(--zr-device-logo); overflow: visible; }
@@ -150,7 +151,8 @@
       <defs>
         <filter id="smoke-filter" x="-20%" y="-20%" width="140%" height="140%">
           <feTurbulence type="fractalNoise" baseFrequency="{{effects.smokeFrequency}}" numOctaves="{{effects.smokeOctaves}}" seed="{{effects.smokeSeed}}" result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="{{effects.smokeScale}}" xChannelSelector="R" yChannelSelector="G" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="{{effects.smokeScale}}" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+          <feGaussianBlur in="displaced" stdDeviation="{{effects.smokeBlur}}" />
         </filter>
       </defs>
     </svg>
@@ -285,9 +287,13 @@
       <!-- @end:S18 -->
 
       <!-- @shot:S19 -->
-      <div class="card" id="card" data-center>
-        <div class="card-face front"><div class="card-stripe"></div><span class="card-mono">PLAIN HTML</span></div>
-        <div class="card-face back"></div>
+      <div class="swipe" id="swipe">
+        <div class="stage">
+          <div class="card" id="card" data-center>
+            <div class="card-face front"><div class="card-stripe"></div><span class="card-mono">PLAIN HTML</span></div>
+            <div class="card-face back"></div>
+          </div>
+        </div>
       </div>
       <!-- @end:S19 -->
 
@@ -364,7 +370,7 @@
 
       <!-- @shot:S26 -->
       <div class="floor warm" id="floor-b"></div>
-      <div class="smoke-word bronze" id="smoke-b" data-center>HTML</div>
+      <div class="smoke-word smoke-accent" id="smoke-b" data-center>HTML</div>
       <!-- @end:S26 -->
 
       <!-- @shot:S27 -->
