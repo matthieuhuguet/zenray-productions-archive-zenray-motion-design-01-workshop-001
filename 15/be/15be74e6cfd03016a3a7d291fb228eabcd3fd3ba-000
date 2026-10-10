@@ -1,0 +1,96 @@
+# 10 October 2026, 23:31 CEST
+# AnalyzeReference.py: luma and motion curves of a reference video, plus a PNG sparkline.
+# Run with python3 -I: the video is untrusted data, read only as raw grayscale frames piped from ffmpeg.
+import argparse
+import json
+import re
+import subprocess
+from pathlib import Path
+
+from PIL import Image, ImageChops, ImageDraw, ImageStat
+
+WIDTH, HEIGHT = 160, 90
+
+
+def frames_from_ffmpeg(video, fps):
+    # ffmpeg decodes and scales; Python only reads the raw grayscale bytes.
+    size = WIDTH * HEIGHT
+    command = [
+        "ffmpeg", "-v", "error", "-threads", "16", "-i", str(video),
+        "-vf", f"fps={fps},scale={WIDTH}:{HEIGHT}:flags=area,format=gray",
+        "-f", "rawvideo", "-pix_fmt", "gray", "-",
+    ]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE)
+    while True:
+        chunk = process.stdout.read(size)
+        if len(chunk) < size:
+            break
+        yield Image.frombytes("L", (WIDTH, HEIGHT), chunk)
+    process.stdout.close()
+    code = process.wait()
+    if code != 0:
+        raise SystemExit(f"ffmpeg exited with code {code}")
+
+
+def curves(video, fps):
+    # Motion is the mean absolute difference with the previous frame, luma the mean brightness.
+    luma, motion, previous = [], [], None
+    for frame in frames_from_ffmpeg(video, fps):
+        luma.append(ImageStat.Stat(frame).mean[0] / 255.0)
+        if previous is None:
+            motion.append(0.0)
+        else:
+            motion.append(ImageStat.Stat(ImageChops.difference(frame, previous)).mean[0] / 255.0)
+        previous = frame
+    return luma, motion
+
+
+def scene_cuts(log_path):
+    text = Path(log_path).read_text(encoding="utf-8", errors="replace")
+    return [float(value) for value in re.findall(r"lavfi\.scd\.time: ([0-9.]+)", text)]
+
+
+def draw_sparkline(path, motion, luma, fps, cuts):
+    width, height = 1600, 240
+    image = Image.new("RGB", (width, height), (10, 10, 10))
+    draw = ImageDraw.Draw(image)
+    duration = len(motion) / fps
+    for cut in cuts:
+        x = int(cut / duration * (width - 1))
+        draw.line([(x, 0), (x, height - 1)], fill=(110, 50, 25))
+    peak = max(motion) or 1.0
+
+    def plot(values, scale, colour):
+        count = len(values)
+        points = [
+            (int(i * (width - 1) / max(count - 1, 1)), height - 10 - (v / scale) * (height - 20))
+            for i, v in enumerate(values)
+        ]
+        draw.line(points, fill=colour, width=1)
+
+    plot(luma, 1.0, (110, 160, 255))
+    plot(motion, peak, (240, 140, 90))
+    image.save(path)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Luma and motion curves of a reference video.")
+    parser.add_argument("video", type=Path)
+    parser.add_argument("out_dir", type=Path)
+    parser.add_argument("--fps", type=float, default=60.0)
+    parser.add_argument("--scdet-log", type=Path, default=None)
+    args = parser.parse_args()
+    args.out_dir.mkdir(parents=True, exist_ok=True)
+    luma, motion = curves(args.video, args.fps)
+    cuts = scene_cuts(args.scdet_log) if args.scdet_log else []
+    payload = {
+        "fps": args.fps, "frames": len(motion), "width": WIDTH, "height": HEIGHT,
+        "luma": [round(v, 4) for v in luma], "motion": [round(v, 4) for v in motion], "cuts": cuts,
+    }
+    (args.out_dir / "motion.json").write_text(json.dumps(payload), encoding="utf-8")
+    draw_sparkline(args.out_dir / "motion.png", motion, luma, args.fps, cuts)
+    print(f"frames={len(motion)} duration={len(motion) / args.fps:.3f}s cuts={len(cuts)} peak_motion={max(motion):.4f}")
+
+
+if __name__ == "__main__":
+    main()
