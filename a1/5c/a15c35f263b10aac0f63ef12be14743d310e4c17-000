@@ -34,6 +34,7 @@ th { font-weight: 400; color: var(--soft); font-size: 12px; text-transform: uppe
 .figure img { max-width: 100%; height: auto; display: block; }
 .scroll { overflow-x: auto; max-width: 100%; width: 100%; }
 p, li, td, th, figcaption { overflow-wrap: anywhere; }
+@media (max-width: 640px) { main { padding: 32px 16px 96px; } }
 figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px; }
 .two { display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start; }
 .wide { overflow-x: auto; }
