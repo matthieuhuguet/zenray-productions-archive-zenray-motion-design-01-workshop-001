@@ -1,0 +1,535 @@
+{
+  "ok": false,
+  "errorCount": 27,
+  "warningCount": 28,
+  "infoCount": 0,
+  "findings": [
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S01.html\" is missing `data-composition-id`.",
+      "elementId": "host-S01",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S01\" data-composition-src=\"compositions/S01.html\" data-start=\"0\" data-duration=\"1.9\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 23,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S02.html\" is missing `data-composition-id`.",
+      "elementId": "host-S02",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S02\" data-composition-src=\"compositions/S02.html\" data-start=\"1.9\" data-duration=\"1.3\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 27,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S03.html\" is missing `data-composition-id`.",
+      "elementId": "host-S03",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S03\" data-composition-src=\"compositions/S03.html\" data-start=\"3.2\" data-duration=\"1.7\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 31,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S04.html\" is missing `data-composition-id`.",
+      "elementId": "host-S04",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S04\" data-composition-src=\"compositions/S04.html\" data-start=\"4.9\" data-duration=\"1.38\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 35,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S05.html\" is missing `data-composition-id`.",
+      "elementId": "host-S05",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S05\" data-composition-src=\"compositions/S05.html\" data-start=\"6.28\" data-duration=\"1.17\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 39,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S06.html\" is missing `data-composition-id`.",
+      "elementId": "host-S06",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S06\" data-composition-src=\"compositions/S06.html\" data-start=\"7.45\" data-duration=\"1.28\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 43,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S07.html\" is missing `data-composition-id`.",
+      "elementId": "host-S07",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S07\" data-composition-src=\"compositions/S07.html\" data-start=\"8.73\" data-duration=\"1.47\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 47,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S08.html\" is missing `data-composition-id`.",
+      "elementId": "host-S08",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S08\" data-composition-src=\"compositions/S08.html\" data-start=\"10.2\" data-duration=\"1.45\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 51,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S09.html\" is missing `data-composition-id`.",
+      "elementId": "host-S09",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S09\" data-composition-src=\"compositions/S09.html\" data-start=\"11.65\" data-duration=\"1.6\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 55,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S10.html\" is missing `data-composition-id`.",
+      "elementId": "host-S10",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S10\" data-composition-src=\"compositions/S10.html\" data-start=\"13.25\" data-duration=\"1.35\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 59,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S11.html\" is missing `data-composition-id`.",
+      "elementId": "host-S11",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S11\" data-composition-src=\"compositions/S11.html\" data-start=\"14.6\" data-duration=\"3.48\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 63,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S12.html\" is missing `data-composition-id`.",
+      "elementId": "host-S12",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S12\" data-composition-src=\"compositions/S12.html\" data-start=\"18.08\" data-duration=\"0.2\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 67,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S13.html\" is missing `data-composition-id`.",
+      "elementId": "host-S13",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S13\" data-composition-src=\"compositions/S13.html\" data-start=\"18.28\" data-duration=\"1.32\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 71,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S14.html\" is missing `data-composition-id`.",
+      "elementId": "host-S14",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S14\" data-composition-src=\"compositions/S14.html\" data-start=\"19.6\" data-duration=\"2.97\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 75,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S15.html\" is missing `data-composition-id`.",
+      "elementId": "host-S15",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S15\" data-composition-src=\"compositions/S15.html\" data-start=\"22.57\" data-duration=\"2.83\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 79,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S16.html\" is missing `data-composition-id`.",
+      "elementId": "host-S16",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S16\" data-composition-src=\"compositions/S16.html\" data-start=\"25.4\" data-duration=\"4.13\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 83,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S17.html\" is missing `data-composition-id`.",
+      "elementId": "host-S17",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S17\" data-composition-src=\"compositions/S17.html\" data-start=\"29.53\" data-duration=\"2.27\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 87,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S18.html\" is missing `data-composition-id`.",
+      "elementId": "host-S18",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S18\" data-composition-src=\"compositions/S18.html\" data-start=\"31.8\" data-duration=\"2.77\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 91,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S19.html\" is missing `data-composition-id`.",
+      "elementId": "host-S19",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S19\" data-composition-src=\"compositions/S19.html\" data-start=\"34.57\" data-duration=\"4.83\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 95,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S20.html\" is missing `data-composition-id`.",
+      "elementId": "host-S20",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S20\" data-composition-src=\"compositions/S20.html\" data-start=\"39.4\" data-duration=\"4.85\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 99,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S21.html\" is missing `data-composition-id`.",
+      "elementId": "host-S21",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S21\" data-composition-src=\"compositions/S21.html\" data-start=\"44.25\" data-duration=\"5.95\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 103,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S22.html\" is missing `data-composition-id`.",
+      "elementId": "host-S22",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S22\" data-composition-src=\"compositions/S22.html\" data-start=\"50.2\" data-duration=\"1.53\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 107,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S23.html\" is missing `data-composition-id`.",
+      "elementId": "host-S23",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S23\" data-composition-src=\"compositions/S23.html\" data-start=\"51.73\" data-duration=\"6.27\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 111,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S24.html\" is missing `data-composition-id`.",
+      "elementId": "host-S24",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S24\" data-composition-src=\"compositions/S24.html\" data-start=\"58\" data-duration=\"1.53\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 115,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S25.html\" is missing `data-composition-id`.",
+      "elementId": "host-S25",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S25\" data-composition-src=\"compositions/S25.html\" data-start=\"59.53\" data-duration=\"1.27\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 119,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S26.html\" is missing `data-composition-id`.",
+      "elementId": "host-S26",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S26\" data-composition-src=\"compositions/S26.html\" data-start=\"60.8\" data-duration=\"1.2\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 123,
+      "column": 5
+    },
+    {
+      "code": "host_missing_composition_id",
+      "severity": "error",
+      "message": "Composition host for \"compositions/S27.html\" is missing `data-composition-id`.",
+      "elementId": "host-S27",
+      "fixHint": "Set `data-composition-id` on every `data-composition-src` host element.",
+      "snippet": "<div class=\"clip\" id=\"host-S27\" data-composition-src=\"compositions/S27.html\" data-start=\"62\" data-duration=\"6\">",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 127,
+      "column": 5
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S01.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S02.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S03.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S04.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S05.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S06.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S07.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S08.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S09.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S10.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S11.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S12.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S13.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S14.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S15.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S16.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S17.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S18.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S19.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S20.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S21.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S22.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S23.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S24.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S25.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S26.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/compositions/S27.html"
+    }
+  ],
+  "filesScanned": 28,
+  "_meta": {
+    "version": "0.8.145",
+    "latestVersion": "0.8.145",
+    "updateAvailable": false
+  }
+}

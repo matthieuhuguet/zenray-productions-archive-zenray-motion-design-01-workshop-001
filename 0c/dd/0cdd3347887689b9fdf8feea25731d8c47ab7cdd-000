@@ -1,0 +1,586 @@
+{
+  "ok": false,
+  "errorCount": 1,
+  "warningCount": 57,
+  "infoCount": 0,
+  "findings": [
+    {
+      "code": "missing_timeline_registry",
+      "severity": "error",
+      "message": "Missing `window.__timelines` registration.",
+      "fixHint": "Register each composition timeline on `window.__timelines[compositionId]`.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html"
+    },
+    {
+      "code": "caption_text_overflow_risk",
+      "severity": "warning",
+      "selector": ".caption-line",
+      "message": "Caption selector \".caption-line\" has white-space: nowrap but no max-width. Long phrases will clip off-screen.",
+      "fixHint": "Add max-width: 1600px (landscape) or max-width: 900px (portrait). Keep overflow visible so scaled emphasis words are not clipped.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html"
+    },
+    {
+      "code": "composition_file_too_large",
+      "severity": "warning",
+      "message": "This HTML composition file has 418 lines. Smaller sub-compositions are easier to read, iterate on, and diff.",
+      "fixHint": "Split coherent scenes or layers into separate .html files under compositions/, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html"
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S01\"> is a timeline element that contains nested <div id=\"orb\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S01",
+      "fixHint": "Move <section id=\"shot-S01\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 161,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S02\"> is a timeline element that contains nested <div id=\"arch\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S02",
+      "fixHint": "Move <section id=\"shot-S02\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 168,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S03\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S03",
+      "fixHint": "Move <section id=\"shot-S03\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 175,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S05\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S05",
+      "fixHint": "Move <section id=\"shot-S05\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 200,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S06\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S06",
+      "fixHint": "Move <section id=\"shot-S06\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 209,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S07\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S07",
+      "fixHint": "Move <section id=\"shot-S07\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 218,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S08\"> is a timeline element that contains nested <div id=\"bronze\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S08",
+      "fixHint": "Move <section id=\"shot-S08\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 228,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S09\"> is a timeline element that contains nested <div id=\"plane\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S09",
+      "fixHint": "Move <section id=\"shot-S09\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 235,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S10\"> is a timeline element that contains nested <div id=\"streak-1\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S10",
+      "fixHint": "Move <section id=\"shot-S10\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 242,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S11\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S11",
+      "fixHint": "Move <section id=\"shot-S11\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 251,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S12\"> is a timeline element that contains nested <div id=\"flash\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S12",
+      "fixHint": "Move <section id=\"shot-S12\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 269,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S13\"> is a timeline element that contains nested <div id=\"chip-grid\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S13",
+      "fixHint": "Move <section id=\"shot-S13\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 278,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S14\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S14",
+      "fixHint": "Move <section id=\"shot-S14\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 290,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S15\"> is a timeline element that contains nested <div id=\"device-confirm\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S15",
+      "fixHint": "Move <section id=\"shot-S15\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 303,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S17\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S17",
+      "fixHint": "Move <section id=\"shot-S17\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 320,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S18\"> is a timeline element that contains nested <div id=\"pad\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S18",
+      "fixHint": "Move <section id=\"shot-S18\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 331,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S19\"> is a timeline element that contains nested <div id=\"card\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S19",
+      "fixHint": "Move <section id=\"shot-S19\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 343,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S20\"> is a timeline element that contains nested <div id=\"device-menu\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S20",
+      "fixHint": "Move <section id=\"shot-S20\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 353,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S21\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S21",
+      "fixHint": "Move <section id=\"shot-S21\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 375,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S22\"> is a timeline element that contains nested <div id=\"beat-1\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S22",
+      "fixHint": "Move <section id=\"shot-S22\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 388,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S23\"> is a timeline element that contains nested <div id=\"panel-pair\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S23",
+      "fixHint": "Move <section id=\"shot-S23\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 400,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S24\"> is a timeline element that contains nested <div id=\"smoke-title\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S24",
+      "fixHint": "Move <section id=\"shot-S24\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 426,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S25\"> is a timeline element that contains nested <div id=\"floor-a\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S25",
+      "fixHint": "Move <section id=\"shot-S25\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 433,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S26\"> is a timeline element that contains nested <div id=\"floor-b\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S26",
+      "fixHint": "Move <section id=\"shot-S26\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 442,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<section id=\"shot-S27\"> is a timeline element that contains nested <svg id=\"logo\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "shot-S27",
+      "fixHint": "Move <section id=\"shot-S27\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 450,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C00\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C00",
+      "fixHint": "Move <div id=\"cap-C00\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 460,
+      "column": 11
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C01\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C01",
+      "fixHint": "Move <div id=\"cap-C01\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 463,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C02\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C02",
+      "fixHint": "Move <div id=\"cap-C02\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 466,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C03\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C03",
+      "fixHint": "Move <div id=\"cap-C03\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 469,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C04\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C04",
+      "fixHint": "Move <div id=\"cap-C04\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 472,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C05\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C05",
+      "fixHint": "Move <div id=\"cap-C05\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 475,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C06\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C06",
+      "fixHint": "Move <div id=\"cap-C06\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 478,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C07\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C07",
+      "fixHint": "Move <div id=\"cap-C07\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 481,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C08\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C08",
+      "fixHint": "Move <div id=\"cap-C08\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 484,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C09\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C09",
+      "fixHint": "Move <div id=\"cap-C09\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 487,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C10\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C10",
+      "fixHint": "Move <div id=\"cap-C10\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 490,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C11\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C11",
+      "fixHint": "Move <div id=\"cap-C11\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 493,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C12\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C12",
+      "fixHint": "Move <div id=\"cap-C12\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 496,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C13\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C13",
+      "fixHint": "Move <div id=\"cap-C13\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 499,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C14\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C14",
+      "fixHint": "Move <div id=\"cap-C14\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 502,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C15\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C15",
+      "fixHint": "Move <div id=\"cap-C15\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 505,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C16\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C16",
+      "fixHint": "Move <div id=\"cap-C16\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 508,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C17\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C17",
+      "fixHint": "Move <div id=\"cap-C17\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 511,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C18\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C18",
+      "fixHint": "Move <div id=\"cap-C18\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 514,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C19\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C19",
+      "fixHint": "Move <div id=\"cap-C19\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 517,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C20\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C20",
+      "fixHint": "Move <div id=\"cap-C20\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 520,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C21\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C21",
+      "fixHint": "Move <div id=\"cap-C21\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 523,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C22\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C22",
+      "fixHint": "Move <div id=\"cap-C22\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 526,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C23\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C23",
+      "fixHint": "Move <div id=\"cap-C23\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 529,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C24\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C24",
+      "fixHint": "Move <div id=\"cap-C24\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 532,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C25\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C25",
+      "fixHint": "Move <div id=\"cap-C25\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 535,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C26\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C26",
+      "fixHint": "Move <div id=\"cap-C26\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 538,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C27\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C27",
+      "fixHint": "Move <div id=\"cap-C27\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 541,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C28\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C28",
+      "fixHint": "Move <div id=\"cap-C28\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 544,
+      "column": 5
+    },
+    {
+      "code": "nested_structure_needs_subcomposition",
+      "severity": "warning",
+      "message": "<div id=\"cap-C29\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+      "elementId": "cap-C29",
+      "fixHint": "Move <div id=\"cap-C29\"> and its contents into a sub-composition file and mount it with data-composition-src.",
+      "file": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/composition/index.html",
+      "line": 547,
+      "column": 5
+    }
+  ],
+  "filesScanned": 1,
+  "_meta": {
+    "version": "0.8.145",
+    "latestVersion": "0.8.145",
+    "updateAvailable": false
+  }
+}

@@ -1,0 +1,132 @@
+# 10 October 2026, 23:52 CEST
+# MeasureDna.py: palette, accent colours, caption ink boxes and motion per shot of a reference video.
+# Run with python3 -I: the frames are derived from a downloaded video and are read only as images by Pillow.
+import argparse
+import json
+import re
+from pathlib import Path
+
+from PIL import Image
+
+FRAME_W, FRAME_H = 1280, 720
+
+
+def frame_at(frames_dir, fps, last_index, seconds):
+    index = min(max(round(seconds * fps), 0), last_index)
+    return Image.open(frames_dir / f"f{index:04d}.jpg").convert("RGB")
+
+
+def palette(image, colours):
+    small = image.resize((320, 180), Image.Resampling.LANCZOS)
+    quantised = small.quantize(colors=colours, method=Image.Quantize.MEDIANCUT)
+    flat = quantised.getpalette()
+    total = small.size[0] * small.size[1]
+    rows = []
+    for count, index in sorted(quantised.getcolors(total), reverse=True):
+        red, green, blue = flat[index * 3:index * 3 + 3]
+        rows.append({"hex": f"#{red:02x}{green:02x}{blue:02x}", "share": round(count / total, 4)})
+    return rows
+
+
+def accents(image, colours):
+    # Keep only saturated, bright pixels so the accent colours of the product are not drowned by black.
+    small = image.resize((320, 180), Image.Resampling.LANCZOS)
+    hsv = small.convert("HSV")
+    kept = [pixel for hsv_pixel, pixel in zip(hsv.getdata(), small.getdata())
+            if hsv_pixel[1] > 140 and hsv_pixel[2] > 90]
+    if len(kept) < 40:
+        return []
+    strip = Image.new("RGB", (len(kept), 1))
+    strip.putdata(kept)
+    return palette(strip, colours)
+
+
+def caption_ink(image, box, threshold):
+    # Ink box of bright glyphs inside the OCR box, padded to catch overshoot of descenders and tails.
+    x, y, w, h = box
+    pad_x, pad_y = max(w * 0.10, 0.01), max(h * 0.30, 0.02)
+    left = max(0, int((x - pad_x) * FRAME_W))
+    top = max(0, int((y - pad_y) * FRAME_H))
+    right = min(FRAME_W, int((x + w + pad_x) * FRAME_W))
+    bottom = min(FRAME_H, int((y + h + pad_y) * FRAME_H))
+    crop = image.crop((left, top, right, bottom))
+    mask = crop.convert("L").point(lambda v: 255 if v >= threshold else 0)
+    found = mask.getbbox()
+    if found is None:
+        return None
+    il, it, ir, ib = found
+    pixels = [crop.getpixel((px, py)) for py in range(it, ib) for px in range(il, ir) if mask.getpixel((px, py))]
+    if not pixels:
+        return None
+    ranked = sorted(pixels, key=sum, reverse=True)
+    brightest = ranked[: max(1, len(ranked) // 10)]
+    fill = [round(sum(p[channel] for p in brightest) / len(brightest)) for channel in range(3)]
+    return {
+        "x": round((left + il) / FRAME_W, 4), "y": round((top + it) / FRAME_H, 4),
+        "w": round((ir - il) / FRAME_W, 4), "h": round((ib - it) / FRAME_H, 4),
+        "fill": f"#{fill[0]:02x}{fill[1]:02x}{fill[2]:02x}",
+    }
+
+
+def mean_motion(motion, fps, start, end):
+    first = int(start * fps)
+    last = max(int(end * fps), first + 1)
+    window = motion[first:last]
+    return round(sum(window) / len(window), 5) if window else 0.0
+
+
+def boundary_scores(log_path):
+    text = Path(log_path).read_text(encoding="utf-8", errors="replace")
+    return [(float(t), float(s)) for s, t in re.findall(r"lavfi\.scd\.score: ([0-9.]+), lavfi\.scd\.time: ([0-9.]+)", text)]
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Measure palette, captions and motion per shot.")
+    parser.add_argument("frames_dir", type=Path)
+    parser.add_argument("--fps", type=float, default=10.0)
+    parser.add_argument("--shots", type=Path, required=True)
+    parser.add_argument("--captions", type=Path, required=True)
+    parser.add_argument("--motion", type=Path, required=True)
+    parser.add_argument("--scdet-log", type=Path, required=True)
+    parser.add_argument("--min-conf", type=float, default=85.0)
+    parser.add_argument("--threshold", type=int, default=110)
+    parser.add_argument("--out", type=Path, required=True)
+    args = parser.parse_args()
+    last_index = len(list(args.frames_dir.glob("f*.jpg"))) - 1
+    shots = json.loads(args.shots.read_text(encoding="utf-8"))
+    captions = json.loads(args.captions.read_text(encoding="utf-8"))
+    motion_payload = json.loads(args.motion.read_text(encoding="utf-8"))
+    motion, motion_fps = motion_payload["motion"], motion_payload["fps"]
+    scores = boundary_scores(args.scdet_log)
+    shot_rows = []
+    for number, (start, end) in enumerate(shots):
+        image = frame_at(args.frames_dir, args.fps, last_index, (start + end) / 2)
+        near = [s for t, s in scores if abs(t - start) <= 0.05]
+        shot_rows.append({
+            "shot": number + 1, "start": start, "end": end, "duration": round(end - start, 3),
+            "motion_mean": mean_motion(motion, motion_fps, start, end),
+            "boundary_score": max(near) if (near and start > 0) else None,
+            "palette": palette(image, 6), "accents": accents(image, 4),
+        })
+    caption_rows = []
+    for span in captions:
+        if span["frames"] < 4 or span["conf"] < args.min_conf or len(span["text"]) < 6:
+            continue
+        image = frame_at(args.frames_dir, args.fps, last_index, (span["start"] + span["end"]) / 2)
+        ink = caption_ink(image, (span["x"], span["y"], span["w"], span["h"]), args.threshold)
+        caption_rows.append({"text": span["text"], "start": span["start"], "end": span["end"], "ink": ink})
+    args.out.write_text(json.dumps({"shots": shot_rows, "captions": caption_rows}, indent=1, ensure_ascii=False), encoding="utf-8")
+    for row in shot_rows:
+        tops = " ".join(c["hex"] for c in row["palette"][:3])
+        acc = " ".join(c["hex"] for c in row["accents"][:2])
+        print(f"S{row['shot']:02d} {row['start']:6.2f}-{row['end']:6.2f} motion={row['motion_mean']:.4f} score={row['boundary_score']} pal=[{tops}] acc=[{acc}]")
+    for row in caption_rows:
+        ink = row["ink"]
+        if ink:
+            print(f"CAP {row['start']:6.2f}-{row['end']:6.2f} h1080={ink['h'] * 1080:6.1f} w1080={ink['w'] * 1920:7.1f} cx={ink['x'] + ink['w'] / 2:.3f} cy={ink['y'] + ink['h'] / 2:.3f} fill={ink['fill']} | {row['text'][:60]}")
+        else:
+            print(f"CAP {row['start']:6.2f}-{row['end']:6.2f} no-ink | {row['text'][:60]}")
+
+
+if __name__ == "__main__":
+    main()

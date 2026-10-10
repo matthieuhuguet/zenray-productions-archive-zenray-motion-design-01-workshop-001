@@ -1,55 +1,360 @@
 <!doctype html>
+<!-- Cooked by Scripts/Cook.mjs at 2026-10-10T21:38:03.988Z. Edit params/ and template/, never this file. -->
 <html lang="en" data-resolution="landscape">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1920, height=1080" />
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        margin: 0;
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
-        background: #0a0a0a;
-      }
-      #root {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-      }
-      #title {
-        color: #f4f4f5;
-        font-size: 72px;
-        font-weight: 600;
-        letter-spacing: -0.03em;
-      }
-    </style>
+    <link rel="stylesheet" href="tokens.css" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div
-      id="root"
-      data-composition-id="main"
-      data-start="0"
-      data-duration="10"
-      data-width="1920"
-      data-height="1080"
-    >
-      <h1 id="title" class="clip" data-start="0" data-duration="10" data-track-index="0">Title</h1>
+    <!-- Shared smoke filter for the display type: its numbers come from effects tokens. -->
+    <svg width="0" height="0" style="position: absolute;" aria-hidden="true">
+      <defs>
+        <filter id="smoke-filter" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="7" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="120" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div id="root" data-composition-id="main" data-start="0" data-duration="68" data-width="1920" data-height="1080">
+      
+    <section class="clip shot" id="shot-S01" data-shot="orb-ignition" data-start="0" data-duration="1.9">
+      <div class="orb" id="orb" data-center></div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S02" data-shot="arch-morph" data-start="1.9" data-duration="1.3">
+      <div class="arch" id="arch" data-center></div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S03" data-shot="device-rise" data-start="3.2" data-duration="1.7">
+      <div class="stage">
+        <div class="device" id="device-main" data-center>
+          <div class="device-screen">
+            <div class="ui-label">Timeline</div>
+            <div class="ruler"></div>
+            <div class="track t1"><i></i></div>
+            <div class="track t2"><i></i></div>
+            <div class="track t3"><i></i></div>
+            <div class="track t4"><i></i></div>
+            <div class="playhead" id="playhead"></div>
+          </div>
+        </div>
+      </div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S04" data-shot="statement-sweep" data-start="4.9" data-duration="1.38">
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S05" data-shot="slab-push" data-start="6.28" data-duration="1.17">
+      <div class="stage">
+        <div class="slab" id="slab-a" data-center><div class="sheen" id="sheen-a"></div></div>
+      </div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S06" data-shot="slab-lit" data-start="7.45" data-duration="1.28">
+      <div class="stage">
+        <div class="slab" id="slab-b" data-center><div class="sheen" id="sheen-b"></div></div>
+      </div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S07" data-shot="connector-parallax" data-start="8.73" data-duration="1.47">
+      <div class="stage">
+        <div class="slab" id="slab-c" data-center></div>
+        <div class="connector" id="connector"><i></i><i></i><i></i></div>
+      </div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S08" data-shot="specular-wipe" data-start="10.2" data-duration="1.45">
+      <div class="bronze" id="bronze"><div class="band" id="band"></div></div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S09" data-shot="plane-pan" data-start="11.65" data-duration="1.6">
+      <div class="plane" id="plane"></div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S10" data-shot="glass-streaks" data-start="13.25" data-duration="1.35">
+      <div class="streak" id="streak-1"></div>
+      <div class="streak" id="streak-2"></div>
+      <div class="streak" id="streak-3"></div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S11" data-shot="layers-stack" data-start="14.6" data-duration="3.48">
+      <div class="stage">
+        <div class="layers" id="layers">
+          <div class="layer" id="layer-1"><span class="layer-label">Preview ready</span></div>
+          <div class="layer" id="layer-2"></div>
+          <div class="layer" id="layer-3"></div>
+          <div class="layer" id="layer-4"></div>
+        </div>
+      </div>
+      <svg class="svg-full" viewBox="0 0 1920 1080">
+        <path id="trail-1" class="trail" d="M120 860 C 520 700, 900 920, 1800 240" />
+        <path id="trail-2" class="trail" d="M160 260 C 640 420, 1100 120, 1780 760" />
+      </svg>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S12" data-shot="flash-glitch" data-start="18.08" data-duration="0.2">
+      <div class="flash" id="flash"></div>
+      <div class="slice" id="slice-1"></div>
+      <div class="slice" id="slice-2"></div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S13" data-shot="chip-grid" data-start="18.28" data-duration="1.32">
+      <div class="chip-grid" id="chip-grid">
+        <div class="chip"><i></i></div>
+        <div class="chip"><i></i></div>
+        <div class="chip"><i></i></div>
+        <div class="chip"><i></i></div>
+      </div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S14" data-shot="pcb-split" data-start="19.6" data-duration="2.97">
+      <div class="full pcb-bg"></div>
+      <svg class="svg-full" id="pcb" viewBox="0 0 1920 1080">
+        <path id="trace-1" class="trace" d="M0 300 H520 L640 420 H1280 L1400 300 H1920" />
+        <path id="trace-2" class="trace" d="M0 760 H380 L500 640 H1120 L1240 780 H1920" />
+        <rect class="pcb-chip" x="700" y="400" width="520" height="300" rx="28" />
+        <rect class="pcb-chip" x="1320" y="620" width="200" height="200" rx="24" />
+      </svg>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S15" data-shot="confirm-check" data-start="22.57" data-duration="2.83">
+      <div class="device small" id="device-confirm" data-center>
+        <div class="device-screen">
+          <svg class="check-svg" viewBox="0 0 240 240"><path id="check-path" d="M60 128 L104 172 L184 84" /></svg>
+        </div>
+      </div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S16" data-shot="typewriter" data-start="25.4" data-duration="4.13">
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S17" data-shot="puck-ping" data-start="29.53" data-duration="2.27">
+      <div class="full puck-bg"></div>
+      <div class="ping" id="ping-1" data-center></div>
+      <div class="ping" id="ping-2" data-center></div>
+      <div class="ping" id="ping-3" data-center></div>
+      <div class="puck" id="puck" data-center></div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S18" data-shot="wireless-arcs" data-start="31.8" data-duration="2.77">
+      <div class="pad" id="pad" data-center></div>
+      <svg class="svg-full" viewBox="0 0 1920 1080">
+        <path id="arc-1" class="arc" d="M720 380 A 260 260 0 0 1 1200 380" />
+        <path id="arc-2" class="arc" d="M640 380 A 360 360 0 0 1 1280 380" />
+        <path id="arc-3" class="arc" d="M560 380 A 460 460 0 0 1 1360 380" />
+      </svg>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S19" data-shot="card-swipe" data-start="34.57" data-duration="4.83">
+      <div class="card" id="card" data-center>
+        <div class="card-face front"><div class="card-stripe"></div><span class="card-mono">PLAIN HTML</span></div>
+        <div class="card-face back"></div>
+      </div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S20" data-shot="qr-assembly" data-start="39.4" data-duration="4.85">
+      <div class="device" id="device-menu" data-center>
+        <div class="device-screen">
+          <div class="ui-label">Workspace</div>
+          <ul class="menu">
+            <li class="menu-item">Preview</li>
+            <li class="menu-item">Lint</li>
+            <li class="menu-item">Render</li>
+            <li class="menu-item">Export</li>
+            <li class="menu-item">Assets</li>
+            <li class="menu-item">Settings</li>
+          </ul>
+        </div>
+      </div>
+      <div class="qr-card" id="qr-card" data-center>
+        <div class="qr" id="qr"></div>
+      </div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S21" data-shot="ripple-passkey" data-start="44.25" data-duration="5.95">
+      <div class="full ripple-bg"></div>
+      <div class="ripple" id="ripple-1" data-center></div>
+      <div class="ripple" id="ripple-2" data-center></div>
+      <div class="ripple" id="ripple-3" data-center></div>
+      <div class="device small" id="device-passkey" data-center>
+        <div class="device-screen"><div class="ui-label">Passkey</div></div>
+      </div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S22" data-shot="beat-cuts" data-start="50.2" data-duration="1.53">
+      <div class="beat" id="beat-1"></div>
+      <div class="beat" id="beat-2"></div>
+      <div class="beat" id="beat-3"></div>
+      <div class="beat" id="beat-4"></div>
+      <div class="beat" id="beat-5"></div>
+      <div class="flash" id="flash-22"></div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S23" data-shot="counters-easing" data-start="51.73" data-duration="6.27">
+      <div class="panel-pair" id="panel-pair" data-center>
+        <div class="panel" id="panel-l" data-center></div>
+        <div class="panel" id="panel-r" data-center></div>
+      </div>
+      <div class="ring-wrap" id="ring-wrap" data-center>
+        <svg class="ring" viewBox="0 0 640 640">
+          <circle class="ring-track" cx="320" cy="320" r="260" />
+          <circle class="ring-value" id="ring-value" cx="320" cy="320" r="260" />
+        </svg>
+        <div class="counter" id="counter" data-center>0</div>
+        <div class="counter-label" id="counter-label" data-center>frames</div>
+      </div>
+      <div class="badge" id="badge" data-center>LICENSE Apache-2.0</div>
+      <div class="ease-wrap" id="ease-wrap" data-center>
+        <svg viewBox="0 0 640 320">
+          <path class="ease-grid" d="M0 320 H640 M0 0 V320" />
+          <path id="ease-path" class="ease-path" d="M0 320 C 200 320, 260 40, 640 0" />
+          <circle id="ease-dot" class="ease-dot" cx="0" cy="320" r="12" />
+        </svg>
+      </div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S24" data-shot="title-hint" data-start="58" data-duration="1.53">
+      <div class="smoke-word" id="smoke-title" data-center>HTML</div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S25" data-shot="hero-a" data-start="59.53" data-duration="1.27">
+      <div class="floor" id="floor-a"></div>
+      <div class="smoke-word" id="smoke-a" data-center>HTML</div>
+      <div class="device" id="hero-device" data-center></div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S26" data-shot="hero-b" data-start="60.8" data-duration="1.2">
+      <div class="floor warm" id="floor-b"></div>
+      <div class="smoke-word bronze" id="smoke-b" data-center>HTML</div>
+      
+    </section>
+    
+
+      
+    <section class="clip shot" id="shot-S27" data-shot="logo-outro" data-start="62" data-duration="6">
+      <svg class="logo" id="logo" data-center viewBox="0 0 300 300">
+        <circle id="logo-ring" cx="150" cy="150" r="130" />
+        <path id="logo-bar" d="M150 80 V220" />
+      </svg>
+      <div class="logo-dot" id="logo-dot" data-center></div>
+      
+    </section>
+    
+
+          <div class="clip caption-line size-title-big fill-fg" id="cap-C00" data-caption="C00" data-reveal="fade" data-start="4.3" data-duration="0.6" style="--cx: 0.5; --cy: 0.506;">Motion, in code.</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C01" data-caption="C01" data-reveal="sweep" data-start="4.9" data-duration="1.4" style="--cx: 0.5; --cy: 0.506;">Every frame is code.</div>
+    <div class="clip caption-line size-statement fill-fg2" id="cap-C02" data-caption="C02" data-reveal="rise" data-start="7.5" data-duration="1.2" style="--cx: 0.5; --cy: 0.83;">Lit from every edge.</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C03" data-caption="C03" data-reveal="wipe" data-start="10.2" data-duration="1.45" style="--cx: 0.39; --cy: 0.506;">Specular, animated.</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C04" data-caption="C04" data-reveal="fade" data-start="14.1" data-duration="0.5" style="--cx: 0.5; --cy: 0.506;">Edge-lit glass.</div>
+    <div class="clip caption-line size-footnote fill-fg3" id="cap-C05" data-caption="C05" data-reveal="fade" data-start="13.2" data-duration="0.7" style="--cx: 0.5; --cy: 0.92;">Frames measured, not guessed.</div>
+    <div class="clip caption-line size-statement fill-fg2" id="cap-C06" data-caption="C06" data-reveal="rise" data-start="16.1" data-duration="1" style="--cx: 0.5; --cy: 0.83;">Layers in motion.</div>
+    <div class="clip caption-line size-statement fill-fg2" id="cap-C07" data-caption="C07" data-reveal="rise" data-start="17.5" data-duration="0.6" style="--cx: 0.5; --cy: 0.83;">Four timelines, one clock.</div>
+    <div class="clip caption-line size-footnote fill-fg3" id="cap-C08" data-caption="C08" data-reveal="fade" data-start="17.5" data-duration="1.9" style="--cx: 0.5; --cy: 0.92;">60 fps, frame accurate.</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C09" data-caption="C09" data-reveal="split-left" data-start="20.3" data-duration="2.3" style="--cx: 0.22; --cy: 0.506;">Scrub</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C10" data-caption="C10" data-reveal="split-right" data-start="20.3" data-duration="2.3" style="--cx: 0.76; --cy: 0.506;">to any frame.</div>
+    <div class="clip caption-line size-statement fill-fg2" id="cap-C11" data-caption="C11" data-reveal="rise" data-start="23.2" data-duration="2.1" style="--cx: 0.5; --cy: 0.83;">Preview before you render.</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C12" data-caption="C12" data-reveal="typewriter" data-start="25.4" data-duration="1.7" style="--cx: 0.5; --cy: 0.506;">See exactly what you render.</div>
+    <div class="clip caption-line size-statement fill-fg2" id="cap-C13" data-caption="C13" data-reveal="blur" data-start="27.2" data-duration="1.2" style="--cx: 0.5; --cy: 0.506;">Lost in the timeline?</div>
+    <div class="clip caption-line size-sub fill-fg2" id="cap-C14" data-caption="C14" data-reveal="blur" data-start="28.4" data-duration="1.1" style="--cx: 0.5; --cy: 0.506;">No worries. Lint it.</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C15" data-caption="C15" data-reveal="rise" data-start="29.6" data-duration="2.1" style="--cx: 0.5; --cy: 0.83;">Runs in headless Chrome.</div>
+    <div class="clip caption-line size-statement fill-fg2" id="cap-C16" data-caption="C16" data-reveal="rise" data-start="31.9" data-duration="2.1" style="--cx: 0.5; --cy: 0.83;">Frames, piped to FFmpeg.</div>
+    <div class="clip caption-line size-statement fill-fg2" id="cap-C17" data-caption="C17" data-reveal="rise" data-start="36.9" data-duration="2.2" style="--cx: 0.5; --cy: 0.83;">Plain HTML, versioned.</div>
+    <div class="clip caption-line size-footnote fill-fg3" id="cap-C18" data-caption="C18" data-reveal="fade" data-start="37.6" data-duration="1.6" style="--cx: 0.5; --cy: 0.92;">Works with git.</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C19" data-caption="C19" data-reveal="rise" data-start="40.7" data-duration="3.3" style="--cx: 0.5; --cy: 0.83;">Render offline.</div>
+    <div class="clip caption-line size-statement fill-fg2" id="cap-C20" data-caption="C20" data-reveal="rise" data-start="45.2" data-duration="3.7" style="--cx: 0.5; --cy: 0.83;">Deterministic output.</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C21" data-caption="C21" data-reveal="rise" data-start="51.9" data-duration="2.2" style="--cx: 0.5; --cy: 0.83;">Live counters.</div>
+    <div class="clip caption-line size-small fill-fg2" id="cap-C22" data-caption="C22" data-reveal="fade" data-start="54" data-duration="1.4" style="--cx: 0.134; --cy: 0.414;">All new</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C23" data-caption="C23" data-reveal="rise" data-start="54" data-duration="1.4" style="--cx: 0.228; --cy: 0.504;">easing 2</div>
+    <div class="clip caption-line size-statement fill-fg" id="cap-C24" data-caption="C24" data-reveal="fade" data-start="55.4" data-duration="1.2" style="--cx: 0.5; --cy: 0.506;">Open source, Apache 2.0.</div>
+    <div class="clip caption-line size-sub fill-fg2" id="cap-C25" data-caption="C25" data-reveal="fade" data-start="56.6" data-duration="1.4" style="--cx: 0.5; --cy: 0.506;">Smoother. Sharper.</div>
+    <div class="clip caption-line size-title fill-fg" id="cap-C26" data-caption="C26" data-reveal="fade" data-start="58" data-duration="1.53" style="--cx: 0.5; --cy: 0.149;">Motion design, in code</div>
+    <div class="clip caption-line size-title fill-fg" id="cap-C27" data-caption="C27" data-reveal="fade" data-start="60.8" data-duration="1.2" style="--cx: 0.5; --cy: 0.149;">Motion design, in code</div>
+    <div class="clip caption-line size-sub fill-fg" id="cap-C28" data-caption="C28" data-reveal="fade" data-start="63.5" data-duration="2.5" style="--cx: 0.5; --cy: 0.66;">ZenRay</div>
+    <div class="clip caption-line size-footnote fill-fg3" id="cap-C29" data-caption="C29" data-reveal="fade" data-start="65" data-duration="2" style="--cx: 0.5; --cy: 0.74;">@zenrayst</div>
     </div>
-    <script>
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.fromTo("#title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6 }, 0);
-      window.__timelines["main"] = tl;
-      tl.seek(0);
-    </script>
+
+    <script src="vendor/gsap.min.js"></script>
+    <script src="timeline-data.js"></script>
+    <script src="motion-core.js"></script>
+        <script src="motion-main.js"></script>
+        <script>window.__timelines = window.__timelines || {}; window.__timelines['main'] = window.ZR_MAIN_TIMELINE;</script>
   </body>
 </html>

@@ -1,0 +1,17 @@
+// 10 October 2026, 23:58 CEST: the one root timeline. Every shot's choreography and every caption reveal sits on it at absolute times.
+// Copied from template/ by Scripts/Cook.mjs; edit the template copy only.
+(function () {
+  const core = window.ZR;
+  const tl = gsap.timeline({ paused: true });
+  window.ZR_MAIN_TIMELINE = tl;
+  const shotStart = Object.fromEntries(core.timeline.shots.map((shot) => [shot.id, shot.start]));
+  Object.entries(core.choreography).forEach(([shotId, records]) => {
+    const base = shotStart[shotId];
+    if (base === undefined) throw new Error(`Choreography names unknown shot ${shotId}`);
+    records.forEach((record) => core.run(tl, record, base));
+  });
+  core.timeline.captions.forEach((caption) => {
+    core.reveal(tl, caption, core.one(`#cap-${caption.id}`));
+  });
+  tl.seek(0);
+})();
