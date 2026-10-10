@@ -1,0 +1,318 @@
+# 10 October 2026, 00:40 CEST
+# BuildStoryboard.py: writes storyboard/storyboard.html from the parameters, the reference analysis and the verification report.
+# Run with python3 -I: reference frames are read as images only, and their thumbnails stay outside the workshop.
+import argparse
+import html
+import json
+import sys
+from pathlib import Path
+
+from PIL import Image
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(SCRIPT_DIR))
+
+from AnalyzeReference import curves  # noqa: E402
+
+ACTS = [
+    ("1", "Accroche", 0.00, 6.28,
+     "Un orbe, une arche, un appareil qui se lève, puis le titre.",
+     "Un orbe, une arche qui se déforme, un appareil à timeline, le titre « Motion, in code ».",
+     "Le motion design s'écrit en code."),
+    ("2", "Matières", 6.28, 14.60,
+     "Des plans sur les matières, les reflets et le verre.",
+     "Une tige métallique, un chanfrein, une bande bronze, un plan, des traînées de lumière.",
+     "Lumière et matière se calculent."),
+    ("3", "Systèmes", 14.60, 25.40,
+     "Des couches, une puce, un circuit, une confirmation.",
+     "Des couches 3D à traces lumineuses, quatre puces pulsées, un circuit, une coche tracée.",
+     "Les systèmes se voient bouger."),
+    ("4", "Confiance", 25.40, 39.40,
+     "Des phrases qui s'écrivent, un objet suivi, une recharge sans fil, une carte de sauvegarde.",
+     "Une frappe, un doute levé par le lint, une pastille suivie, des arcs, une carte qui se retourne.",
+     "On vérifie avant de rendre."),
+    ("5", "Connectivité", 39.40, 50.20,
+     "Un menu, une matrice de code, une clé d'accès avec ondes.",
+     "Un menu décalé, une matrice QR qui s'assemble module par module, des ondes.",
+     "Le rendu se fait hors ligne, et la sortie reste identique."),
+    ("6", "Produit", 50.20, 58.00,
+     "Des coupes rapides, un compteur en anneau, deux panneaux, une licence, une courbe d'aisance.",
+     "Cinq aplats coupés sur le temps, un compteur en anneau, deux panneaux, un badge, une courbe d'aisance.",
+     "Les données bougent, le rythme se mesure."),
+    ("7", "Titre et marque", 58.00, 68.00,
+     "Un titre, un hero en lettres 3D, un logo qui se trace.",
+     "Un titre, « HTML » en Vogun avec fumée, un logo tracé, la marque et le compte.",
+     "Recréer ce plan avec le même rythme."),
+]
+
+CSS = """
+@font-face { font-family: 'InterVariable'; src: url('../composition/assets/fonts/InterVariable.ttf') format('truetype'); font-weight: 100 900; }
+@font-face { font-family: 'AnthropicSerif'; src: url('../composition/assets/fonts/AnthropicSerif-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'AnthropicMono'; src: url('../composition/assets/fonts/AnthropicMono-Regular.ttf') format('truetype'); font-weight: 400; }
+:root { --paper: #ffffff; --ink: #161616; --soft: #6b6b6b; --line: #e6e4e1; --accent: #cc7c5e; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'InterVariable', system-ui, sans-serif; font-weight: 400; line-height: 1.45; }
+main { max-width: 1280px; margin: 0 auto; padding: 48px 32px 96px; }
+h1 { font-size: 40px; letter-spacing: -0.01em; margin: 0 0 8px; }
+h2 { font-size: 24px; margin: 56px 0 12px; border-top: 1px solid var(--line); padding-top: 24px; }
+p, li { font-size: 16px; }
+.lede { color: var(--soft); max-width: 880px; }
+.num { font-family: 'AnthropicSerif', Georgia, serif; font-weight: 400; font-variant-numeric: tabular-nums; }
+code, .mono { font-family: 'AnthropicMono', ui-monospace, monospace; font-size: 13px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0 24px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 400; color: var(--soft); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+.swatches { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0 24px; }
+.sw { width: 132px; }
+.sw span { display: block; height: 64px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--line); }
+.sw code { display: block; margin-top: 6px; color: var(--soft); }
+.pass { color: #2f7a4f; } .fail { color: #a23b2a; }
+.thumbs img { width: 180px; height: auto; border-radius: 8px; box-shadow: 0 0 0 1px var(--line); display: block; }
+.thumbs { display: flex; gap: 8px; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 99px; background: #f3ece8; color: #7a3d26; font-size: 12px; }
+.warn { background: #fbf6f3; border-left: 3px solid var(--accent); padding: 12px 16px; margin: 16px 0; }
+.wide { overflow-x: auto; }
+figure { margin: 12px 0 24px; }
+figure img { max-width: 100%; border-radius: 8px; box-shadow: 0 0 0 1px var(--line); }
+figcaption { color: var(--soft); font-size: 13px; margin-top: 6px; }
+"""
+
+
+def fr(value, digits=2):
+    # French decimal comma for every number shown to Matthieu.
+    return f"{value:.{digits}f}".replace(".", ",")
+
+
+def esc(text):
+    return html.escape(str(text), quote=True)
+
+
+def time_range(start, end):
+    return f"<span class=\"num\">{fr(start, 2)}&nbsp;à&nbsp;{fr(end, 2)}</span>"
+
+
+def reference_thumbnails(frames_dir, last_index, shots, out_dir):
+    # Reference thumbnails, kept in scratch: they are third-party frames, used for private comparison only.
+    out_dir.mkdir(parents=True, exist_ok=True)
+    paths = {}
+    for shot in shots:
+        mid = (shot["start"] + shot["end"]) / 2
+        index = min(max(round(mid * 10), 0), last_index)
+        image = Image.open(frames_dir / f"f{index:04d}.jpg").convert("RGB").resize((480, 270), Image.Resampling.LANCZOS)
+        target = out_dir / f"{shot['id']}.jpg"
+        image.save(target, quality=85)
+        paths[shot["id"]] = target
+    return paths
+
+
+def swatch(hex_value, label=None):
+    label_html = f'<div class="mono">{esc(label)}</div>' if label else ""
+    return f'<div class="sw"><span style="background:{esc(hex_value)}"></span><code>{esc(hex_value)}</code>{label_html}</div>'
+
+
+def top_colours(entries, limit):
+    weight = {}
+    for entry in entries:
+        for colour in entry["colours"]:
+            weight[colour["hex"]] = weight.get(colour["hex"], 0.0) + entry["duration"] * colour["share"]
+    return [hex_value for hex_value, _ in sorted(weight.items(), key=lambda kv: kv[1], reverse=True)[:limit]]
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Build the storyboard HTML.")
+    parser.add_argument("--params", type=Path, required=True)
+    parser.add_argument("--analysis", type=Path, required=True)
+    parser.add_argument("--ref-frames", type=Path, required=True)
+    parser.add_argument("--ref-thumbs", type=Path, required=True)
+    parser.add_argument("--ours-dir", type=Path, required=True)
+    parser.add_argument("--render", type=Path, required=True)
+    parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--out", type=Path, required=True)
+    args = parser.parse_args()
+
+    timeline = json.loads((args.params / "timeline.json").read_text(encoding="utf-8"))
+    tokens = json.loads((args.params / "tokens.json").read_text(encoding="utf-8"))
+    ambient = json.loads((args.params / "ambient.json").read_text(encoding="utf-8"))
+    dna = json.loads((args.analysis / "dna-reference.json").read_text(encoding="utf-8"))
+    report = json.loads(args.report.read_text(encoding="utf-8"))
+
+    _, our_motion = curves(args.render, 60)
+    ours_motion = {}
+    for shot in timeline["shots"]:
+        first, last = int(shot["start"] * 60), max(int(shot["end"] * 60), int(shot["start"] * 60) + 1)
+        window = our_motion[first:last]
+        ours_motion[shot["id"]] = sum(window) / len(window) if window else 0.0
+
+    frames = sorted(args.ref_frames.glob("f*.jpg"))
+    thumbs = reference_thumbnails(args.ref_frames, len(frames) - 1, timeline["shots"], args.ref_thumbs)
+
+    colours = tokens["color"]
+    ref_neutral = top_colours([{"duration": s["duration"], "colours": s["palette"]} for s in dna["shots"]], 6)
+    ref_accents = top_colours([{"duration": s["duration"], "colours": s["accents"]} for s in dna["shots"]], 8)
+
+    rows_shots = []
+    for shot, reference in zip(timeline["shots"], dna["shots"]):
+        boundary = reference.get("boundary_score")
+        if boundary is None:
+            kind = "début"
+        elif boundary >= 15:
+            kind = f"franche ({fr(boundary, 1)})"
+        else:
+            kind = f"douce ({fr(boundary, 1)})"
+        drift = ambient.get(shot["id"])
+        drift_text = f"dérive {esc(drift['property'])} ±{fr(drift['amplitude'], 0)}" if drift else "aucune dérive"
+        rows_shots.append(
+            f"<tr><td class=\"mono\">{shot['id']}</td><td>{esc(shot['name'])}</td>"
+            f"<td>{time_range(shot['start'], shot['end'])}</td>"
+            f"<td class=\"num\">{fr(shot['end'] - shot['start'], 2)}</td>"
+            f"<td>{esc(kind)}</td>"
+            f"<td class=\"num\">{reference['motion_mean']:.4f}</td>"
+            f"<td class=\"num\">{ours_motion[shot['id']]:.4f}</td>"
+            f"<td>{esc(shot['technique'])}<br><span class=\"mono\">{esc(drift_text)}</span></td>"
+            f"<td class=\"thumbs\"><img src=\"{esc(thumbs[shot['id']].as_uri())}\" alt=\"référence {shot['id']}\">"
+            f"<img src=\"ours/{shot['id']}.png\" alt=\"rendu {shot['id']}\"></td></tr>"
+        )
+
+    rows_captions = []
+    for caption in timeline["captions"]:
+        rows_captions.append(
+            f"<tr><td class=\"mono\">{caption['id']}</td><td>{time_range(caption['start'], caption['end'])}</td>"
+            f"<td>{esc(caption['text'])}</td><td class=\"mono\">{esc(caption['placement'])}</td>"
+            f"<td class=\"mono\">{esc(caption['size'])}</td><td class=\"mono\">{esc(caption['fill'])}</td>"
+            f"<td class=\"mono\">{esc(caption['reveal'])}</td></tr>"
+        )
+
+    rows_acts = []
+    for number, name, start, end, reference_text, our_text, message in ACTS:
+        rows_acts.append(
+            f"<tr><td class=\"num\">{number}</td><td>{esc(name)}</td><td>{time_range(start, end)}</td>"
+            f"<td>{esc(reference_text)}</td><td>{esc(our_text)}</td><td>{esc(message)}</td></tr>"
+        )
+
+    contract = report["contract"]
+    checks = report["checks"]
+
+    def badge(passed):
+        return "<span class=\"pass\">réussi</span>" if passed else "<span class=\"fail\">échoué</span>"
+
+    rows_checks = [
+        ("Durée et format", f"durée {fr(checks['duration']['value'], 3)} s, {checks['duration']['size'][0]}×{checks['duration']['size'][1]}, {fr(checks['duration']['fps'], 0)} images/s",
+         f"durée de référence 68,053 s, tolérance {fr(contract['duration_tolerance_s'], 2)} s", checks["duration"]["pass"]),
+        ("Mouvement image à image", f"corrélation {fr(checks['motion']['frame_correlation'], 3)}", f"au moins {fr(contract['motion_correlation_min'], 2)}", checks["motion"]["frame_correlation"] >= contract["motion_correlation_min"]),
+        ("Mouvement par plan", f"corrélation de rang {fr(checks['motion']['shot_rank_correlation'], 3)}", f"au moins {fr(contract['shot_motion_rank_min'], 2)}", checks["motion"]["shot_rank_correlation"] >= contract["shot_motion_rank_min"]),
+        ("Coupes franches", f"{checks['cuts']['matched']} sur {checks['cuts']['reference_hard_cuts']} retrouvées ({fr(checks['cuts']['rate'] * 100, 0)} %)", f"au moins {fr(contract['hard_cut_match_min'] * 100, 0)} %", checks["cuts"]["rate"] >= contract["hard_cut_match_min"]),
+        ("Lisibilité des légendes (OCR)", f"{checks['captions']['readable']} sur {checks['captions']['captions']} lisibles ({fr(checks['captions']['readable_rate'] * 100, 0)} %)", f"au moins {fr(contract['caption_recall_min'] * 100, 0)} %", checks["captions"]["readable_rate"] >= contract["caption_recall_min"]),
+        ("Timing des légendes", f"écart médian {fr(checks['captions']['timing_median_s'], 2)} s", f"au plus {fr(contract['caption_timing_median_s'], 2)} s", (checks["captions"]["timing_median_s"] or 99) <= contract["caption_timing_median_s"]),
+        ("Couleurs par plan (ΔE CIE76)", f"médiane {fr(checks['palette']['median_delta_e'], 1)}", f"au plus {fr(contract['palette_delta_e_median_max'], 0)}", checks["palette"]["pass"]),
+        ("Taille d'encre des légendes", f"rapport {fr(checks['typography']['ratio'], 3)} ({fr(checks['typography']['render_median_ink_px'], 1)} px contre {fr(checks['typography']['reference_median_ink_px'], 1)} px)", f"entre {fr(contract['ink_ratio_min'], 2)} et {fr(contract['ink_ratio_max'], 2)}", checks["typography"]["pass"]),
+    ]
+    rows_check_html = "".join(
+        f"<tr><td>{esc(name)}</td><td>{esc(value)}</td><td>{esc(limit)}</td><td>{badge(passed)}</td></tr>"
+        for name, value, limit, passed in rows_checks
+    )
+
+    neutral_html = "".join(swatch(c) for c in ref_neutral)
+    accent_html = "".join(swatch(c) for c in ref_accents)
+    ours_html = "".join(swatch(colours[key], label) for key, label in [
+        ("bg", "fond"), ("fg", "texte"), ("fg2", "secondaire"), ("fg3", "note"),
+        ("accent", "accent (argile ZenRay)"), ("accentDeep", "bronze profond"), ("signal", "bleu signal"), ("steel", "acier"),
+    ])
+
+    page = f"""<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Generated by Scripts/BuildStoryboard.py on 10 October 2026. Edit the parameters, then regenerate. -->
+<title>Storyboard, motion design 01</title>
+<style>{CSS}</style>
+</head>
+<body>
+<main>
+<h1>Storyboard : motion design 01, à partir de la référence OneKey Pro 2</h1>
+<p class="lede">Ce document fixe la référence mesurée, puis la version produite plan par plan. Le rendu suit le même déroulé, les mêmes coupes et le même rythme, avec un contenu adapté à la cible motion design. Aucune image ni musique n'est générée : le code, les polices et les mesures suffisent.</p>
+<p class="mono">Projet zenray-motion-design-01 · 10 October 2026</p>
+
+<h2>1. Ce que la référence fait (mesuré)</h2>
+<table>
+<tr><th>Mesure</th><th>Valeur</th><th>Comment elle est obtenue</th></tr>
+<tr><td>Durée et cadence</td><td class="num">68,05 s, 1920 × 1080, 60 images/s, H.264</td><td>ffprobe sur le MP4 de référence</td></tr>
+<tr><td>Piste audio</td><td>AAC 48 kHz stéréo, non reproduite</td><td>pas de musique générée à ce stade</td></tr>
+<tr><td>Coupes détectées</td><td class="num">39 au total, 13 franches (score ≥ 15)</td><td>scdet de ffmpeg, seuil 6</td></tr>
+<tr><td>Plans</td><td class="num">27 plans, du 0 au 68,00 s</td><td>coupes regroupées, micro-coupes du 50 s fusionnées</td></tr>
+<tr><td>Légendes</td><td class="num">30 segments lus à l'OCR</td><td>tesseract sur une image sur dix, puis fusion des lignes</td></tr>
+<tr><td>Mouvement</td><td class="num">pic 0,35 ; plan le plus vif : 50 à 52 s</td><td>différence moyenne entre images, 60 images/s</td></tr>
+<tr><td>Taille d'encre</td><td class="num">88,5 px à 1080p pour les titres de légende</td><td>boîte d'encre mesurée sur les images noires</td></tr>
+</table>
+<figure>
+<img src="reference-motion.png" alt="Courbes de mouvement et de luminance de la référence, traits = coupes">
+<figcaption>Courbes de la référence : orange, mouvement ; bleu, luminance ; traits rouges, coupes détectées. Donnée dérivée, pas une image de la référence.</figcaption>
+</figure>
+
+<h2>2. ADN graphique</h2>
+<p>Couleurs mesurées sur la référence, et couleurs de la version produite (jetons de <span class="mono">params/tokens.json</span>).</p>
+<h3>Référence, neutres</h3>
+<div class="swatches">{neutral_html}</div>
+<h3>Référence, accents</h3>
+<div class="swatches">{accent_html}</div>
+<h3>Version produite</h3>
+<div class="swatches">{ours_html}</div>
+<table>
+<tr><th>Élément</th><th>Référence (mesuré)</th><th>Version produite</th></tr>
+<tr><td>Typographie</td><td>grotesque sans, graisse régulière, centrée, interlignage serré</td><td>InterVariable 400 pour les légendes, Vogun pour le titre hero, AnthropicSerif pour les nombres, AnthropicMono pour les étiquettes</td></tr>
+<tr><td>Légende principale</td><td class="num">88,5 px d'encre à 1080p, centre vertical 0,506</td><td class="num">92 px, centre vertical 0,506, encre mesurée 85,5 px</td></tr>
+<tr><td>Note de bas de page</td><td class="num">environ 28 à 35 px d'encre, vers 0,92 de la hauteur</td><td class="num">30 px, vers 0,92 de la hauteur</td></tr>
+<tr><td>Titre de légende</td><td class="num">73,5 px d'encre, en haut</td><td class="num">64 px, en haut</td></tr>
+<tr><td>Fond</td><td>noir pur, aucune texture de fond</td><td>noir pur, lumière portée par les dégradés</td></tr>
+<tr><td>Mouvement</td><td>caméra vivante, coupes franches, flashs sur le temps</td><td>entrées par translation et échelle, dérive continue, coupes franches, flashs réglés</td></tr>
+</table>
+
+<h2>3. Narratif en sept actes</h2>
+<table>
+<tr><th>Acte</th><th>Nom</th><th>Plage</th><th>Référence (description)</th><th>Version produite</th><th>Message pour la cible</th></tr>
+{''.join(rows_acts)}
+</table>
+
+<h2>4. Les 27 plans</h2>
+<p>Coupe de référence : franche si le score de changement dépasse 15. Mouvement : différence moyenne entre images, référence contre rendu. Les vignettes de référence restent dans le scratchpad de session et ne sont ni publiées ni archivées.</p>
+<div class="wide">
+<table>
+<tr><th>Plan</th><th>Nom</th><th>Plage</th><th>Durée</th><th>Coupe (référence)</th><th>Mouvement réf.</th><th>Mouvement rendu</th><th>Technique</th><th>Référence et rendu</th></tr>
+{''.join(rows_shots)}
+</table>
+</div>
+
+<h2>5. Les 30 légendes</h2>
+<p>Textes de la version produite. Placement, taille et remplissage viennent des jetons ; les textes et les temps viennent de <span class="mono">params/timeline.json</span>.</p>
+<table>
+<tr><th>Id</th><th>Plage</th><th>Texte</th><th>Placement</th><th>Taille</th><th>Remplissage</th><th>Apparition</th></tr>
+{''.join(rows_captions)}
+</table>
+
+<h2>6. Contrat de vérification et résultat</h2>
+<p>Le contrat est écrit en tête de <span class="mono">Scripts/Verify.py</span>. Il mesure la structure et le rythme, pas l'identité des pixels ni des textes. Rapport : <span class="mono">verify/report-v3.json</span>.</p>
+<table>
+<tr><th>Contrôle</th><th>Mesure</th><th>Limite</th><th>Résultat</th></tr>
+{rows_check_html}
+</table>
+
+<h2>7. Limites et droits</h2>
+<div class="warn">Les cadres de la référence servent à la comparaison privée. Ils ne sont ni publiés, ni archivés dans l'atelier, ni repris dans le rendu.</div>
+<ul>
+<li>Pas de musique ni de voix : la piste sonore n'est pas reproduite à ce stade.</li>
+<li>Pas d'image générée : les objets sont dessinés en CSS et en SVG.</li>
+<li>La structure en une seule timeline racine produit 26 avertissements « nested_structure_needs_subcomposition » du lint. Essai de sous-compositions : la timeline d'un plan n'a pas été placée au temps local attendu, donc abandonné pour cette version.</li>
+<li>L'OCR lit mal le texte en fumée et les légendes sur fond chargé : la lisibilité mesurée est un plancher, pas un jugement de goût.</li>
+<li>Polices : InterVariable, Vogun, AnthropicSerif et AnthropicMono proviennent de l'installation locale. Vérifier leur licence avant toute distribution des polices elles-mêmes ; le rendu MP4 ne redistribue pas le fichier de police.</li>
+</ul>
+</main>
+</body>
+</html>
+"""
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(page, encoding="utf-8")
+    print(f"storyboard written: {args.out} ({args.out.stat().st_size} bytes)")
+
+
+if __name__ == "__main__":
+    main()

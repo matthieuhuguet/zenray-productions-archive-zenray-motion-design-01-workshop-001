@@ -1,4 +1,4 @@
-/* Cooked by Scripts/Cook.mjs at 2026-10-10T21:38:03.988Z. Edit params/tokens.json. */
+/* Cooked by Scripts/Cook.mjs at 2026-10-10T21:44:47.666Z. Edit params/tokens.json. */
 :root {
   --zr-color-bg: #000000;
   --zr-color-fg: #ffffff;
@@ -89,9 +89,10 @@
   --zr-device-ring-stroke: 36;
   --zr-device-logo-radius: 130;
   --zr-device-logo-stroke: 14;
-  --zr-effects-smoke-frequency: 0.011;
+  --zr-effects-smoke-frequency: 0.007;
   --zr-effects-smoke-octaves: 3;
   --zr-effects-smoke-seed: 7;
-  --zr-effects-smoke-scale: 120;
-  --zr-effects-halo-blur: 24px;
+  --zr-effects-smoke-scale: 70;
+  --zr-effects-halo-blur: 10px;
+  --zr-effects-smoke-blur: 2;
 }

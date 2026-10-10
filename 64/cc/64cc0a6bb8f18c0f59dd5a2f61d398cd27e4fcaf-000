@@ -11,6 +11,7 @@ const readJson = async (file) => JSON.parse(await readFile(path.join(root, 'para
 const tokens = await readJson('tokens.json');
 const timeline = await readJson('timeline.json');
 const choreography = await readJson('choreography.json');
+const ambient = await readJson('ambient.json');
 let html = await readFile(path.join(root, 'template', 'index.html'), 'utf8');
 
 const kebab = (text) => text.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
@@ -106,7 +107,7 @@ for (const stale of ['motion-shot.js', 'motion-root.js']) {
 await writeFile(path.join(compositionDir, 'tokens.css'), `/* Cooked by Scripts/Cook.mjs at ${stamp}. Edit params/tokens.json. */\n:root {\n${cssBody.join('\n')}\n}\n`, 'utf8');
 await writeFile(path.join(compositionDir, 'styles.css'), fillPlaceholders(styles), 'utf8');
 await writeFile(path.join(compositionDir, 'timeline-data.js'),
-  `// Cooked by Scripts/Cook.mjs at ${stamp}. Edit params/*.json.\nwindow.ZR_TOKENS = ${JSON.stringify(tokens, null, 2)};\nwindow.ZR_TIMELINE = ${JSON.stringify(timeline, null, 2)};\nwindow.ZR_CHOREO = ${JSON.stringify(choreography, null, 2)};\n`, 'utf8');
+  `// Cooked by Scripts/Cook.mjs at ${stamp}. Edit params/*.json.\nwindow.ZR_TOKENS = ${JSON.stringify(tokens, null, 2)};\nwindow.ZR_TIMELINE = ${JSON.stringify(timeline, null, 2)};\nwindow.ZR_CHOREO = ${JSON.stringify(choreography, null, 2)};\nwindow.ZR_AMBIENT = ${JSON.stringify(ambient, null, 2)};\n`, 'utf8');
 await writeFile(path.join(compositionDir, 'index.html'), fillPlaceholders(html), 'utf8');
 for (const name of ['motion-core.js', 'motion-main.js']) {
   await copyFile(path.join(root, 'template', name), path.join(compositionDir, name));

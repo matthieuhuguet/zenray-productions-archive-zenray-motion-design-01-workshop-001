@@ -1,0 +1,77 @@
+{
+  "S01": {
+    "target": "#orb",
+    "property": "x",
+    "amplitude": 160
+  },
+  "S02": {
+    "target": "#arch",
+    "property": "y",
+    "amplitude": 50
+  },
+  "S03": {
+    "target": "#device-main",
+    "property": "rotationY",
+    "amplitude": 4
+  },
+  "S05": {
+    "target": "#slab-a",
+    "property": "x",
+    "amplitude": 200
+  },
+  "S06": {
+    "target": "#slab-b",
+    "property": "x",
+    "amplitude": 180
+  },
+  "S07": {
+    "target": "#connector",
+    "property": "rotation",
+    "amplitude": 25
+  },
+  "S11": {
+    "target": "#layers",
+    "property": "rotationY",
+    "amplitude": 25
+  },
+  "S13": {
+    "target": "#chip-grid",
+    "property": "rotation",
+    "amplitude": 15
+  },
+  "S15": {
+    "target": "#device-confirm",
+    "property": "y",
+    "amplitude": 120
+  },
+  "S17": {
+    "target": "#puck",
+    "property": "y",
+    "amplitude": 120
+  },
+  "S18": {
+    "target": "#pad",
+    "property": "rotation",
+    "amplitude": 4
+  },
+  "S20": {
+    "target": "#device-menu",
+    "property": "y",
+    "amplitude": 100
+  },
+  "S21": {
+    "target": "#device-passkey",
+    "property": "rotation",
+    "amplitude": 4
+  },
+  "S25": {
+    "target": "#hero-device",
+    "property": "rotationY",
+    "amplitude": 12
+  },
+  "S19": {
+    "target": "#swipe",
+    "property": "y",
+    "amplitude": 60
+  }
+}

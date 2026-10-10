@@ -1,0 +1,297 @@
+# 10 October 2026, 00:20 CEST
+# Verify.py: measures a rendered composition against the reference analysis and writes a JSON report.
+# The contract (thresholds) is written below; the report says which checks passed and by how much.
+# Run with python3 -I: the render and the reference are derived media, read only through ffmpeg, tesseract and Pillow.
+import argparse
+import json
+import math
+import re
+import subprocess
+import sys
+from concurrent.futures import ProcessPoolExecutor
+from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(SCRIPT_DIR))
+
+from AnalyzeReference import curves  # noqa: E402
+from ExtractCaptions import merge_spans, normalise, ocr_lines  # noqa: E402
+from MeasureDna import boundary_scores, caption_ink, frame_at, palette  # noqa: E402
+
+# Contract: X = same structure and rhythm as the reference. Each value is a limit a check must meet.
+CONTRACT = {
+    "duration_tolerance_s": 0.10,
+    "motion_correlation_min": 0.45,
+    "shot_motion_rank_min": 0.50,
+    "hard_cut_score_min": 15.0,
+    "hard_cut_match_min": 0.60,
+    "cut_window_s": 0.10,
+    "caption_recall_min": 0.70,
+    "caption_timing_median_s": 0.25,
+    "palette_delta_e_median_max": 25.0,
+    "ink_ratio_min": 0.85,
+    "ink_ratio_max": 1.15,
+}
+
+
+def probe(video):
+    fields = "width,height,r_frame_rate,duration"
+    out = subprocess.run(
+        ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", f"stream={fields}", "-of", "json", str(video)],
+        capture_output=True, text=True, check=True,
+    ).stdout
+    stream = json.loads(out)["streams"][0]
+    num, den = stream["r_frame_rate"].split("/")
+    duration = float(stream.get("duration") or 0.0)
+    if duration == 0.0:
+        duration = float(json.loads(subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "json", str(video)],
+            capture_output=True, text=True, check=True).stdout)["format"]["duration"])
+    return {"width": stream["width"], "height": stream["height"], "fps": float(num) / float(den), "duration": duration}
+
+
+def extract_frames(video, out_dir, fps=10):
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for old in out_dir.glob("f*.jpg"):
+        old.unlink()
+    subprocess.run(
+        ["ffmpeg", "-v", "error", "-threads", "16", "-i", str(video), "-vf", f"fps={fps},scale=1280:720:flags=lanczos",
+         "-start_number", "0", "-q:v", "2", str(out_dir / "f%04d.jpg")],
+        check=True,
+    )
+    return len(list(out_dir.glob("f*.jpg")))
+
+
+def scene_scores(video, work):
+    log = work / "scdet.log"
+    subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-threads", "16", "-i", str(video), "-vf", "scdet=threshold=6",
+                    "-an", "-f", "null", "-"], stdout=subprocess.DEVNULL, stderr=open(log, "w"), check=False)
+    return boundary_scores(log)
+
+
+def ocr_worker(job):
+    return ocr_lines(job)
+
+
+def ocr_spans(frames_dir, fps, workers=16):
+    frames = sorted(frames_dir.glob("f*.jpg"))
+    jobs = [(path, index, 60.0) for index, path in enumerate(frames)]
+    per_frame = {}
+    with ProcessPoolExecutor(max_workers=workers) as pool:
+        for index, lines in pool.map(ocr_worker, jobs):
+            per_frame[index] = lines
+    return merge_spans(per_frame, fps)
+
+
+def smooth(values, window):
+    prefix = [0.0]
+    for value in values:
+        prefix.append(prefix[-1] + value)
+    out = []
+    for i in range(len(values)):
+        lo = max(0, i - window // 2)
+        hi = min(len(values), i + window // 2 + 1)
+        out.append((prefix[hi] - prefix[lo]) / (hi - lo))
+    return out
+
+
+def pearson(a, b):
+    n = min(len(a), len(b))
+    a, b = a[:n], b[:n]
+    if n < 2:
+        return 0.0
+    ma, mb = sum(a) / n, sum(b) / n
+    cov = sum((x - ma) * (y - mb) for x, y in zip(a, b))
+    va = math.sqrt(sum((x - ma) ** 2 for x in a))
+    vb = math.sqrt(sum((y - mb) ** 2 for y in b))
+    return cov / (va * vb) if va > 0 and vb > 0 else 0.0
+
+
+def ranks(values):
+    order = sorted(range(len(values)), key=lambda i: values[i])
+    result = [0.0] * len(values)
+    i = 0
+    while i < len(order):
+        j = i
+        while j + 1 < len(order) and values[order[j + 1]] == values[order[i]]:
+            j += 1
+        average = (i + j) / 2 + 1
+        for k in range(i, j + 1):
+            result[order[k]] = average
+        i = j + 1
+    return result
+
+
+def spearman(a, b):
+    return pearson(ranks(a), ranks(b))
+
+
+def median(values):
+    values = sorted(v for v in values if v is not None)
+    if not values:
+        return None
+    mid = len(values) // 2
+    return values[mid] if len(values) % 2 else (values[mid - 1] + values[mid]) / 2
+
+
+def hex_to_rgb(text):
+    return tuple(int(text[i:i + 2], 16) for i in (1, 3, 5))
+
+
+def srgb_to_lab(rgb):
+    def linear(channel):
+        c = channel / 255.0
+        return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+    r, g, b = (linear(v) for v in rgb)
+    x = (0.4124 * r + 0.3576 * g + 0.1805 * b) / 0.95047
+    y = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    z = (0.0193 * r + 0.1192 * g + 0.9505 * b) / 1.08883
+
+    def pivot(t):
+        return t ** (1 / 3) if t > 0.008856 else 7.787 * t + 16 / 116
+
+    fx, fy, fz = pivot(x), pivot(y), pivot(z)
+    return (116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz))
+
+
+def delta_e(a, b):
+    return math.dist(srgb_to_lab(a), srgb_to_lab(b))
+
+
+def palette_distance(reference_palette, our_palette):
+    ref = [hex_to_rgb(c["hex"]) for c in reference_palette[:3]]
+    ours = [hex_to_rgb(c["hex"]) for c in our_palette[:4]]
+    if not ref or not ours:
+        return None
+    return sum(min(delta_e(r, o) for o in ours) for r in ref) / len(ref)
+
+
+def words(text):
+    return [w for w in normalise(text).split() if len(w) >= 2]
+
+
+def caption_checks(timeline, spans):
+    rows = []
+    for caption in timeline["captions"]:
+        wanted = set(words(caption["text"]))
+        if not wanted:
+            continue
+        window = [s for s in spans if s["end"] >= caption["start"] - 0.2 and s["start"] <= caption["end"] + 0.2]
+        seen = set()
+        for span in window:
+            seen.update(words(span["text"]))
+        recall = len(wanted & seen) / len(wanted)
+        first_seen = None
+        for span in sorted(window, key=lambda s: s["start"]):
+            if span["start"] < caption["start"] - 0.5:
+                continue
+            if len(wanted & set(words(span["text"]))) / len(wanted) >= 0.5:
+                first_seen = span["start"]
+                break
+        best = max(window, key=lambda s: len(wanted & set(words(s["text"]))), default=None)
+        rows.append({
+            "id": caption["id"], "text": caption["text"], "start": caption["start"], "recall": round(recall, 3),
+            "first_seen": first_seen, "timing_error": None if first_seen is None else round(first_seen - caption["start"], 3),
+            "best_span": best, "size": caption["size"],
+        })
+    return rows
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Measure a render against the reference analysis.")
+    parser.add_argument("render", type=Path)
+    parser.add_argument("--reference-dir", type=Path, required=True, help="analysis folder: motion.json, scdet.log, dna-reference.json")
+    parser.add_argument("--reference-frames", type=Path, required=True, help="reference frames at 10 fps (f%%04d.jpg)")
+    parser.add_argument("--timeline", type=Path, required=True)
+    parser.add_argument("--work", type=Path, required=True)
+    parser.add_argument("--out", type=Path, required=True)
+    args = parser.parse_args()
+    args.work.mkdir(parents=True, exist_ok=True)
+    timeline = json.loads(args.timeline.read_text(encoding="utf-8"))
+    reference = json.loads((args.reference_dir / "dna-reference.json").read_text(encoding="utf-8"))
+    ref_motion = json.loads((args.reference_dir / "motion.json").read_text(encoding="utf-8"))
+    checks = {}
+
+    # 1. Format and duration.
+    info = probe(args.render)
+    checks["duration"] = {
+        "value": round(info["duration"], 3), "target": 68.053, "fps": info["fps"], "size": [info["width"], info["height"]],
+        "pass": abs(info["duration"] - 68.053) <= CONTRACT["duration_tolerance_s"] and info["fps"] == 60 and (info["width"], info["height"]) == (1920, 1080),
+    }
+
+    # 2. Motion energy, frame by frame and shot by shot.
+    _, our_motion = curves(args.render, 60)
+    ref_series = smooth(ref_motion["motion"], 6)
+    our_series = smooth(our_motion, 6)
+    correlation = pearson(ref_series, our_series)
+    shot_ours, shot_ref = [], []
+    for shot, dna in zip(timeline["shots"], reference["shots"]):
+        first, last = int(shot["start"] * 60), max(int(shot["end"] * 60), int(shot["start"] * 60) + 1)
+        window = our_motion[first:last]
+        shot_ours.append(sum(window) / len(window) if window else 0.0)
+        shot_ref.append(dna["motion_mean"])
+    rank_corr = spearman(shot_ref, shot_ours)
+    checks["motion"] = {"frame_correlation": round(correlation, 3), "shot_rank_correlation": round(rank_corr, 3),
+                        "pass": correlation >= CONTRACT["motion_correlation_min"] and rank_corr >= CONTRACT["shot_motion_rank_min"]}
+
+    # 3. Cuts: reference hard cuts must reappear as visible changes within the window.
+    ref_cuts = [(t, s) for t, s in boundary_scores(args.reference_dir / "scdet.log") if s >= CONTRACT["hard_cut_score_min"]]
+    our_cuts = scene_scores(args.render, args.work)
+    matched = [t for t, _ in ref_cuts if any(abs(t - u) <= CONTRACT["cut_window_s"] for u, _ in our_cuts)]
+    cut_rate = len(matched) / len(ref_cuts) if ref_cuts else 0.0
+    checks["cuts"] = {"reference_hard_cuts": len(ref_cuts), "matched": len(matched), "rate": round(cut_rate, 3),
+                      "pass": cut_rate >= CONTRACT["hard_cut_match_min"]}
+
+    # 4. Captions: each line must be readable by OCR inside its window, and appear close to its declared start.
+    frames = args.work / "frames10"
+    extract_frames(args.render, frames, 10)
+    spans = ocr_spans(frames, 10)
+    rows = caption_checks(timeline, spans)
+    recall_pass = [r for r in rows if r["recall"] >= CONTRACT["caption_recall_min"]]
+    timing = [abs(r["timing_error"]) for r in rows if r["timing_error"] is not None]
+    timing_median = median(timing)
+    checks["captions"] = {
+        "captions": len(rows), "readable": len(recall_pass), "readable_rate": round(len(recall_pass) / len(rows), 3) if rows else 0.0,
+        "timing_median_s": None if timing_median is None else round(timing_median, 3),
+        "unreadable": [{"id": r["id"], "text": r["text"], "recall": r["recall"]} for r in rows if r["recall"] < CONTRACT["caption_recall_min"]],
+        "pass": bool(rows) and len(recall_pass) / len(rows) >= CONTRACT["caption_recall_min"] and (timing_median is not None and timing_median <= CONTRACT["caption_timing_median_s"]),
+    }
+
+    # 5. Palette per shot: colour distance between the reference's and our dominant colours (CIE76 Delta E).
+    distances = []
+    for shot, dna in zip(timeline["shots"], reference["shots"]):
+        image = frame_at(frames, 10, len(list(frames.glob("f*.jpg"))) - 1, (shot["start"] + shot["end"]) / 2)
+        distances.append(palette_distance(dna["palette"], palette(image, 6)))
+    delta = median(distances)
+    checks["palette"] = {"median_delta_e": None if delta is None else round(delta, 2),
+                         "per_shot": [None if d is None else round(d, 1) for d in distances],
+                         "pass": delta is not None and delta <= CONTRACT["palette_delta_e_median_max"]}
+
+    # 6. Typography: statement captions keep the reference's ink height (measured on the 1080p frame).
+    ref_heights = [c["ink"]["h"] * 1080 for c in reference["captions"] if c["ink"] and 60 <= c["ink"]["h"] * 1080 <= 110]
+    our_heights = []
+    for row in rows:
+        if row["size"] != "statement" or not row["best_span"]:
+            continue
+        span = row["best_span"]
+        image = frame_at(frames, 10, len(list(frames.glob("f*.jpg"))) - 1, (span["start"] + span["end"]) / 2)
+        ink = caption_ink(image, (span["x"], span["y"], span["w"], span["h"]), 110)
+        if ink and 60 <= ink["h"] * 1080 <= 110:
+            our_heights.append(ink["h"] * 1080)
+    ratio = (median(our_heights) / median(ref_heights)) if our_heights and ref_heights else None
+    checks["typography"] = {"reference_median_ink_px": round(median(ref_heights), 1) if ref_heights else None,
+                            "render_median_ink_px": round(median(our_heights), 1) if our_heights else None,
+                            "ratio": None if ratio is None else round(ratio, 3),
+                            "pass": ratio is not None and CONTRACT["ink_ratio_min"] <= ratio <= CONTRACT["ink_ratio_max"]}
+
+    report = {"contract": CONTRACT, "checks": checks, "passed": all(c.get("pass") for c in checks.values())}
+    args.out.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    for name, data in checks.items():
+        print(f"{'PASS' if data.get('pass') else 'FAIL'} {name}: " + ", ".join(f"{k}={v}" for k, v in data.items() if k not in ('pass', 'per_shot', 'unreadable')))
+    print("OVERALL", "PASS" if report["passed"] else "FAIL")
+    raise SystemExit(0 if report["passed"] else 1)
+
+
+if __name__ == "__main__":
+    main()

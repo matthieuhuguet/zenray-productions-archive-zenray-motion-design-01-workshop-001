@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Cooked by Scripts/Cook.mjs at 2026-10-10T21:38:03.988Z. Edit params/ and template/, never this file. -->
+<!-- Cooked by Scripts/Cook.mjs at 2026-10-10T21:44:47.666Z. Edit params/ and template/, never this file. -->
 <html lang="en" data-resolution="landscape">
   <head>
     <meta charset="UTF-8" />
@@ -12,8 +12,9 @@
     <svg width="0" height="0" style="position: absolute;" aria-hidden="true">
       <defs>
         <filter id="smoke-filter" x="-20%" y="-20%" width="140%" height="140%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="7" result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="120" xChannelSelector="R" yChannelSelector="G" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.007" numOctaves="3" seed="7" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="70" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+          <feGaussianBlur in="displaced" stdDeviation="2" />
         </filter>
       </defs>
     </svg>
@@ -203,9 +204,13 @@
 
       
     <section class="clip shot" id="shot-S19" data-shot="card-swipe" data-start="34.57" data-duration="4.83">
-      <div class="card" id="card" data-center>
-        <div class="card-face front"><div class="card-stripe"></div><span class="card-mono">PLAIN HTML</span></div>
-        <div class="card-face back"></div>
+      <div class="swipe" id="swipe">
+        <div class="stage">
+          <div class="card" id="card" data-center>
+            <div class="card-face front"><div class="card-stripe"></div><span class="card-mono">PLAIN HTML</span></div>
+            <div class="card-face back"></div>
+          </div>
+        </div>
       </div>
       
     </section>
@@ -303,7 +308,7 @@
       
     <section class="clip shot" id="shot-S26" data-shot="hero-b" data-start="60.8" data-duration="1.2">
       <div class="floor warm" id="floor-b"></div>
-      <div class="smoke-word bronze" id="smoke-b" data-center>HTML</div>
+      <div class="smoke-word smoke-accent" id="smoke-b" data-center>HTML</div>
       
     </section>
     

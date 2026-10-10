@@ -105,11 +105,12 @@
     "logoStroke": 14
   },
   "effects": {
-    "smokeFrequency": 0.011,
+    "smokeFrequency": 0.007,
     "smokeOctaves": 3,
     "smokeSeed": 7,
-    "smokeScale": 120,
-    "haloBlur": "24px"
+    "smokeScale": 70,
+    "haloBlur": "10px",
+    "smokeBlur": 2
   },
   "motion": {
     "easeOut": "power3.out",
@@ -129,7 +130,7 @@
     "splitOffset": 160,
     "blurAmount": "18px",
     "stagger": 0.06,
-    "qrStagger": 0.012,
+    "qrStagger": 0.002,
     "qrModules": 25,
     "qrSeed": 7
   }
