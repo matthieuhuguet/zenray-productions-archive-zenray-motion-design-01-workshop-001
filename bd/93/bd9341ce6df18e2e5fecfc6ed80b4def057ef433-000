@@ -1,0 +1,108 @@
+{
+  "mp4": "/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/renders/zenray-motion-design-01-sfx.mp4",
+  "passed": true,
+  "checks": [
+    {
+      "name": "AAC audio stream present",
+      "pass": true,
+      "detail": "aac"
+    },
+    {
+      "name": "stereo at 48 kHz",
+      "pass": true,
+      "detail": "2 channels, 48000 Hz"
+    },
+    {
+      "name": "duration matches the picture",
+      "pass": true,
+      "detail": "68.011 s"
+    },
+    {
+      "name": "no clipping (peak below 0.98 of full scale)",
+      "pass": true,
+      "detail": "0.767"
+    },
+    {
+      "name": "every event is audible",
+      "pass": true,
+      "detail": "53 of 53"
+    },
+    {
+      "name": "onsets within one picture frame",
+      "pass": true,
+      "detail": "largest gap 8.0 ms, tolerance 17.7 ms"
+    },
+    {
+      "name": "picture unchanged (frame hashes identical)",
+      "pass": true,
+      "detail": "identical"
+    }
+  ],
+  "values": {
+    "codec": "aac",
+    "channels": 2,
+    "sampleRate": 48000,
+    "audioSeconds": 68.011,
+    "peakFullScale": 0.767,
+    "events": 53,
+    "audible": 53,
+    "maxGapMs": 8.0,
+    "toleranceMs": 17.7,
+    "pictureIdentical": true
+  },
+  "offsets_ms": [
+    6.0,
+    4.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    8.0,
+    8.0,
+    0.0,
+    0.0,
+    4.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    6.0,
+    0.0,
+    6.0,
+    0.0,
+    4.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    6.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    6.0,
+    0.0,
+    0.0
+  ]
+}

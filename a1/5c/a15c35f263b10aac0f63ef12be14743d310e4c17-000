@@ -65,7 +65,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <h2 id="s1">1. Lecture rapide</h2>
 <div class="scroll"><table>
 <tr><th>Élément</th><th>Valeur</th><th>Détail</th></tr>
-<tr><td>Durée de l'étude</td><td class="num">68,00 s</td><td class="num">4080 images à 60 images/s, 1920 × 1080 px, H.264, sans audio</td></tr>
+<tr><td>Durée de l'étude</td><td class="num">68,00 s</td><td class="num">4080 images à 60 images/s, 1920 × 1080 px, H.264 ; son AAC stéréo 48 kHz, fait en code, sans musique</td></tr>
 <tr><td>Plans</td><td class="num">27</td><td>coupes repérées sur la référence, du 0,00 s au 68,00 s, sans trou</td></tr>
 <tr><td>Légendes</td><td class="num">30</td><td>textes originaux, placés, dimensionnés et animés depuis les paramètres</td></tr>
 <tr><td>Actes narratifs</td><td class="num">7</td><td>accroche, matières, systèmes, confiance, connectivité, produit, titre et marque</td></tr>
@@ -146,7 +146,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0079</td><td class="num">0.0005</td><td class="num">0,06</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 0,00 s (image 0). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 0,00 s (image 0). Aucun son au début du film.</p>
 </div></div></article>
 <article class="shot" id="S02">
 <header><span class="mono">S02</span><h3>arch-morph</h3>
@@ -165,7 +165,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0044</td><td class="num">0.0010</td><td class="num">0,23</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 1,90 s (image 114). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 1,90 s (image 114). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S03">
 <header><span class="mono">S03</span><h3>device-rise</h3>
@@ -184,7 +184,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0022</td><td class="num">0.0018</td><td class="num">0,79</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 3,20 s (image 192). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 3,20 s (image 192). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S04">
 <header><span class="mono">S04</span><h3>statement-sweep</h3>
@@ -203,7 +203,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0014</td><td class="num">0.0005</td><td class="num">0,34</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 4,90 s (image 294). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 4,90 s (image 294). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S05">
 <header><span class="mono">S05</span><h3>slab-push</h3>
@@ -222,7 +222,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0082</td><td class="num">0.0026</td><td class="num">0,31</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 6,28 s (image 377). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 6,28 s (image 377). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S06">
 <header><span class="mono">S06</span><h3>slab-lit</h3>
@@ -241,7 +241,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0067</td><td class="num">0.0029</td><td class="num">0,43</td><td>oui, score 6,9</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 7,45 s (image 447). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 7,45 s (image 447). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S07">
 <header><span class="mono">S07</span><h3>connector-parallax</h3>
@@ -260,7 +260,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0074</td><td class="num">0.0011</td><td class="num">0,15</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 8,73 s (image 524). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 8,73 s (image 524). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S08">
 <header><span class="mono">S08</span><h3>specular-wipe</h3>
@@ -279,7 +279,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0053</td><td class="num">0.0082</td><td class="num">1,55</td><td>oui, score 17,6</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 10,20 s (image 612). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 10,20 s (image 612). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S09">
 <header><span class="mono">S09</span><h3>plane-pan</h3>
@@ -298,7 +298,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0054</td><td class="num">0.0025</td><td class="num">0,47</td><td>oui, score 16,1</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 11,65 s (image 699). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 11,65 s (image 699). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S10">
 <header><span class="mono">S10</span><h3>glass-streaks</h3>
@@ -317,7 +317,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0123</td><td class="num">0.0026</td><td class="num">0,21</td><td>oui, score 16,3</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 13,25 s (image 795). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 13,25 s (image 795). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S11">
 <header><span class="mono">S11</span><h3>layers-stack</h3>
@@ -336,7 +336,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0089</td><td class="num">0.0006</td><td class="num">0,07</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 14,60 s (image 876). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 14,60 s (image 876). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S12">
 <header><span class="mono">S12</span><h3>flash-glitch</h3>
@@ -355,7 +355,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0207</td><td class="num">0.0615</td><td class="num">2,97</td><td>oui, score 32,3</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 18,08 s (image 1085). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 18,08 s (image 1085). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S13">
 <header><span class="mono">S13</span><h3>chip-grid</h3>
@@ -374,7 +374,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0074</td><td class="num">0.0032</td><td class="num">0,43</td><td>oui, score 6,7</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 18,28 s (image 1097). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 18,28 s (image 1097). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S14">
 <header><span class="mono">S14</span><h3>pcb-split</h3>
@@ -393,7 +393,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0028</td><td class="num">0.0007</td><td class="num">0,26</td><td>oui, score 6,4</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 19,60 s (image 1176). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 19,60 s (image 1176). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S15">
 <header><span class="mono">S15</span><h3>confirm-check</h3>
@@ -412,7 +412,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0047</td><td class="num">0.0010</td><td class="num">0,21</td><td>oui, score 6,4</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 22,57 s (image 1354). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 22,57 s (image 1354). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S16">
 <header><span class="mono">S16</span><h3>typewriter</h3>
@@ -431,7 +431,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0011</td><td class="num">0.0002</td><td class="num">0,19</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 25,40 s (image 1524). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 25,40 s (image 1524). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S17">
 <header><span class="mono">S17</span><h3>puck-ping</h3>
@@ -450,7 +450,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0039</td><td class="num">0.0013</td><td class="num">0,34</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 29,53 s (image 1772). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 29,53 s (image 1772). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S18">
 <header><span class="mono">S18</span><h3>wireless-arcs</h3>
@@ -469,7 +469,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0044</td><td class="num">0.0020</td><td class="num">0,47</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 31,80 s (image 1908). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 31,80 s (image 1908). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S19">
 <header><span class="mono">S19</span><h3>card-swipe</h3>
@@ -488,7 +488,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0052</td><td class="num">0.0009</td><td class="num">0,17</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 34,57 s (image 2074). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 34,57 s (image 2074). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S20">
 <header><span class="mono">S20</span><h3>qr-assembly</h3>
@@ -507,7 +507,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0029</td><td class="num">0.0014</td><td class="num">0,50</td><td>oui, score 13,8</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 39,40 s (image 2364). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 39,40 s (image 2364). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S21">
 <header><span class="mono">S21</span><h3>ripple-passkey</h3>
@@ -526,7 +526,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0048</td><td class="num">0.0017</td><td class="num">0,35</td><td>oui, score 17,0</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 44,25 s (image 2655). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 44,25 s (image 2655). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S22">
 <header><span class="mono">S22</span><h3>beat-cuts</h3>
@@ -545,7 +545,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0280</td><td class="num">0.0232</td><td class="num">0,83</td><td>oui, score 51,2</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 50,20 s (image 3012). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 50,20 s (image 3012). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S23">
 <header><span class="mono">S23</span><h3>counters-easing</h3>
@@ -564,7 +564,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0023</td><td class="num">0.0019</td><td class="num">0,83</td><td>oui, score 22,4</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 51,73 s (image 3104). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 51,73 s (image 3104). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S24">
 <header><span class="mono">S24</span><h3>title-hint</h3>
@@ -583,7 +583,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0019</td><td class="num">0.0006</td><td class="num">0,34</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 58,00 s (image 3480). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 58,00 s (image 3480). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S25">
 <header><span class="mono">S25</span><h3>hero-a</h3>
@@ -602,7 +602,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0047</td><td class="num">0.0027</td><td class="num">0,56</td><td>oui, score 6,6</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 59,53 s (image 3572). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 59,53 s (image 3572). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S26">
 <header><span class="mono">S26</span><h3>hero-b</h3>
@@ -621,7 +621,7 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0051</td><td class="num">0.0026</td><td class="num">0,51</td><td>oui, score 10,1</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 60,80 s (image 3648). Accent recommandé : coupe franche.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 60,80 s (image 3648). Coup grave à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 <article class="shot" id="S27">
 <header><span class="mono">S27</span><h3>logo-outro</h3>
@@ -640,11 +640,11 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <tr><th>Énergie de mouvement</th><th>Référence</th><th>Étude</th><th>Rapport</th><th>Coupe détectée dans le rendu</th></tr>
 <tr><td>Moyenne par image</td><td class="num">0.0003</td><td class="num">0.0002</td><td class="num">0,66</td><td>non</td></tr>
 </table></div>
-<p class="cue"><strong>Repère sonore (pour une musique que tu fournis).</strong> Coupe à 62,00 s (image 3720). Pas d&#x27;accent imposé.</p>
+<p class="cue"><strong>Son du film.</strong> Coupe à 62,00 s (image 3720). Souffle à la coupe. Une musique que tu fournis se cale sur cette coupe.</p>
 </div></div></article>
 
 <h2 id="s9">9. Les 30 légendes</h2>
-<p>Lisibilité : taux de mots lus par l'OCR dans la fenêtre de la légende. Écart : différence entre le début déclaré et la première lecture OCR.</p><p>Légendes non lues en entier par l'OCR : C00, C06, C07, C10, C20, C26, C27. L'OCR échoue sur les fonds en dégradé, les couleurs vives et les titres de petit corps ; il ne mesure donc pas ce que voit le spectateur.</p><p>Relues à l'œil sur l'image de leur instant dans le rendu : C00 (lisible à 4,6 s, sur l'appareil), C06 (lisible à 16,6 s), C07 (lisible à 17,8 s), C10 (lisible à 21,8 s), C20 (lisible à 47,0 s, mais chevauche le bas de l'appareil), C26 (lisible à 59,0 s), C27 (lisible à 61,4 s).</p>
+<p>Lisibilité : taux de mots lus par l'OCR dans la fenêtre de la légende. Écart : différence entre le début déclaré et la première lecture OCR.</p><p>Légendes non lues en entier par l'OCR : C00, C06, C07, C10, C20, C26, C27. L'OCR échoue sur les fonds en dégradé, les couleurs vives et les titres de petit corps ; il ne mesure donc pas ce que voit le spectateur.</p><p>À contrôler à l'œil avant toute conclusion : C00, C06, C07, C10, C20, C26, C27.</p>
 <div class="wide">
 <div class="scroll"><table>
 <tr><th>Id</th><th>Temps</th><th>Texte</th><th>Placement</th><th>Taille</th><th>Remplissage</th><th>Apparition</th><th>Lisibilité OCR</th><th>Écart</th></tr>
@@ -661,13 +661,13 @@ figure.figure figcaption { color: var(--soft); font-size: 13px; margin-top: 8px;
 <h3>10.2 Vérification du rendu contre la référence, OVERALL PASS</h3>
 <div class="scroll"><table>
 <tr><th>Contrôle</th><th>Mesure</th><th>Limite</th><th>Résultat</th></tr>
-<tr><td>Durée du rendu</td><td class="num">68,000 s</td><td>68,053 s ± 0,10 s</td><td><span class="pass">réussi</span></td></tr><tr><td>Mouvement image à image</td><td class="num">0,503</td><td>au moins 0,45</td><td><span class="pass">réussi</span></td></tr><tr><td>Mouvement par plan (rang)</td><td class="num">0,560</td><td>au moins 0,50</td><td><span class="pass">réussi</span></td></tr><tr><td>Coupes franches retrouvées</td><td class="num">9 sur 13</td><td>au moins 60 %</td><td><span class="pass">réussi</span></td></tr><tr><td>Légendes lisibles à l&#x27;OCR</td><td class="num">23 sur 30</td><td>au moins 70 %</td><td><span class="pass">réussi</span></td></tr><tr><td>Timing des légendes (médiane)</td><td class="num">0,10 s</td><td>au plus 0,25 s</td><td><span class="pass">réussi</span></td></tr><tr><td>Couleurs par plan (ΔE médian)</td><td class="num">10,25</td><td>au plus 25</td><td><span class="pass">réussi</span></td></tr><tr><td>Taille d&#x27;encre des légendes</td><td class="num">0,967</td><td>entre 0,85 et 1,15</td><td><span class="pass">réussi</span></td></tr>
+<tr><td>Durée du rendu</td><td class="num">68,000 s</td><td>68,053 s ± 0,10 s</td><td><span class="pass">réussi</span></td></tr><tr><td>Mouvement image à image</td><td class="num">0,503</td><td>au moins 0,45</td><td><span class="pass">réussi</span></td></tr><tr><td>Mouvement par plan (rang)</td><td class="num">0,560</td><td>au moins 0,50</td><td><span class="pass">réussi</span></td></tr><tr><td>Coupes franches retrouvées</td><td class="num">9 sur 13</td><td>au moins 60 %</td><td><span class="pass">réussi</span></td></tr><tr><td>Légendes lisibles à l&#x27;OCR</td><td class="num">23 sur 30</td><td>au moins 70 %</td><td><span class="pass">réussi</span></td></tr><tr><td>Timing des légendes (médiane)</td><td class="num">0,10 s</td><td>au plus 0,25 s</td><td><span class="pass">réussi</span></td></tr><tr><td>Couleurs par plan (ΔE médian)</td><td class="num">10,25</td><td>au plus 25</td><td><span class="pass">réussi</span></td></tr><tr><td>Taille d&#x27;encre des légendes</td><td class="num">0,967</td><td>entre 0,85 et 1,15</td><td><span class="pass">réussi</span></td></tr><tr><td>Son : format</td><td class="num">AAC, 2 voies, 48 000 Hz</td><td>AAC, stéréo, 48 000 Hz</td><td><span class="pass">réussi</span></td></tr><tr><td>Son : durée</td><td class="num">68,01 s</td><td>68,00 s à 0,05 s près</td><td><span class="pass">réussi</span></td></tr><tr><td>Son : crête</td><td class="num">0,767</td><td>au plus 0,98 du plein niveau</td><td><span class="pass">réussi</span></td></tr><tr><td>Son : événements audibles</td><td class="num">53 sur 53</td><td>tous</td><td><span class="pass">réussi</span></td></tr><tr><td>Son : écart maximal au départ</td><td class="num">8,0 ms</td><td>au plus 17,7 ms, soit une image</td><td><span class="pass">réussi</span></td></tr><tr><td>Son : image inchangée</td><td class="num">identique</td><td>identique à la vidéo muette v6</td><td><span class="pass">réussi</span></td></tr>
 </table></div>
 <p class="mono">Rapport complet : verify/report-v3.json · Liste des plans : shot-list.csv · Liste des légendes : caption-list.csv</p>
 
 <h2 id="s11">11. Limites, droits et étapes suivantes</h2>
 <ul>
-<li>Son : aucune piste sonore n'est reprise ni produite. Pour une musique, fournir un fichier dont tu as les droits ; les repères de la section 8 indiquent les coupes en images.</li>
+<li>Son : aucune musique, et aucun son de la référence. La couche sonore est faite en code : un coup grave à chaque coupe franche, un souffle à chaque coupe douce, un clic à chaque instant d'apparition de légende. Pour une musique, fournir un fichier dont tu as les droits ; les repères de la section 8 indiquent les coupes en images.</li>
 <li>Images : aucune image de la référence n'est utilisée. Le rendu ne contient que des formes, des dégradés, du texte et des tracés produits par le code.</li>
 <li>Marque : aucun logo, nom de produit ni slogan de la référence. La marque affichée est ZenRay, avec le compte @zenrayst.</li>
 <li>Polices : InterVariable, Vogun, AnthropicSerif et AnthropicMono proviennent de l'installation locale. Vérifier leur licence avant toute diffusion des fichiers de police.</li>

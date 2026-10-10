@@ -3,8 +3,8 @@
   "updated": "11 October 2026",
   "goal_x": "Study with the structure and rhythm of the OneKey Pro 2 reference (68 s, 27 shots, caption windows, motion energy, measured colours), original content only: no reference image, sound, text or logo; no Hyperframes or tool labels on screen. Verify.py OVERALL PASS on the last render.",
   "status": "delivered_pending_owner_decision",
-  "current_render": "renders/zenray-motion-design-01-v6.mp4",
-  "current_verify": "verify/report-v6.json",
+  "current_render": "renders/zenray-motion-design-01.mp4 (v6 picture, code-made sound layer, AAC 48 kHz stereo)",
+  "current_verify": "verify/report-v6.json (picture), verify/sound-report.json (sound)",
   "done": [
     "v3 OVERALL PASS; v4 (original caption copy, shadow token); v5 (caption reveal and exit fitted to each caption window); v6 (neutral interface labels, hero word SURE); each render verified",
     "storyboard/storyboard.html rebuilt from v6: 27 plans, 30 captions, 11 sections, checks all pass, no tool labels, no reference strings, phone width without sideways scroll",
@@ -12,7 +12,7 @@
     "seven unread captions checked by eye on v6 frames, recorded in params/visual-checks.json"
   ],
   "next": [
-    "Send storyboard/storyboard.html and renders/zenray-motion-design-01.mp4 to Matthieu",
+    "Matthieu: decide whether the code-made sound layer stays, or send a track he has the rights to (it will be timed to the same cuts)",
     "Matthieu decides: caption C20 overlapping the device, font licences before any release, publication",
     "Ask Matthieu to resend the image from the first message (never readable) or describe it in one sentence"
   ],

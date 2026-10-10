@@ -1,0 +1,271 @@
+{
+  "rate": 48000,
+  "durationSeconds": 68.0,
+  "events": [
+    {
+      "time": 1.9,
+      "kind": "soft",
+      "id": "S02"
+    },
+    {
+      "time": 3.2,
+      "kind": "soft",
+      "id": "S03"
+    },
+    {
+      "time": 4.3,
+      "kind": "caption",
+      "id": "C00"
+    },
+    {
+      "time": 4.9,
+      "kind": "soft",
+      "id": "S04"
+    },
+    {
+      "time": 4.9,
+      "kind": "caption",
+      "id": "C01"
+    },
+    {
+      "time": 6.28,
+      "kind": "hard",
+      "id": "S05"
+    },
+    {
+      "time": 7.45,
+      "kind": "hard",
+      "id": "S06"
+    },
+    {
+      "time": 7.5,
+      "kind": "caption",
+      "id": "C02"
+    },
+    {
+      "time": 8.73,
+      "kind": "hard",
+      "id": "S07"
+    },
+    {
+      "time": 10.2,
+      "kind": "soft",
+      "id": "S08"
+    },
+    {
+      "time": 10.2,
+      "kind": "caption",
+      "id": "C03"
+    },
+    {
+      "time": 11.65,
+      "kind": "hard",
+      "id": "S09"
+    },
+    {
+      "time": 13.2,
+      "kind": "caption",
+      "id": "C05"
+    },
+    {
+      "time": 13.25,
+      "kind": "hard",
+      "id": "S10"
+    },
+    {
+      "time": 14.1,
+      "kind": "caption",
+      "id": "C04"
+    },
+    {
+      "time": 14.6,
+      "kind": "hard",
+      "id": "S11"
+    },
+    {
+      "time": 16.1,
+      "kind": "caption",
+      "id": "C06"
+    },
+    {
+      "time": 17.5,
+      "kind": "caption",
+      "id": "C07+C08"
+    },
+    {
+      "time": 18.08,
+      "kind": "soft",
+      "id": "S12"
+    },
+    {
+      "time": 18.28,
+      "kind": "soft",
+      "id": "S13"
+    },
+    {
+      "time": 19.6,
+      "kind": "hard",
+      "id": "S14"
+    },
+    {
+      "time": 20.3,
+      "kind": "caption",
+      "id": "C09+C10"
+    },
+    {
+      "time": 22.57,
+      "kind": "soft",
+      "id": "S15"
+    },
+    {
+      "time": 23.2,
+      "kind": "caption",
+      "id": "C11"
+    },
+    {
+      "time": 25.4,
+      "kind": "soft",
+      "id": "S16"
+    },
+    {
+      "time": 25.4,
+      "kind": "caption",
+      "id": "C12"
+    },
+    {
+      "time": 27.2,
+      "kind": "caption",
+      "id": "C13"
+    },
+    {
+      "time": 28.4,
+      "kind": "caption",
+      "id": "C14"
+    },
+    {
+      "time": 29.53,
+      "kind": "soft",
+      "id": "S17"
+    },
+    {
+      "time": 29.6,
+      "kind": "caption",
+      "id": "C15"
+    },
+    {
+      "time": 31.8,
+      "kind": "soft",
+      "id": "S18"
+    },
+    {
+      "time": 31.9,
+      "kind": "caption",
+      "id": "C16"
+    },
+    {
+      "time": 34.57,
+      "kind": "soft",
+      "id": "S19"
+    },
+    {
+      "time": 36.9,
+      "kind": "caption",
+      "id": "C17"
+    },
+    {
+      "time": 37.6,
+      "kind": "caption",
+      "id": "C18"
+    },
+    {
+      "time": 39.4,
+      "kind": "hard",
+      "id": "S20"
+    },
+    {
+      "time": 40.7,
+      "kind": "caption",
+      "id": "C19"
+    },
+    {
+      "time": 44.25,
+      "kind": "hard",
+      "id": "S21"
+    },
+    {
+      "time": 45.2,
+      "kind": "caption",
+      "id": "C20"
+    },
+    {
+      "time": 50.2,
+      "kind": "hard",
+      "id": "S22"
+    },
+    {
+      "time": 51.73,
+      "kind": "soft",
+      "id": "S23"
+    },
+    {
+      "time": 51.9,
+      "kind": "caption",
+      "id": "C21"
+    },
+    {
+      "time": 54.0,
+      "kind": "caption",
+      "id": "C22+C23"
+    },
+    {
+      "time": 55.4,
+      "kind": "caption",
+      "id": "C24"
+    },
+    {
+      "time": 56.6,
+      "kind": "caption",
+      "id": "C25"
+    },
+    {
+      "time": 58.0,
+      "kind": "soft",
+      "id": "S24"
+    },
+    {
+      "time": 58.0,
+      "kind": "caption",
+      "id": "C26"
+    },
+    {
+      "time": 59.53,
+      "kind": "hard",
+      "id": "S25"
+    },
+    {
+      "time": 60.8,
+      "kind": "hard",
+      "id": "S26"
+    },
+    {
+      "time": 60.8,
+      "kind": "caption",
+      "id": "C27"
+    },
+    {
+      "time": 62.0,
+      "kind": "soft",
+      "id": "S27"
+    },
+    {
+      "time": 63.5,
+      "kind": "caption",
+      "id": "C28"
+    },
+    {
+      "time": 65.0,
+      "kind": "caption",
+      "id": "C29"
+    }
+  ]
+}
