@@ -1,0 +1,6 @@
+{
+  "note": "11 October 2026, 02:00 CEST: how measured moves become camera moves. 'skip': the measured move is the subject's own animation, already in the choreography. 'captions': the move belongs to the text of a text-only shot, so it scales the captions of that shot. 'maxScaleFrom': safety bound on the starting scale.",
+  "skip": ["S01", "S02"],
+  "captions": ["S04", "S16"],
+  "maxScaleFrom": 3.6
+}

@@ -43,7 +43,11 @@
     "qrDark": "#0d0d10",
     "qrLight": "#e9e9ec",
     "padTop": "#1b2030",
-    "padBottom": "#0a0c14"
+    "padBottom": "#0a0c14",
+    "slotLine": "rgba(255, 255, 255, 0.34)",
+    "slotFill": "#0a0b0d",
+    "slotHatch": "rgba(255, 255, 255, 0.14)",
+    "slotBadge": "rgba(0, 0, 0, 0.6)"
   },
   "type": {
     "sans": "'InterVariable', 'Hiragino Sans W4', sans-serif",
@@ -59,7 +63,11 @@
     "sizeSmall": "40px",
     "sizeFootnote": "30px",
     "sizeMono": "26px",
-    "tracking": "-0.01em"
+    "tracking": "-0.01em",
+    "sizeSlotId": "24px",
+    "sizeSlotTitle": "32px",
+    "sizeSlotMeta": "20px",
+    "sizeShotLabel": "20px"
   },
   "layout": {
     "centreX": 0.5,

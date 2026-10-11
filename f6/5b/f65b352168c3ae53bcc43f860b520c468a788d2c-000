@@ -1,4 +1,4 @@
-/* Cooked by Scripts/Cook.mjs at 2026-10-10T22:11:12.295Z. Edit params/tokens.json. */
+/* Cooked by Scripts/Cook.mjs at 2026-10-11T15:04:59.052Z. Edit params/tokens.json. */
 :root {
   --zr-color-bg: #000000;
   --zr-color-fg: #ffffff;
@@ -36,6 +36,10 @@
   --zr-color-qr-light: #e9e9ec;
   --zr-color-pad-top: #1b2030;
   --zr-color-pad-bottom: #0a0c14;
+  --zr-color-slot-line: rgba(255, 255, 255, 0.34);
+  --zr-color-slot-fill: #0a0b0d;
+  --zr-color-slot-hatch: rgba(255, 255, 255, 0.14);
+  --zr-color-slot-badge: rgba(0, 0, 0, 0.6);
   --zr-type-sans: 'InterVariable', 'Hiragino Sans W4', sans-serif;
   --zr-type-display: 'Vogun', 'Hiragino Mincho ProN W3', serif;
   --zr-type-serif: 'AnthropicSerif', Georgia, serif;
@@ -50,6 +54,10 @@
   --zr-type-size-footnote: 30px;
   --zr-type-size-mono: 26px;
   --zr-type-tracking: -0.01em;
+  --zr-type-size-slot-id: 24px;
+  --zr-type-size-slot-title: 32px;
+  --zr-type-size-slot-meta: 20px;
+  --zr-type-size-shot-label: 20px;
   --zr-layout-centre-x: 0.5;
   --zr-layout-center-y: 0.506;
   --zr-layout-centre-left-x: 0.39;

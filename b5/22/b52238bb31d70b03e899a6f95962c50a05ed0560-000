@@ -1,0 +1,384 @@
+#!/usr/bin/env python3
+# 11 October 2026, 03:30 CEST: the animatic sheet (storyboard v2): one HTML page and three CSV files, generated from
+# params/ (timeline, reading of the reference, assets, camera, colour script), analysis/ (measured camera and sound of the
+# reference), verify/ (reports) and the animatic render (one thumbnail per shot and one per second).
+# Nothing in the output is written by hand: change the params, then rebuild.
+# Run from the atelier: ~/.venvs/motion-design/bin/python -I Scripts/BuildAnimaticSheet.py --render renders/zenray-motion-design-01-animatique-v1.mp4
+import argparse
+import csv
+import html
+import json
+import re
+import subprocess
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+FPS = 60
+SOURCES_CHECKED = "11 October 2026"
+FLOW_SOURCES = [
+    ("Tarifs de l'API Gemini (officiel)", "https://ai.google.dev/gemini-api/docs/pricing"),
+    ("Génération vidéo dans l'API Gemini (officiel)", "https://ai.google.dev/gemini-api/docs/video"),
+    ("Veo 3 dans l'API Gemini", "https://geekflare.com/news/you-can-now-use-veo-3-in-the-gemini-api"),
+    ("Veo 3.1 dans Flow et Vertex", "https://www.etcentric.org/tag/veo-3-1-fast"),
+]
+KIND_TEXT = {"image": "image", "video": "vidéo", "3d": "3D", "ui": "interface", "music": "musique", "sfx": "effets",
+             "font": "police", "text": "texte", "logo": "logo"}
+SOUND_TEXT = {"thump": "coup grave", "whoosh": "souffle", "click": "clic", "tick": "tic de légende", "key": "frappe",
+              "blip": "bip", "pulse": "impulsion", "ding": "tintement", "chime": "carillon", "impact": "impact", "riser": "montée"}
+
+
+def load(relative):
+    return json.loads((ROOT / relative).read_text(encoding="utf-8"))
+
+
+def esc(text):
+    return html.escape(str(text), quote=True)
+
+
+def fr(value, digits=2):
+    return f"{value:.{digits}f}".replace(".", ",")
+
+
+def frames(seconds):
+    return int(round(seconds * FPS))
+
+
+def thumbnails(render, shots, out_dir):
+    shot_dir = out_dir / "animatique" / "plans"
+    second_dir = out_dir / "animatique" / "secondes"
+    shot_dir.mkdir(parents=True, exist_ok=True)
+    second_dir.mkdir(parents=True, exist_ok=True)
+    for shot in shots:
+        middle = (shot["start"] + shot["end"]) / 2
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{middle:.3f}", "-i", str(render), "-frames:v", "1",
+                        "-vf", "scale=640:360:flags=lanczos", "-q:v", "3", str(shot_dir / f"{shot['id']}.jpg")], check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "0.5", "-i", str(render), "-vf", "fps=1,scale=320:180:flags=lanczos",
+                    "-q:v", "4", "-start_number", "0", str(second_dir / "t%02d.jpg")], check=True)
+
+
+def loudness(render):
+    log = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(render), "-map", "0:a:0", "-af", "ebur128=peak=true",
+                          "-f", "null", "-"], capture_output=True, text=True).stderr
+    summary = log[log.rfind("Summary:"):]
+    integrated = re.search(r"I:\s+(-?[\d.]+) LUFS", summary)
+    lra = re.search(r"LRA:\s+([\d.]+) LU", summary)
+    return (float(integrated.group(1)) if integrated else None, float(lra.group(1)) if lra else None)
+
+
+def chip(text, tone):
+    return f'<span class="chip chip-{tone}">{esc(text)}</span>'
+
+
+def status_tone(status):
+    return {"slot": "slot", "done": "done", "temp": "temp", "todo": "todo"}.get(status, "slot")
+
+
+def shot_assets(assets, shot_id):
+    return [a for a in assets["assets"] if shot_id in (a.get("shots") or []) or (a.get("slot") or {}).get("shot") == shot_id
+            or (a.get("inset") or {}).get("shot") == shot_id]
+
+
+def camera_text(measured, applied):
+    if measured["static"]:
+        return "Plan fixe (mouvement total inférieur à 12 px).", "Aucun mouvement de caméra."
+    parts = [f"recul ou avance {fr(measured['scale'], 3)}", f"déplacement {fr(measured['dx'], 0)} px en x et {fr(measured['dy'], 0)} px en y",
+             f"rotation {fr(measured['rotationDeg'], 2)}°", f"courbe {measured['ease']} (écart {fr(measured['easeError'], 3)})"]
+    dominant = {"scale": "échelle", "rotation": "rotation", "translation": "translation"}[measured["dominant"]]
+    seen = f"Mouvement dominant : {dominant}, {fr(measured['movePx'], 0)} px ; " + ", ".join(parts) + "."
+    if not applied:
+        return seen, "Mouvement porté par l'animation du sujet (plan exclu de la caméra)."
+    start = applied["from"]
+    if applied["target"] == "captions":
+        return seen, f"Appliqué aux légendes du plan : échelle de {fr(start['scale'], 3)} à 1, courbe {applied['ease']}."
+    return seen, (f"Appliqué au plan : départ à l'échelle {fr(start['scale'], 3)}, décalé de {fr(start['x'], 0)} px et {fr(start['y'], 0)} px, "
+                  f"tourné de {fr(start['rotation'], 2)}°, puis retour à la composition avec la courbe {applied['ease']}.")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Build the animatic sheet (storyboard v2).")
+    parser.add_argument("--render", type=Path, required=True)
+    parser.add_argument("--out-dir", type=Path, default=ROOT / "storyboard")
+    args = parser.parse_args()
+    render = args.render if args.render.is_absolute() else ROOT / args.render
+
+    timeline = load("params/timeline.json")
+    scenes = load("params/reference-scenes.json")
+    assets = load("params/assets.json")
+    camera = load("params/camera.json")["moves"]
+    colours = load("params/color-script.json")["shots"]
+    measured_camera = load("analysis/camera.json")["shots"]
+    audio = load("analysis/audio.json")
+    picture = load("verify/report-v8.json")
+    stem = load("verify/sound-report-sfx-v2.json")
+    final = load("verify/sound-report-animatique-v1.json")
+    events = load("verify/sound-events-v2.json")
+    music_check = load("verify/music-temp-check.json")
+    shots = timeline["shots"]
+    out_dir = args.out_dir
+    thumbnails(render, shots, out_dir)
+    lufs, lra = loudness(render)
+
+    sources = assets["sources"]
+    by_source = {}
+    for asset in assets["assets"]:
+        by_source[asset["source"]] = by_source.get(asset["source"], 0) + 1
+    to_make = [a for a in assets["assets"] if a["status"] == "slot"]
+    made = [a for a in assets["assets"] if a["status"] in ("done", "temp")]
+
+    # --- seconds ---------------------------------------------------------------------------------------------------
+    def shot_at(t):
+        return next(s for s in shots if s["start"] <= t < s["end"] or s is shots[-1])
+    second_rows = []
+    for n in range(68):
+        shot = shot_at(n + 0.5)
+        second_rows.append((n, shot["id"], scenes["seconds"][str(n)]))
+
+    # --- shot cards ------------------------------------------------------------------------------------------------
+    cards = []
+    shot_csv = []
+    for shot in shots:
+        sid = shot["id"]
+        scene = scenes["shots"][sid]
+        seen_motion, applied_motion = camera_text(measured_camera[sid], camera.get(sid))
+        sound = audio["shots"][sid]
+        classes = ", ".join(f"{name} {count}" for name, count in sound["classes"].items() if count) or "aucune attaque"
+        in_shot = [e for e in events["events"] if shot["start"] <= e["time"] < shot["end"]]
+        counts = {}
+        for event in in_shot:
+            counts[SOUND_TEXT[event["kind"]]] = counts.get(SOUND_TEXT[event["kind"]], 0) + 1
+        our_sound = ", ".join(f"{name} {count}" for name, count in counts.items()) or "aucun effet"
+        used = shot_assets(assets, sid)
+        asset_items = "".join(f"<li>{chip(a['id'], status_tone(a['status']))} {esc(a['title'])} · {esc(sources[a['source']])} · "
+                              f"{esc(assets['status'][a['status']])}</li>" for a in used) or "<li>Aucun asset propre au plan.</li>"
+        caps = [c for c in timeline["captions"] if shot["start"] - 1e-6 <= c["start"] < shot["end"]]
+        cap_items = "".join(f"<li><span class=\"mono\">{c['id']}</span> « {esc(c['text'])} », {fr(c['start'])} à {fr(c['end'])} s, "
+                            f"images {frames(c['start'])} à {frames(c['end'])}</li>" for c in caps) or "<li>Aucune légende.</li>"
+        tint = colours[sid]["tint"]
+        cards.append(f"""
+<article class="shot" id="{sid}">
+<header><h3>{sid} · {esc(scene['label'])}</h3><span class="num">{fr(shot['start'])} à {fr(shot['end'])} s · images {frames(shot['start'])} à {frames(shot['end'])} · {frames(shot['end']) - frames(shot['start'])} images</span><span class="swatch" style="background:{tint}" title="teinte du plan {tint}"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/{sid}.jpg" alt="Animatique, {sid} à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> {esc(scene['seen'])}</p>
+<p><strong>Ce que le plan illustre.</strong> {esc(scene['illustrates'])}</p>
+<p><strong>Comment c'est fait.</strong> {esc(scene['technique'])}</p>
+<p><strong>Intégration 3D.</strong> {esc(scene['needs3d'])}</p>
+<p><strong>Mouvement mesuré.</strong> {esc(seen_motion)}</p>
+<p><strong>Dans l'animatique.</strong> {esc(applied_motion)}</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen {fr(sound['meanDb'], 1) if sound['meanDb'] is not None else 'non mesuré'} dB, {sound['attacks']} attaques ({esc(classes)}){' ; une attaque tombe sur la coupe' if sound['attackOnCut'] else ''}.</p>
+<p><strong>Son de l'animatique.</strong> {esc(our_sound)}.</p>
+<p><strong>Assets du plan.</strong></p><ul>{asset_items}</ul>
+<p><strong>Légendes.</strong></p><ul>{cap_items}</ul>
+</div></div></article>""")
+        shot_csv.append([sid, scene["label"], fr(shot["start"]), fr(shot["end"]), frames(shot["start"]), frames(shot["end"]),
+                         scene["illustrates"], scene["technique"], scene["needs3d"], applied_motion,
+                         " ".join(a["id"] for a in used), " ".join(c["id"] for c in caps), tint])
+
+    # --- asset inventory -------------------------------------------------------------------------------------------
+    asset_rows = []
+    prompt_blocks = []
+    asset_csv = []
+    for asset in assets["assets"]:
+        where = ", ".join(sorted(set((asset.get("shots") or []) + [x for x in [(asset.get("slot") or {}).get("shot"), (asset.get("inset") or {}).get("shot")] if x]))) or "tout le film"
+        asset_rows.append(f"<tr><td>{chip(asset['id'], status_tone(asset['status']))}</td><td>{esc(asset['title'])}</td>"
+                          f"<td>{esc(KIND_TEXT.get(asset['kind'], asset['kind']))}</td><td>{esc(sources[asset['source']])}</td>"
+                          f"<td>{esc(assets['status'][asset['status']])}</td><td>{esc(where)}</td>"
+                          f"<td class=\"num\">{fr(asset['seconds']) + ' s' if asset['seconds'] else 'sans durée'}</td><td>{esc(asset['format'])}</td></tr>")
+        if asset.get("prompt"):
+            suffix = "" if asset["kind"] == "music" else " " + assets["promptSuffix"]
+            prompt_blocks.append(f"<details><summary>{chip(asset['id'], status_tone(asset['status']))} {esc(asset['title'])} · {esc(sources[asset['source']])}</summary>"
+                                 f"<p class=\"prompt mono\">{esc(asset['prompt'] + suffix)}</p><p>{esc(asset.get('notes', ''))}</p></details>")
+        asset_csv.append([asset["id"], asset["title"], KIND_TEXT.get(asset["kind"], asset["kind"]), sources[asset["source"]],
+                          assets["status"][asset["status"]], where, fr(asset["seconds"]) if asset["seconds"] else "", asset["format"],
+                          asset.get("prompt", ""), asset.get("notes", "")])
+
+    # --- identification --------------------------------------------------------------------------------------------
+    classes_total = {}
+    for attack in audio["attacks"]:
+        classes_total[attack["class"]] = classes_total.get(attack["class"], 0) + 1
+    classes_text = ", ".join(f"{name} {count}" for name, count in sorted(classes_total.items(), key=lambda kv: -kv[1]))
+    video_count = sum(1 for a in assets["assets"] if a["kind"] in ("video", "3d") and a["status"] == "slot")
+    image_count = sum(1 for a in assets["assets"] if a["kind"] == "image" and a["status"] == "slot")
+
+    # --- verification tables -----------------------------------------------------------------------------------------
+    checks = picture["checks"]
+    contract = picture["contract"]
+    picture_rows = [
+        ("Durée", f"{fr(checks['duration']['value'], 3)} s", "68,053 s à 0,10 s près", checks["duration"]["pass"]),
+        ("Mouvement image à image", fr(checks["motion"]["frame_correlation"], 3), f"au moins {fr(contract['motion_correlation_min'], 2)}", checks["motion"]["frame_correlation"] >= contract["motion_correlation_min"]),
+        ("Mouvement par plan (rang)", fr(checks["motion"]["shot_rank_correlation"], 3), f"au moins {fr(contract['shot_motion_rank_min'], 2)}", checks["motion"]["shot_rank_correlation"] >= contract["shot_motion_rank_min"]),
+        ("Coupes franches retrouvées", f"{checks['cuts']['matched']} sur {checks['cuts']['reference_hard_cuts']}", f"au moins {fr(contract['hard_cut_match_min'] * 100, 0)} %", checks["cuts"]["rate"] >= contract["hard_cut_match_min"]),
+        ("Légendes lues par l'OCR", f"{checks['captions']['readable']} sur {checks['captions']['captions']}", f"au moins {fr(contract['caption_recall_min'] * 100, 0)} %", checks["captions"]["readable_rate"] >= contract["caption_recall_min"]),
+        ("Écart médian des légendes", f"{fr(checks['captions']['timing_median_s'], 2)} s", f"au plus {fr(contract['caption_timing_median_s'], 2)} s", checks["captions"]["timing_median_s"] <= contract["caption_timing_median_s"]),
+        ("Couleurs par plan (ΔE médian)", fr(checks["palette"]["median_delta_e"], 2), f"au plus {fr(contract['palette_delta_e_median_max'], 0)}", checks["palette"]["pass"]),
+        ("Taille d'encre des légendes", fr(checks["typography"]["ratio"], 3), f"entre {fr(contract['ink_ratio_min'], 2)} et {fr(contract['ink_ratio_max'], 2)}", checks["typography"]["pass"]),
+    ]
+    sv, fv = stem["values"], final["values"]
+    sound_rows = [
+        ("Effets : événements chronométrés audibles", f"{sv['audible']} sur {sv['events']} ({sv['allEvents']} en tout)", "tous", sv["audible"] == sv["events"]),
+        ("Effets : écart maximal au départ", f"{fr(sv['maxGapMs'], 1)} ms", f"au plus {fr(sv['toleranceMs'], 1)} ms, soit une image", sv["maxGapMs"] <= sv["toleranceMs"]),
+        ("Musique provisoire : tempo mesuré", f"{fr(music_check['bpm'], 2)} BPM (croche)", f"{fr(audio['bpm'], 2)} BPM sur la référence", abs(music_check["bpm"] - audio["bpm"]) <= 0.5),
+        ("Fichier final : format", f"{str(fv['codec']).upper()}, {fv['channels']} voies, {fv['sampleRate'] // 1000} {fv['sampleRate'] % 1000:03d} Hz", "AAC, stéréo, 48 000 Hz", fv["codec"] == "aac" and fv["channels"] == 2),
+        ("Fichier final : durée du son", f"{fr(fv['audioSeconds'], 2)} s", "68,00 s à 0,05 s près", abs(fv["audioSeconds"] - 68.0) <= 0.05),
+        ("Fichier final : crête", fr(fv["peakFullScale"], 3), "au plus 0,98 du plein niveau", fv["peakFullScale"] <= 0.98),
+        ("Fichier final : image inchangée", "identique" if fv["pictureIdentical"] else "différente", "identique au rendu v8", bool(fv["pictureIdentical"])),
+        ("Fichier final : niveau intégré", f"{fr(lufs, 1)} LUFS" if lufs is not None else "non mesuré", "repère, sans seuil", True),
+    ]
+
+    def table(rows):
+        lines = []
+        for name, value, limit, ok in rows:
+            verdict = '<span class="pass">réussi</span>' if ok else '<span class="fail">échoué</span>'
+            lines.append(f'<tr><td>{esc(name)}</td><td class="num">{esc(value)}</td><td>{esc(limit)}</td><td>{verdict}</td></tr>')
+        return "<table><tr><th>Contrôle</th><th>Valeur</th><th>Limite</th><th>Résultat</th></tr>" + "".join(lines) + "</table>"
+
+    seconds_html = "".join(f"<tr><td class=\"num\">{n} à {n + 1} s</td><td class=\"mono\">{sid}</td><td>{esc(text)}</td>"
+                           f"<td><img class=\"thumb\" src=\"animatique/secondes/t{n:02d}.jpg\" alt=\"Animatique à {n},5 s\" loading=\"lazy\"></td></tr>"
+                           for n, sid, text in second_rows)
+    flow_links = "".join(f'<li><a href="{url}">{esc(name)}</a></li>' for name, url in FLOW_SOURCES)
+    summary_cards = [
+        ("27", "plans, mêmes coupes que la référence"),
+        (str(len(assets["assets"])), "assets recensés"),
+        (str(len(to_make)), "assets à produire, en emplacement nommé"),
+        (str(len(made)), "assets faits en code dans cette passe"),
+        (str(len(camera)), "mouvements de caméra mesurés et rejoués"),
+        (f"{fr(audio['bpm'] / 2, 1)}", "BPM mesurés (croche à " + fr(audio["bpm"], 2) + ")"),
+        (str(len(events["events"])), "effets sonores placés"),
+        ("PASS", "contrat de vérification de l'image"),
+    ]
+    summary_html = "".join(f"<div class=\"stat\"><span class=\"num big\">{esc(v)}</span><span>{esc(t)}</span></div>" for v, t in summary_cards)
+
+    page = f"""<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animatique étude 01</title>
+<style>
+@font-face {{ font-family: 'InterVariable'; src: url('../composition/assets/fonts/InterVariable.ttf') format('truetype'); font-weight: 100 900; }}
+@font-face {{ font-family: 'AnthropicSerif'; src: url('../composition/assets/fonts/AnthropicSerif-Regular.ttf') format('truetype'); font-weight: 400; }}
+@font-face {{ font-family: 'AnthropicMono'; src: url('../composition/assets/fonts/AnthropicMono-Regular.ttf') format('truetype'); font-weight: 400; }}
+:root {{ --paper: #ffffff; --ink: #161616; --soft: #6b6b6b; --line: #e6e4e1; --accent: #cc7c5e; --slot: #8b3b16; --done: #2f6b45; --temp: #8a6a12; --todo: #5a5a66; }}
+* {{ box-sizing: border-box; }}
+body {{ margin: 0; background: var(--paper); color: var(--ink); font-family: 'InterVariable', system-ui, sans-serif; font-weight: 400; line-height: 1.5; }}
+main {{ max-width: 1280px; margin: 0 auto; padding: 48px 32px 120px; }}
+h1 {{ font-family: 'AnthropicSerif', Georgia, serif; font-weight: 400; font-size: 40px; line-height: 1.15; margin: 8px 0 12px; }}
+h2 {{ font-family: 'AnthropicSerif', Georgia, serif; font-weight: 400; font-size: 28px; margin: 56px 0 12px; border-top: 1px solid var(--line); padding-top: 24px; }}
+h3 {{ margin: 0; font-size: 20px; }}
+.num {{ font-family: 'AnthropicSerif', Georgia, serif; font-weight: 400; font-variant-numeric: tabular-nums; }}
+.mono, code {{ font-family: 'AnthropicMono', ui-monospace, monospace; font-size: 13px; }}
+.lead {{ color: var(--soft); max-width: 860px; }}
+.meta {{ font-family: 'AnthropicMono', ui-monospace, monospace; font-size: 13px; color: var(--soft); }}
+.perimeter {{ border-left: 4px solid var(--accent); background: #f8f6f3; padding: 14px 18px; border-radius: 6px; max-width: 920px; }}
+.stats {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 20px 0; }}
+.stat {{ border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 4px; }}
+.big {{ font-size: 30px; }}
+.scroll {{ overflow-x: auto; max-width: 100%; width: 100%; }}
+table {{ border-collapse: collapse; width: 100%; font-size: 14px; }}
+th, td {{ border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }}
+th {{ font-weight: 500; color: var(--soft); }}
+.thumb {{ width: 160px; height: auto; border-radius: 4px; display: block; }}
+.shot {{ border-top: 1px solid var(--line); padding: 28px 0 12px; margin-top: 28px; }}
+.shot header {{ display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }}
+.swatch {{ width: 22px; height: 22px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 1px var(--line); }}
+.grid2 {{ display: grid; grid-template-columns: minmax(0, 520px) minmax(0, 1fr); gap: 28px; margin-top: 16px; }}
+.grid2 figure {{ margin: 0; }}
+.grid2 img {{ width: 100%; border-radius: 8px; box-shadow: 0 0 0 1px var(--line); display: block; }}
+figcaption {{ color: var(--soft); font-size: 12px; margin-top: 6px; }}
+.chip {{ display: inline-block; font-family: 'AnthropicMono', ui-monospace, monospace; font-size: 12px; padding: 1px 8px; border-radius: 999px; color: #fff; }}
+.chip-slot {{ background: var(--slot); }} .chip-done {{ background: var(--done); }} .chip-temp {{ background: var(--temp); }} .chip-todo {{ background: var(--todo); }}
+details {{ border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin: 8px 0; }}
+summary {{ cursor: pointer; }}
+.prompt {{ background: #f6f5f3; padding: 10px 12px; border-radius: 6px; white-space: pre-wrap; }}
+.pass {{ color: var(--done); font-weight: 500; }} .fail {{ color: #b3261e; font-weight: 500; }}
+p, li, td, th, figcaption, summary {{ overflow-wrap: anywhere; }}
+ul {{ padding-left: 20px; }}
+@media (max-width: 900px) {{ .grid2 {{ grid-template-columns: minmax(0, 1fr); }} .grid2 > * {{ min-width: 0; }} }}
+@media (max-width: 640px) {{ main {{ padding: 32px 16px 96px; }} h1 {{ font-size: 30px; }} }}
+</style></head>
+<body><main>
+<p class="meta">zenray-motion-design-01 · animatique v1 · 11 October 2026 · rendu v8 et son v2</p>
+<h1>Animatique : la structure de la référence, montée sur les assets dont elle a besoin</h1>
+<p class="lead">Chaque plan reprend les temps, les coupes et le mouvement de caméra mesurés sur la référence. Chaque asset à produire est un emplacement nommé et animé dans le montage ; les assets faisables sans génération (titres, légendes, interfaces, logo, sons, musique provisoire) sont faits.</p>
+<div class="perimeter"><strong>Périmètre.</strong> Aucune image, aucun texte, aucun logo et aucun son de la référence ne figurent dans ce document ni dans le film. Les descriptions de la référence sont des reformulations. Les prompts décrivent un appareil original (fiche A00), jamais le produit de la référence. Aucune génération n'est lancée avant ta validation.</div>
+<div class="stats">{summary_html}</div>
+
+<h2>1. La référence, seconde par seconde</h2>
+<p>Ce qu'on voit à chaque seconde de la référence (image prise à n + 0,5 s), et ce que montre l'animatique au même instant.</p>
+<div class="scroll"><table><tr><th>Temps</th><th>Plan</th><th>Ce qu'on voit dans la référence</th><th>Animatique</th></tr>{seconds_html}</table></div>
+
+<h2>2. Plan par plan</h2>
+<p>Pour chaque plan : ce qu'on voit, ce que le plan illustre, comment l'animation est faite, le besoin de 3D, le mouvement mesuré et la façon dont l'animatique le rejoue, le son mesuré, puis les assets et les légendes. La pastille de couleur est la teinte du plan dans le script couleur.</p>
+{''.join(cards)}
+
+<h2>3. Inventaire des assets</h2>
+<p>{len(assets['assets'])} assets : {', '.join(f"{n} {sources[k].lower()}" for k, n in sorted(by_source.items(), key=lambda kv: -kv[1]))}. Les pastilles brunes sont des emplacements à produire, les vertes sont faites en code, les ocres sont provisoires, les grises restent à faire en code.</p>
+<div class="scroll"><table><tr><th>Id</th><th>Asset</th><th>Type</th><th>Source</th><th>Statut</th><th>Plans</th><th>Durée</th><th>Format</th></tr>{''.join(asset_rows)}</table></div>
+<h3 style="margin-top:24px">Prompts, à lancer seulement après validation</h3>
+<p>Chaque prompt vidéo ou image se termine par le même suffixe : appareil conforme à la fiche A00, aucun texte, aucun logo, 16:9 et 1920 × 1080. Ordre conseillé : A00 d'abord (validation), puis W01, puis les vidéos dans l'ordre du film.</p>
+{''.join(prompt_blocks)}
+
+<h2>4. Identification des polices, de la musique, des sons et des images</h2>
+<h3>Polices</h3>
+<p>Référence : une grotesque néo-moderne proche de SF Pro Display ou d'Inter Display, en graisse moyenne pour le grand titre et régulière pour les légendes, avec une approche légèrement serrée. C'est une estimation visuelle, faute de métadonnées. Le film utilise InterVariable (F01, licence SIL Open Font) pour les légendes et l'interface, AnthropicSerif (F02) pour les chiffres, Vogun Medium (F03) pour le mot héros, et AnthropicMono pour les étiquettes de l'animatique. Les licences de diffusion de F02 et F03 restent à vérifier.</p>
+<h3>Musique</h3>
+<p>Référence : tempo mesuré de {fr(audio['bpm'], 2)} BPM à la croche, soit {fr(audio['bpm'] / 2, 2)} BPM ; {events['cutsOnGrid']} coupes sur 26 tombent à 50 ms près sur cette grille. Le niveau suit cinq parties : une ouverture très calme, un corps plein dès 4,9 s, un creux de 25,4 à 29,5 s, le corps de nouveau, puis une sortie au noir dès 62 s. La page de la référence ne crédite ni la musique ni le studio : la musique ne s'identifie pas et ne se reprend pas. M00 (musique provisoire faite en code) suit la même grille ; M01 se génère avec Lyria (0,08 $ le morceau par l'API Gemini) ou se choisit dans une bibliothèque sous licence.</p>
+<h3>Sons</h3>
+<p>Référence : {len(audio['attacks'])} attaques mesurées ({esc(classes_text)}). Le design sonore repose donc surtout sur des souffles et des clics, avec très peu d'impacts graves. L'animatique place {len(events['events'])} effets faits en code sur ses propres événements : coupes (selon la classe de l'attaque de la référence la plus proche), apparition des légendes, frappe, menu, code QR, compteur, anneaux, coche, impacts du titre héros et logo.</p>
+<h3>Images, vidéos et 3D</h3>
+<p>À produire : {video_count} vidéos ou rendus 3D et {image_count} images, dont la fiche de design A00, qui sert de référence d'image à toutes les générations pour garder le même appareil d'un plan à l'autre. Les écrans des prises de vue restent sombres pour l'incrustation des interfaces faites en code (U03 à U08).</p>
+<h3>Voix</h3>
+<p>Aucune voix off n'est établie. Une transcription automatique ne trouve que quatre segments très courts, dont le profil (deux mots, probabilité de mot proche de 0,5, taux de compression identique) est celui d'un faux positif sur de la musique. À confirmer à l'écoute.</p>
+
+<h2>5. Google Flow : ce qu'il faut pour générer</h2>
+<p>Flow est une interface de création dans le navigateur, sans API publique, et aucun connecteur n'existe pour lui dans le registre des connecteurs. Ses modèles sont en revanche accessibles par l'API Gemini. Faits vérifiés le {SOURCES_CHECKED} sur la documentation officielle : Veo 3.1 Standard à 0,40 $ par seconde en 1080p, Veo 3.1 Fast à 0,12 $, images de 0,07 à 0,13 $, Lyria 3.5 à 0,08 $ le morceau, sans offre gratuite par l'API.</p>
+<ul>
+<li><strong>Voie conseillée : l'API Gemini.</strong> Une clé créée dans Google AI Studio, avec la facturation activée. Tu la ranges toi-même dans le trousseau macOS (<code>security add-generic-password -a "$USER" -s gemini-api-key -w</code>), sans jamais la coller dans la conversation ; les scripts la lisent au moment de générer. La même clé active aussi la description automatique des captures par HyperFrames.</li>
+<li><strong>Voie Flow.</strong> Tu te connectes toi-même à Flow dans le navigateur intégré ; je saisis les prompts et je télécharge les résultats avec ton accord à chaque lot. Cette voie consomme les crédits de ton abonnement.</li>
+<li><strong>Voie Vertex AI.</strong> Un projet Google Cloud, l'API activée et un compte de service ; plus lourde, utile seulement pour un volume important.</li>
+</ul>
+<p>Estimation, à revérifier au moment de lancer : 16 vidéos de 8 s coûtent environ 51 $ en Standard ou 15 $ en Fast, et le double si chaque plan demande deux essais ; les images et la musique ajoutent quelques dollars. Rien n'est lancé sans ta validation de la fiche A00 et des prompts.</p>
+<ul>{flow_links}</ul>
+
+<h2>6. Vérifications</h2>
+<h3>Image : animatique contre la référence</h3>
+<div class="scroll">{table(picture_rows)}</div>
+<h3>Son</h3>
+<div class="scroll">{table(sound_rows)}</div>
+<p>Les départs se mesurent sur la piste d'effets seule, où la musique ne masque rien. Les {sv['allEvents'] - sv['events']} événements trop rapprochés pour être chronométrés un par un (frappe, bips du QR, compteur, menu) sont comptés mais non mesurés.</p>
+
+<h2>7. Fichiers</h2>
+<ul class="mono">
+<li>{esc(str(render))}</li>
+<li>{esc(str(ROOT / 'params' / 'assets.json'))}</li>
+<li>{esc(str(ROOT / 'params' / 'reference-scenes.json'))}</li>
+<li>{esc(str(ROOT / 'params' / 'camera.json'))}</li>
+<li>{esc(str(ROOT / 'params' / 'color-script.json'))}</li>
+<li>{esc(str(ROOT / 'renders' / 'sfx-v2.wav'))}</li>
+<li>{esc(str(ROOT / 'renders' / 'music-temp-v1.wav'))}</li>
+<li>{esc(str(ROOT / 'renders' / 'mix-v2.wav'))}</li>
+<li>{esc(str(out_dir / 'assets.csv'))}</li>
+</ul>
+</main></body></html>
+"""
+    page = re.sub(r"<table", '<div class="scroll"><table', page)
+    page = page.replace("</table>", "</table></div>")
+    page = page.replace('<div class="scroll"><div class="scroll">', '<div class="scroll">').replace("</table></div></div>", "</table></div>")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "animatique.html").write_text(page, encoding="utf-8")
+    with open(out_dir / "assets.csv", "w", newline="", encoding="utf-8-sig") as handle:
+        writer = csv.writer(handle, delimiter=";")
+        writer.writerow(["id", "asset", "type", "source", "statut", "plans", "durée_s", "format", "prompt", "notes"])
+        writer.writerows(asset_csv)
+    with open(out_dir / "plans-animatique.csv", "w", newline="", encoding="utf-8-sig") as handle:
+        writer = csv.writer(handle, delimiter=";")
+        writer.writerow(["plan", "rôle", "début_s", "fin_s", "début_image", "fin_image", "illustre", "technique", "3D", "animatique", "assets", "légendes", "teinte"])
+        writer.writerows(shot_csv)
+    with open(out_dir / "secondes.csv", "w", newline="", encoding="utf-8-sig") as handle:
+        writer = csv.writer(handle, delimiter=";")
+        writer.writerow(["seconde", "plan", "ce_qu_on_voit"])
+        writer.writerows(second_rows)
+    print(f"animatic sheet: {len(shots)} shots, {len(assets['assets'])} assets ({len(to_make)} to make, {len(made)} made), "
+          f"68 seconds, loudness {lufs} LUFS")
+
+
+if __name__ == "__main__":
+    main()

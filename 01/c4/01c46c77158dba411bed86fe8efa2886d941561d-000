@@ -1,4 +1,4 @@
-// Cooked by Scripts/Cook.mjs at 2026-10-10T22:11:12.295Z. Edit params/*.json.
+// Cooked by Scripts/Cook.mjs at 2026-10-11T15:04:59.052Z. Edit params/*.json.
 window.ZR_TOKENS = {
   "meta": {
     "id": "zenray-motion-design-01",
@@ -44,7 +44,11 @@ window.ZR_TOKENS = {
     "qrDark": "#0d0d10",
     "qrLight": "#e9e9ec",
     "padTop": "#1b2030",
-    "padBottom": "#0a0c14"
+    "padBottom": "#0a0c14",
+    "slotLine": "rgba(255, 255, 255, 0.34)",
+    "slotFill": "#0a0b0d",
+    "slotHatch": "rgba(255, 255, 255, 0.14)",
+    "slotBadge": "rgba(0, 0, 0, 0.6)"
   },
   "type": {
     "sans": "'InterVariable', 'Hiragino Sans W4', sans-serif",
@@ -60,7 +64,11 @@ window.ZR_TOKENS = {
     "sizeSmall": "40px",
     "sizeFootnote": "30px",
     "sizeMono": "26px",
-    "tracking": "-0.01em"
+    "tracking": "-0.01em",
+    "sizeSlotId": "24px",
+    "sizeSlotTitle": "32px",
+    "sizeSlotMeta": "20px",
+    "sizeShotLabel": "20px"
   },
   "layout": {
     "centreX": 0.5,
@@ -379,7 +387,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C02",
-      "text": "Light at every edge.",
+      "text": "Cut from one piece.",
       "start": 7.5,
       "end": 8.7,
       "placement": "bottom",
@@ -389,7 +397,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C03",
-      "text": "Glass that glows.",
+      "text": "A finish that holds the light.",
       "start": 10.2,
       "end": 11.65,
       "placement": "centre-left",
@@ -399,7 +407,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C04",
-      "text": "Confirm.",
+      "text": "Clear.",
       "start": 14.1,
       "end": 14.6,
       "placement": "centre",
@@ -409,7 +417,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C05",
-      "text": "Every step, checked.",
+      "text": "Hardened glass.",
       "start": 13.2,
       "end": 13.9,
       "placement": "footnote",
@@ -419,7 +427,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C06",
-      "text": "Layers, in place.",
+      "text": "Security, in layers.",
       "start": 16.1,
       "end": 17.1,
       "placement": "bottom",
@@ -429,7 +437,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C07",
-      "text": "One tap. One beat.",
+      "text": "Sealed in silicon.",
       "start": 17.5,
       "end": 18.1,
       "placement": "bottom",
@@ -439,7 +447,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C08",
-      "text": "Sealed, offline, always ready.",
+      "text": "Tested by independent labs.",
       "start": 17.5,
       "end": 19.4,
       "placement": "footnote",
@@ -469,7 +477,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C11",
-      "text": "Hold steady while it reads.",
+      "text": "Read it, then approve.",
       "start": 23.2,
       "end": 25.3,
       "placement": "bottom",
@@ -479,7 +487,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C12",
-      "text": "Scan the code to begin.",
+      "text": "Every detail, on screen.",
       "start": 25.4,
       "end": 27.1,
       "placement": "centre",
@@ -489,7 +497,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C13",
-      "text": "Something missing?",
+      "text": "Left it somewhere?",
       "start": 27.2,
       "end": 28.4,
       "placement": "centre",
@@ -499,7 +507,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C14",
-      "text": "No hurry. Try again.",
+      "text": "We'll find it.",
       "start": 28.4,
       "end": 29.5,
       "placement": "centre",
@@ -509,7 +517,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C15",
-      "text": "Works from any angle.",
+      "text": "Findable, anywhere.",
       "start": 29.6,
       "end": 31.7,
       "placement": "bottom",
@@ -519,7 +527,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C16",
-      "text": "A signal, sent and checked.",
+      "text": "Charges without a cable.",
       "start": 31.9,
       "end": 34,
       "placement": "bottom",
@@ -529,7 +537,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C17",
-      "text": "Thin, light, sealed.",
+      "text": "Saved to a card.",
       "start": 36.9,
       "end": 39.1,
       "placement": "bottom",
@@ -539,7 +547,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C18",
-      "text": "Made to travel.",
+      "text": "Card included.",
       "start": 37.6,
       "end": 39.2,
       "placement": "footnote",
@@ -549,7 +557,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C19",
-      "text": "Ready to go anywhere.",
+      "text": "Sign offline, by QR.",
       "start": 40.7,
       "end": 44,
       "placement": "bottom",
@@ -559,7 +567,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C20",
-      "text": "Quiet, precise, certain.",
+      "text": "One touch to sign in.",
       "start": 45.2,
       "end": 48.9,
       "placement": "bottom",
@@ -569,7 +577,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C21",
-      "text": "Live numbers, live light.",
+      "text": "Your holdings, at a glance.",
       "start": 51.9,
       "end": 54.1,
       "placement": "bottom",
@@ -579,7 +587,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C22",
-      "text": "Refined",
+      "text": "Now with",
       "start": 54,
       "end": 55.4,
       "placement": "left-small",
@@ -589,7 +597,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C23",
-      "text": "for every hand.",
+      "text": "a new OS.",
       "start": 54,
       "end": 55.4,
       "placement": "left-statement",
@@ -599,7 +607,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C24",
-      "text": "Designed to disappear.",
+      "text": "Open, auditable code.",
       "start": 55.4,
       "end": 56.6,
       "placement": "centre",
@@ -609,7 +617,7 @@ window.ZR_TIMELINE = {
     },
     {
       "id": "C25",
-      "text": "Lighter. Clearer. Calmer.",
+      "text": "Lighter. Calmer. Faster.",
       "start": 56.6,
       "end": 58,
       "placement": "centre",
@@ -723,6 +731,22 @@ window.ZR_CHOREO = {
         "borderBottomLeftRadius": "0px",
         "borderBottomRightRadius": "0px"
       }
+    ],
+    [
+      "#slot-A02",
+      0.15,
+      1,
+      "@motion.easeOut",
+      {
+        "y": 160,
+        "scale": 0.72,
+        "opacity": 0
+      },
+      {
+        "y": 0,
+        "scale": 1,
+        "opacity": 1
+      }
     ]
   ],
   "S03": [
@@ -764,6 +788,18 @@ window.ZR_CHOREO = {
       },
       {
         "x": 300
+      }
+    ],
+    [
+      "#ui-U01 .ui-boot-glow",
+      0.1,
+      1.2,
+      "@motion.easeInOut",
+      {
+        "opacity": 0.15
+      },
+      {
+        "opacity": 0.85
       }
     ]
   ],
@@ -1277,6 +1313,62 @@ window.ZR_CHOREO = {
       {
         "rotationY": 180
       }
+    ],
+    [
+      "#u04-ring-1",
+      0.5,
+      1.4,
+      "@motion.easeOut",
+      {
+        "scale": 0.4,
+        "opacity": 0.9
+      },
+      {
+        "scale": 1.6,
+        "opacity": 0
+      }
+    ],
+    [
+      "#u04-ring-2",
+      1.5,
+      1.4,
+      "@motion.easeOut",
+      {
+        "scale": 0.4,
+        "opacity": 0.9
+      },
+      {
+        "scale": 1.6,
+        "opacity": 0
+      }
+    ],
+    [
+      "#u04-ring-1",
+      2.5,
+      1.4,
+      "@motion.easeOut",
+      {
+        "scale": 0.4,
+        "opacity": 0.9
+      },
+      {
+        "scale": 1.6,
+        "opacity": 0
+      }
+    ],
+    [
+      "#u04-ring-2",
+      3.4,
+      1.3,
+      "@motion.easeOut",
+      {
+        "scale": 0.4,
+        "opacity": 0.9
+      },
+      {
+        "scale": 1.6,
+        "opacity": 0
+      }
     ]
   ],
   "S20": [
@@ -1412,6 +1504,20 @@ window.ZR_CHOREO = {
       {
         "scale": 2.6,
         "opacity": 0
+      }
+    ],
+    [
+      "#u08-sheet",
+      1.2,
+      0.7,
+      "@motion.easeOut",
+      {
+        "y": 260,
+        "opacity": 0
+      },
+      {
+        "y": 0,
+        "opacity": 1
       }
     ]
   ],
@@ -1664,6 +1770,18 @@ window.ZR_CHOREO = {
       {
         "opacity": 0.55
       }
+    ],
+    [
+      "#slot-A24",
+      0,
+      1.2,
+      "@motion.easeOut",
+      {
+        "y": 50
+      },
+      {
+        "y": 0
+      }
     ]
   ],
   "S25": [
@@ -1702,6 +1820,18 @@ window.ZR_CHOREO = {
         "y": 0,
         "opacity": 1
       }
+    ],
+    [
+      "#slot-A25",
+      0,
+      1,
+      "@motion.easeOut",
+      {
+        "scale": 0.96
+      },
+      {
+        "scale": 1
+      }
     ]
   ],
   "S26": [
@@ -1726,6 +1856,18 @@ window.ZR_CHOREO = {
       null,
       {
         "opacity": 1
+      }
+    ],
+    [
+      "#slot-A26",
+      0,
+      1,
+      "@motion.easeOut",
+      {
+        "scale": 0.96
+      },
+      {
+        "scale": 1
       }
     ]
   ],
@@ -1846,5 +1988,343 @@ window.ZR_AMBIENT = {
     "target": "#swipe",
     "property": "y",
     "amplitude": 60
+  }
+};
+window.ZR_CAMERA = {
+  "S04": {
+    "target": "captions",
+    "ease": "power2.out",
+    "from": {
+      "scale": 1.1998
+    },
+    "measured": {
+      "scale": 0.8335,
+      "dx": -0.9,
+      "dy": 5.6,
+      "rotationDeg": 0.01,
+      "dominant": "scale",
+      "movePx": 183.4,
+      "easeError": 0.143
+    }
+  },
+  "S05": {
+    "target": "content",
+    "ease": "sine.inOut",
+    "from": {
+      "scale": 1.0142,
+      "x": 18.4,
+      "y": 1,
+      "rotation": 0.15
+    },
+    "measured": {
+      "scale": 0.986,
+      "dx": -18.4,
+      "dy": -1,
+      "rotationDeg": -0.15,
+      "dominant": "translation",
+      "movePx": 18.4,
+      "easeError": 0.083
+    }
+  },
+  "S06": {
+    "target": "content",
+    "ease": "none",
+    "from": {
+      "scale": 0.9884,
+      "x": 5.4,
+      "y": 0.9,
+      "rotation": -1.18
+    },
+    "measured": {
+      "scale": 1.0117,
+      "dx": -5.4,
+      "dy": -0.9,
+      "rotationDeg": 1.18,
+      "dominant": "rotation",
+      "movePx": 22.7,
+      "easeError": 0.048
+    }
+  },
+  "S07": {
+    "target": "content",
+    "ease": "power2.out",
+    "from": {
+      "scale": 1.351,
+      "x": -274.2,
+      "y": -46,
+      "rotation": 0.97
+    },
+    "measured": {
+      "scale": 0.7402,
+      "dx": 274.2,
+      "dy": 46,
+      "rotationDeg": -0.97,
+      "dominant": "scale",
+      "movePx": 286.1,
+      "easeError": 0.113
+    }
+  },
+  "S08": {
+    "target": "content",
+    "ease": "power2.out",
+    "from": {
+      "scale": 1.0725,
+      "x": 4.6,
+      "y": -5.1,
+      "rotation": -0.52
+    },
+    "measured": {
+      "scale": 0.9324,
+      "dx": -4.6,
+      "dy": 5.1,
+      "rotationDeg": 0.52,
+      "dominant": "scale",
+      "movePx": 74.4,
+      "easeError": 0.08
+    }
+  },
+  "S09": {
+    "target": "content",
+    "ease": "none",
+    "from": {
+      "scale": 0.9854,
+      "x": -10.2,
+      "y": 12.4,
+      "rotation": 0.95
+    },
+    "measured": {
+      "scale": 1.0148,
+      "dx": 10.2,
+      "dy": -12.4,
+      "rotationDeg": -0.95,
+      "dominant": "rotation",
+      "movePx": 18.3,
+      "easeError": 0.094
+    }
+  },
+  "S10": {
+    "target": "content",
+    "ease": "power2.out",
+    "from": {
+      "scale": 1.021,
+      "x": 33.8,
+      "y": -6.3,
+      "rotation": -0.27
+    },
+    "measured": {
+      "scale": 0.9794,
+      "dx": -33.8,
+      "dy": 6.3,
+      "rotationDeg": 0.27,
+      "dominant": "translation",
+      "movePx": 34.3,
+      "easeError": 0.065
+    }
+  },
+  "S11": {
+    "target": "content",
+    "ease": "power1.out",
+    "from": {
+      "scale": 3.4518,
+      "x": -17.4,
+      "y": -303.7,
+      "rotation": -8.49
+    },
+    "measured": {
+      "scale": 0.2897,
+      "dx": 17.4,
+      "dy": 303.7,
+      "rotationDeg": 8.49,
+      "dominant": "scale",
+      "movePx": 782.4,
+      "easeError": 0.091
+    }
+  },
+  "S13": {
+    "target": "content",
+    "ease": "power3.out",
+    "from": {
+      "scale": 1.0324,
+      "x": 36.8,
+      "y": 132.6,
+      "rotation": 0.83
+    },
+    "measured": {
+      "scale": 0.9686,
+      "dx": -36.8,
+      "dy": -132.6,
+      "rotationDeg": -0.83,
+      "dominant": "translation",
+      "movePx": 137.6,
+      "easeError": 0.05
+    }
+  },
+  "S14": {
+    "target": "content",
+    "ease": "power1.out",
+    "from": {
+      "scale": 0.9944,
+      "x": -14.1,
+      "y": -19.4,
+      "rotation": 0.22
+    },
+    "measured": {
+      "scale": 1.0056,
+      "dx": 14.1,
+      "dy": 19.4,
+      "rotationDeg": -0.22,
+      "dominant": "translation",
+      "movePx": 24,
+      "easeError": 0.067
+    }
+  },
+  "S15": {
+    "target": "content",
+    "ease": "power1.out",
+    "from": {
+      "scale": 0.877,
+      "x": 216.5,
+      "y": -63.9,
+      "rotation": 3.6
+    },
+    "measured": {
+      "scale": 1.1402,
+      "dx": -216.5,
+      "dy": 63.9,
+      "rotationDeg": -3.6,
+      "dominant": "translation",
+      "movePx": 225.7,
+      "easeError": 0.059
+    }
+  },
+  "S16": {
+    "target": "captions",
+    "ease": "power2.out",
+    "from": {
+      "scale": 1.2673
+    },
+    "measured": {
+      "scale": 0.7891,
+      "dx": -64.1,
+      "dy": 8.3,
+      "rotationDeg": -0.12,
+      "dominant": "scale",
+      "movePx": 232.3,
+      "easeError": 0.086
+    }
+  },
+  "S18": {
+    "target": "content",
+    "ease": "power2.inOut",
+    "from": {
+      "scale": 0.9987,
+      "x": -5,
+      "y": -0.3,
+      "rotation": -0.81
+    },
+    "measured": {
+      "scale": 1.0013,
+      "dx": 5,
+      "dy": 0.3,
+      "rotationDeg": 0.81,
+      "dominant": "rotation",
+      "movePx": 15.5,
+      "easeError": 0.078
+    }
+  },
+  "S19": {
+    "target": "content",
+    "ease": "power1.out",
+    "from": {
+      "scale": 1.0781,
+      "x": 214.9,
+      "y": -41.9,
+      "rotation": 6.42
+    },
+    "measured": {
+      "scale": 0.9276,
+      "dx": -214.9,
+      "dy": 41.9,
+      "rotationDeg": -6.42,
+      "dominant": "translation",
+      "movePx": 219,
+      "easeError": 0.111
+    }
+  },
+  "S20": {
+    "target": "content",
+    "ease": "power2.out",
+    "from": {
+      "scale": 1.1176,
+      "x": 5.7,
+      "y": 19.4,
+      "rotation": -0.57
+    },
+    "measured": {
+      "scale": 0.8948,
+      "dx": -5.7,
+      "dy": -19.4,
+      "rotationDeg": 0.57,
+      "dominant": "scale",
+      "movePx": 115.8,
+      "easeError": 0.068
+    }
+  },
+  "S21": {
+    "target": "content",
+    "ease": "power1.in",
+    "from": {
+      "scale": 1.5637,
+      "x": -70.9,
+      "y": 59.5,
+      "rotation": 16.3
+    },
+    "measured": {
+      "scale": 0.6395,
+      "dx": 70.9,
+      "dy": -59.5,
+      "rotationDeg": -16.3,
+      "dominant": "scale",
+      "movePx": 397.1,
+      "easeError": 0.092
+    }
+  },
+  "S23": {
+    "target": "content",
+    "ease": "power1.in",
+    "from": {
+      "scale": 2.3535,
+      "x": -117.6,
+      "y": -76.5,
+      "rotation": -10.92
+    },
+    "measured": {
+      "scale": 0.4249,
+      "dx": 117.6,
+      "dy": 76.5,
+      "rotationDeg": 10.92,
+      "dominant": "scale",
+      "movePx": 633.5,
+      "easeError": 0.116
+    }
+  },
+  "S25": {
+    "target": "content",
+    "ease": "none",
+    "from": {
+      "scale": 0.9875,
+      "x": -2.7,
+      "y": 7.7,
+      "rotation": -0.12
+    },
+    "measured": {
+      "scale": 1.0127,
+      "dx": 2.7,
+      "dy": -7.7,
+      "rotationDeg": 0.12,
+      "dominant": "scale",
+      "movePx": 13.9,
+      "easeError": 0.055
+    }
   }
 };

@@ -1,5 +1,8 @@
 // 10 October 2026, 23:58 CEST: cook params and templates into the Hyperframes project.
-// Writes: index.html (one root timeline, shots and captions as timed clips), styles.css, tokens.css, timeline-data.js, motion-*.js.
+// 11 October 2026, 02:20 CEST: animatic layer. Each shot is wrapped in a camera element (#cam-SXX) that receives the
+// measured move from params/camera.json; params/assets.json places the named asset slots, the code-made UI insets,
+// hides the stand-ins a slot replaces, and feeds the burn-in shot labels (params/reference-scenes.json gives their names).
+// Writes: index.html (one root timeline, shots, labels and captions as timed clips), styles.css, tokens.css, timeline-data.js, motion-*.js.
 // Edit params/*.json and template/, then run: node Scripts/Cook.mjs
 import { copyFile, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -12,12 +15,17 @@ const tokens = await readJson('tokens.json');
 const timeline = await readJson('timeline.json');
 const choreography = await readJson('choreography.json');
 const ambient = await readJson('ambient.json');
+const assets = await readJson('assets.json');
+const camera = await readJson('camera.json');
+const scenes = await readJson('reference-scenes.json');
+const colorScript = await readJson('color-script.json');
 let html = await readFile(path.join(root, 'template', 'index.html'), 'utf8');
 
 const kebab = (text) => text.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 const round3 = (value) => Math.round(value * 1000) / 1000;
 const lookup = (dotted) => dotted.split('.').reduce((node, key) => (node === undefined ? undefined : node[key]), tokens);
 const escapeHtml = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const frNumber = (value, digits = 2) => value.toFixed(digits).replace('.', ',');
 const stamp = new Date().toISOString();
 
 // 1. The reference cut list must be gap-free and end at the video duration.
@@ -25,6 +33,7 @@ timeline.shots.forEach((shot, index) => {
   if (index > 0 && Math.abs(shot.start - timeline.shots[index - 1].end) > 1e-6) {
     throw new Error(`Shot ${shot.id} does not start where ${timeline.shots[index - 1].id} ends`);
   }
+  if (!scenes.shots[shot.id]) throw new Error(`reference-scenes.json lacks shot ${shot.id}`);
 });
 const lastShot = timeline.shots[timeline.shots.length - 1];
 if (Math.abs(lastShot.end - tokens.meta.durationSeconds) > 1e-6) {
@@ -34,10 +43,54 @@ if (Math.abs(lastShot.end - tokens.meta.durationSeconds) > 1e-6) {
 // 2. Shared stylesheet: the template's <style> block moves to styles.css.
 const styleMatch = html.match(/<style>([\s\S]*?)<\/style>/);
 if (!styleMatch) throw new Error('Template lacks its <style> block');
-const styles = `/* Cooked by Scripts/Cook.mjs at ${stamp}. Edit template/index.html. */\n${styleMatch[1].trim()}\n`;
 html = html.replace(styleMatch[0], '<link rel="stylesheet" href="styles.css" />');
 
-// 3. Each shot block becomes one timed clip of the root timeline; its visual stays inline.
+// 3. The code-made UI library is lifted out of the page; each block is copied into the inset that names it.
+const uiLibrary = {};
+html = html.replace(/[ \t]*<!-- @ui:(\w+) -->\n?([\s\S]*?)[ \t]*<!-- @end-ui:\1 -->\n?/g, (match, id, inner) => {
+  uiLibrary[id] = inner.trim();
+  return '';
+});
+html = html.replace(/[ \t]*<!-- 11 October 2026: code-made UI screens[^\n]*-->\n/, '');
+
+// 4. Asset slots, UI insets and hidden stand-ins, all driven by params/assets.json.
+const known = new Set(timeline.shots.map((shot) => shot.id));
+const statusText = (asset) => assets.status[asset.status] ?? asset.status;
+const sourceText = (asset) => assets.sources[asset.source] ?? asset.source;
+// Labels of full-frame and badge slots stay fixed on screen (outside the camera), so a strong zoom never pushes them out
+// of frame; a box slot keeps its label with the box, below it or inside it ("label": "inside").
+const labelMarkup = (asset, extraClass) => {
+  const seconds = asset.seconds ? ` · ${frNumber(asset.seconds)} s` : '';
+  return `<div class="slot-label${extraClass}"><span class="slot-id">${asset.id} · ${escapeHtml(sourceText(asset))}</span>`
+    + `<span class="slot-title">${escapeHtml(asset.title)}</span>`
+    + `<span class="slot-meta">${escapeHtml(statusText(asset))} · ${escapeHtml(asset.format)}${seconds}</span></div>`;
+};
+const slotMarkup = (asset) => {
+  const slot = asset.slot;
+  if (!['full', 'box', 'badge'].includes(slot.variant)) throw new Error(`Unknown slot variant ${slot.variant} on ${asset.id}`);
+  const tone = colorScript.shots[slot.shot] ?? {};
+  const colour = tone.tint ? `--st: ${tone.tint}; --sa: ${tone.hatchAngle};` : '';
+  const geometry = slot.variant === 'box'
+    ? ` style="--sx: ${slot.x}; --sy: ${slot.y}; --sw: ${slot.w}; --sh: ${slot.h}; --sr: ${slot.radius}px; ${colour}"`
+    : (colour ? ` style="${colour}"` : '');
+  const inside = slot.label === 'inside' ? ' label-inside' : '';
+  const label = slot.variant === 'box' ? labelMarkup(asset, '') : '';
+  return `<div class="asset-slot slot-${slot.variant}${inside}" id="slot-${asset.id}" data-asset="${asset.id}"${geometry}>${label}</div>`;
+};
+const insetMarkup = (asset) => {
+  const inset = asset.inset;
+  const inner = uiLibrary[asset.id];
+  if (!inner) throw new Error(`Template has no UI block @ui:${asset.id}`);
+  return `<div class="ui-screen ui-${asset.id}" id="ui-${asset.id}" style="--ux: ${inset.x}; --uy: ${inset.y}; --uw: ${inset.w}; --uh: ${inset.h}; --ur: ${inset.rotate}deg;">`
+    + `<span class="ui-tag">${asset.id} · ${escapeHtml(sourceText(asset))}</span>${inner}</div>`;
+};
+for (const asset of assets.assets) {
+  for (const where of [asset.slot?.shot, asset.inset?.shot, ...(asset.shots ?? [])].filter(Boolean)) {
+    if (!known.has(where)) throw new Error(`Asset ${asset.id} names unknown shot ${where}`);
+  }
+}
+
+// 5. Each shot block becomes one timed clip; its visual sits inside the camera element, between the slots.
 for (const shot of timeline.shots) {
   const open = `<!-- @shot:${shot.id} -->`;
   const close = `<!-- @end:${shot.id} -->`;
@@ -45,12 +98,33 @@ for (const shot of timeline.shots) {
   const end = html.indexOf(close);
   if (start < 0 || end < 0) throw new Error(`Template lacks the block ${shot.id}`);
   const inner = html.slice(start + open.length, end);
+  const inShot = assets.assets.filter((asset) => asset.slot?.shot === shot.id);
+  const layer = (variant) => inShot.filter((asset) => asset.slot.variant === variant).map(slotMarkup).join('');
+  const insets = assets.assets.filter((asset) => asset.inset?.shot === shot.id).map(insetMarkup).join('');
+  const fixed = inShot.filter((asset) => asset.slot.variant !== 'box').map((asset) => labelMarkup(asset, ' slot-caption')).join('');
+  const stack = fixed ? `<div class="shot-assets">${fixed}</div>` : '';
   const duration = round3(shot.end - shot.start);
-  const wrapped = `\n    <section class="clip shot" id="shot-${shot.id}" data-shot="${shot.name}" data-start="${shot.start}" data-duration="${duration}">${inner}\n    </section>\n    `;
+  const wrapped = `\n    <section class="clip shot" id="shot-${shot.id}" data-shot="${shot.name}" data-start="${shot.start}" data-duration="${duration}">`
+    + `<div class="cam" id="cam-${shot.id}">${layer('full')}${inner}${layer('box')}${insets}${layer('badge')}</div>${stack}\n    </section>\n    `;
   html = html.slice(0, start) + wrapped + html.slice(end + close.length);
 }
+const hidden = assets.assets.flatMap((asset) => asset.hide ?? []);
+const hiddenCss = hidden.length
+  ? `\n/* Stand-ins replaced by named asset slots (params/assets.json). */\n${hidden.join(', ')} { visibility: hidden !important; }\n` : '';
 
-// 4. Captions are leaf clips: the timed element is the line itself, placed by two layout tokens.
+// 6. Burn-in shot labels: shot id, its role, its time range and every asset it uses.
+const captionsOf = (shot) => timeline.captions.filter((caption) => caption.start >= shot.start - 1e-6 && caption.start < shot.end);
+const labelBlocks = timeline.shots.map((shot) => {
+  const ids = assets.assets.filter((asset) => (asset.shots ?? []).includes(shot.id) || asset.slot?.shot === shot.id || asset.inset?.shot === shot.id)
+    .map((asset) => asset.id);
+  const all = [...new Set(ids), ...captionsOf(shot).map((caption) => caption.id)];
+  const text = `${shot.id} · ${scenes.shots[shot.id].label} · ${frNumber(shot.start)} à ${frNumber(shot.end)} s${all.length ? ` · ${all.join(' ')}` : ''}`;
+  return `    <div class="clip shot-label" id="lab-${shot.id}" data-start="${shot.start}" data-duration="${round3(shot.end - shot.start)}">${escapeHtml(text)}</div>`;
+});
+if (!html.includes('<!-- @shot-labels -->')) throw new Error('Template lacks the shot-labels marker');
+html = html.replace('<!-- @shot-labels -->', labelBlocks.join('\n'));
+
+// 7. Captions are leaf clips: the timed element is the line itself, placed by two layout tokens.
 const placements = {
   'centre': ['centreX', 'centerY'],
   'title-big': ['centreX', 'centerY'],
@@ -75,7 +149,7 @@ const captionBlocks = timeline.captions.map((caption) => {
 if (!html.includes('<!-- @captions -->')) throw new Error('Template lacks the captions marker');
 html = html.replace('<!-- @captions -->', captionBlocks.join('\n'));
 
-// 5. Root scripts: shared helpers, the one root timeline, then its registration on window.__timelines.
+// 8. Root scripts: shared helpers, the one root timeline, then its registration on window.__timelines.
 if (!html.includes('<script src="motion.js"></script>')) throw new Error('Template lacks the motion script tag');
 html = html.replace('<script src="motion.js"></script>', [
   '<script src="motion-core.js"></script>',
@@ -84,7 +158,7 @@ html = html.replace('<script src="motion.js"></script>', [
 ].join('\n    '));
 html = html.replace('<!doctype html>', `<!doctype html>\n<!-- Cooked by Scripts/Cook.mjs at ${stamp}. Edit params/ and template/, never this file. -->`);
 
-// 6. Tokens become CSS custom properties: color.accentDeep -> --zr-color-accent-deep.
+// 9. Tokens become CSS custom properties: color.accentDeep -> --zr-color-accent-deep.
 const cssBody = [];
 for (const [group, values] of Object.entries(tokens)) {
   if (group === 'meta' || group === 'motion') continue;
@@ -93,12 +167,13 @@ for (const [group, values] of Object.entries(tokens)) {
   }
 }
 
-// 7. Placeholders {{group.key}} anywhere in the output take their token value; an unknown token stops the cook.
+// 10. Placeholders {{group.key}} anywhere in the output take their token value; an unknown token stops the cook.
 const fillPlaceholders = (text) => text.replace(/\{\{([A-Za-z0-9_.]+)\}\}/g, (match, dotted) => {
   const value = lookup(dotted);
   if (value === undefined) throw new Error(`Placeholder ${match} has no token`);
   return String(value);
 });
+const styles = `/* Cooked by Scripts/Cook.mjs at ${stamp}. Edit template/index.html. */\n${styleMatch[1].trim()}\n${hiddenCss}`;
 
 await rm(path.join(compositionDir, 'compositions'), { recursive: true, force: true });
 for (const stale of ['motion-shot.js', 'motion-root.js']) {
@@ -107,11 +182,14 @@ for (const stale of ['motion-shot.js', 'motion-root.js']) {
 await writeFile(path.join(compositionDir, 'tokens.css'), `/* Cooked by Scripts/Cook.mjs at ${stamp}. Edit params/tokens.json. */\n:root {\n${cssBody.join('\n')}\n}\n`, 'utf8');
 await writeFile(path.join(compositionDir, 'styles.css'), fillPlaceholders(styles), 'utf8');
 await writeFile(path.join(compositionDir, 'timeline-data.js'),
-  `// Cooked by Scripts/Cook.mjs at ${stamp}. Edit params/*.json.\nwindow.ZR_TOKENS = ${JSON.stringify(tokens, null, 2)};\nwindow.ZR_TIMELINE = ${JSON.stringify(timeline, null, 2)};\nwindow.ZR_CHOREO = ${JSON.stringify(choreography, null, 2)};\nwindow.ZR_AMBIENT = ${JSON.stringify(ambient, null, 2)};\n`, 'utf8');
+  `// Cooked by Scripts/Cook.mjs at ${stamp}. Edit params/*.json.\nwindow.ZR_TOKENS = ${JSON.stringify(tokens, null, 2)};\nwindow.ZR_TIMELINE = ${JSON.stringify(timeline, null, 2)};\nwindow.ZR_CHOREO = ${JSON.stringify(choreography, null, 2)};\nwindow.ZR_AMBIENT = ${JSON.stringify(ambient, null, 2)};\nwindow.ZR_CAMERA = ${JSON.stringify(camera.moves, null, 2)};\n`, 'utf8');
 await writeFile(path.join(compositionDir, 'index.html'), fillPlaceholders(html), 'utf8');
 for (const name of ['motion-core.js', 'motion-main.js']) {
   await copyFile(path.join(root, 'template', name), path.join(compositionDir, name));
 }
 
 const records = Object.values(choreography).reduce((sum, list) => sum + list.length, 0);
-console.log(`cooked ${timeline.shots.length} shots, ${timeline.captions.length} captions, ${records} choreography records, ${cssBody.length} css tokens`);
+const slots = assets.assets.filter((asset) => asset.slot).length;
+const insets = assets.assets.filter((asset) => asset.inset).length;
+console.log(`cooked ${timeline.shots.length} shots, ${timeline.captions.length} captions, ${records} choreography records, `
+  + `${slots} asset slots, ${insets} UI insets, ${hidden.length} hidden stand-ins, ${Object.keys(camera.moves).length} camera moves, ${cssBody.length} css tokens`);

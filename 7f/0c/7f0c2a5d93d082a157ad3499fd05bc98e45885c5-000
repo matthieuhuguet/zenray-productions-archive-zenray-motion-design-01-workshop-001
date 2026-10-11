@@ -68,6 +68,8 @@ def main():
     parser.add_argument("--events", type=Path, required=True)
     parser.add_argument("--video-ref", type=Path)
     parser.add_argument("--out", type=Path)
+    parser.add_argument("--codec", default="aac", help="expected audio codec (pcm_s16le for a WAV stem)")
+    parser.add_argument("--skip-onsets", action="store_true", help="mixes with music: onsets are checked on the effects stem")
     args = parser.parse_args()
 
     events_doc = json.loads(args.events.read_text(encoding="utf-8"))
@@ -79,7 +81,7 @@ def main():
     peak = max(max(samples), -min(samples))
 
     checks = [
-        {"name": "AAC audio stream present", "pass": audio.get("codec_name") == "aac",
+        {"name": f"{args.codec} audio stream present", "pass": audio.get("codec_name") == args.codec,
          "detail": str(audio.get("codec_name"))},
         {"name": "stereo at 48 kHz", "pass": audio.get("channels") == 2 and str(audio.get("sample_rate")) == str(rate),
          "detail": f"{audio.get('channels')} channels, {audio.get('sample_rate')} Hz"},
@@ -89,18 +91,21 @@ def main():
          "detail": f"{peak / 32767:.3f}"},
     ]
 
+    # 11 October 2026: events marked "check": false (typing, QR blips, counter ticks) are too close together to time one by one.
+    timed = [] if args.skip_onsets else [event for event in events_doc["events"] if event.get("check", True)]
     offsets, missing = [], []
-    for event in events_doc["events"]:
+    for event in timed:
         found, _ = onset(samples, rate, event["time"])
         if found is None:
             missing.append(event["time"])
         else:
             offsets.append(found - event["time"])
     worst = max((abs(offset) for offset in offsets), default=None)
-    checks.append({"name": "every event is audible", "pass": not missing,
-                   "detail": f"{len(events_doc['events']) - len(missing)} of {len(events_doc['events'])}"})
-    checks.append({"name": "onsets within one picture frame", "pass": not missing and worst is not None and worst <= TOLERANCE,
-                   "detail": f"largest gap {worst * 1000:.1f} ms, tolerance {TOLERANCE * 1000:.1f} ms" if worst is not None else "no onset"})
+    if timed:
+        checks.append({"name": "every timed event is audible", "pass": not missing,
+                       "detail": f"{len(timed) - len(missing)} of {len(timed)}"})
+        checks.append({"name": "onsets within one picture frame", "pass": not missing and worst is not None and worst <= TOLERANCE,
+                       "detail": f"largest gap {worst * 1000:.1f} ms, tolerance {TOLERANCE * 1000:.1f} ms" if worst is not None else "no onset"})
 
     picture_identical = None
     if args.video_ref:
@@ -119,8 +124,9 @@ def main():
             "sampleRate": int(audio.get("sample_rate") or 0),
             "audioSeconds": round(audio_seconds, 3),
             "peakFullScale": round(peak / 32767, 4),
-            "events": len(events_doc["events"]),
-            "audible": len(events_doc["events"]) - len(missing),
+            "events": len(timed),
+            "audible": len(timed) - len(missing),
+            "allEvents": len(events_doc["events"]),
             "maxGapMs": round(worst * 1000, 1) if worst is not None else None,
             "toleranceMs": round(TOLERANCE * 1000, 1),
             "pictureIdentical": picture_identical,

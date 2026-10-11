@@ -1,0 +1,1626 @@
+{
+ "shots": [
+  {
+   "shot": 1,
+   "start": 0.0,
+   "end": 1.9,
+   "duration": 1.9,
+   "motion_mean": 0.00789,
+   "boundary_score": null,
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 0.7063
+    },
+    {
+     "hex": "#c3d5d4",
+     "share": 0.1095
+    },
+    {
+     "hex": "#d5d6cd",
+     "share": 0.1095
+    },
+    {
+     "hex": "#9caaaa",
+     "share": 0.0609
+    },
+    {
+     "hex": "#060000",
+     "share": 0.007
+    },
+    {
+     "hex": "#000001",
+     "share": 0.0068
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#977329",
+     "share": 0.325
+    },
+    {
+     "hex": "#ded13a",
+     "share": 0.2812
+    },
+    {
+     "hex": "#7a440e",
+     "share": 0.2188
+    },
+    {
+     "hex": "#b89032",
+     "share": 0.175
+    }
+   ]
+  },
+  {
+   "shot": 2,
+   "start": 1.9,
+   "end": 3.2,
+   "duration": 1.3,
+   "motion_mean": 0.00442,
+   "boundary_score": null,
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 0.9468
+    },
+    {
+     "hex": "#bdc1b5",
+     "share": 0.0155
+    },
+    {
+     "hex": "#0f0709",
+     "share": 0.0135
+    },
+    {
+     "hex": "#5e5452",
+     "share": 0.0134
+    },
+    {
+     "hex": "#000004",
+     "share": 0.008
+    },
+    {
+     "hex": "#0c0002",
+     "share": 0.0027
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#843619",
+     "share": 0.4531
+    },
+    {
+     "hex": "#ab893b",
+     "share": 0.2344
+    },
+    {
+     "hex": "#3f2f3e",
+     "share": 0.2094
+    },
+    {
+     "hex": "#685045",
+     "share": 0.1031
+    }
+   ]
+  },
+  {
+   "shot": 3,
+   "start": 3.2,
+   "end": 4.9,
+   "duration": 1.7,
+   "motion_mean": 0.00225,
+   "boundary_score": null,
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 0.7719
+    },
+    {
+     "hex": "#0c0503",
+     "share": 0.0775
+    },
+    {
+     "hex": "#999592",
+     "share": 0.0527
+    },
+    {
+     "hex": "#2d1f1a",
+     "share": 0.0513
+    },
+    {
+     "hex": "#000001",
+     "share": 0.0318
+    },
+    {
+     "hex": "#070000",
+     "share": 0.0147
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#de6a39",
+     "share": 0.3125
+    },
+    {
+     "hex": "#9a4526",
+     "share": 0.275
+    },
+    {
+     "hex": "#573432",
+     "share": 0.2156
+    },
+    {
+     "hex": "#ac6539",
+     "share": 0.1969
+    }
+   ]
+  },
+  {
+   "shot": 4,
+   "start": 4.9,
+   "end": 6.28,
+   "duration": 1.38,
+   "motion_mean": 0.00136,
+   "boundary_score": null,
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 0.975
+    },
+    {
+     "hex": "#010101",
+     "share": 0.0077
+    },
+    {
+     "hex": "#dbdbdb",
+     "share": 0.0074
+    },
+    {
+     "hex": "#6c6c6c",
+     "share": 0.0051
+    },
+    {
+     "hex": "#131312",
+     "share": 0.0048
+    },
+    {
+     "hex": "#010000",
+     "share": 0.0001
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 5,
+   "start": 6.28,
+   "end": 7.45,
+   "duration": 1.17,
+   "motion_mean": 0.00819,
+   "boundary_score": 25.762,
+   "palette": [
+    {
+     "hex": "#151515",
+     "share": 0.2239
+    },
+    {
+     "hex": "#0a0a0a",
+     "share": 0.2204
+    },
+    {
+     "hex": "#353534",
+     "share": 0.1707
+    },
+    {
+     "hex": "#7f7f7e",
+     "share": 0.1627
+    },
+    {
+     "hex": "#101010",
+     "share": 0.1202
+    },
+    {
+     "hex": "#cacac8",
+     "share": 0.1021
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 6,
+   "start": 7.45,
+   "end": 8.73,
+   "duration": 1.28,
+   "motion_mean": 0.00672,
+   "boundary_score": 17.754,
+   "palette": [
+    {
+     "hex": "#060606",
+     "share": 0.2324
+    },
+    {
+     "hex": "#b7b7b4",
+     "share": 0.1973
+    },
+    {
+     "hex": "#131313",
+     "share": 0.1915
+    },
+    {
+     "hex": "#0b0b0a",
+     "share": 0.1399
+    },
+    {
+     "hex": "#5a5a5a",
+     "share": 0.1309
+    },
+    {
+     "hex": "#cececb",
+     "share": 0.1081
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 7,
+   "start": 8.73,
+   "end": 10.2,
+   "duration": 1.47,
+   "motion_mean": 0.00741,
+   "boundary_score": 23.922,
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 0.8414
+    },
+    {
+     "hex": "#271e1d",
+     "share": 0.0634
+    },
+    {
+     "hex": "#834233",
+     "share": 0.0382
+    },
+    {
+     "hex": "#9e9797",
+     "share": 0.0352
+    },
+    {
+     "hex": "#0a0000",
+     "share": 0.0148
+    },
+    {
+     "hex": "#000001",
+     "share": 0.007
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#a9462c",
+     "share": 0.3812
+    },
+    {
+     "hex": "#a34028",
+     "share": 0.3063
+    },
+    {
+     "hex": "#893522",
+     "share": 0.1844
+    },
+    {
+     "hex": "#b45031",
+     "share": 0.1281
+    }
+   ]
+  },
+  {
+   "shot": 8,
+   "start": 10.2,
+   "end": 11.65,
+   "duration": 1.45,
+   "motion_mean": 0.00529,
+   "boundary_score": 9.994,
+   "palette": [
+    {
+     "hex": "#080000",
+     "share": 0.2528
+    },
+    {
+     "hex": "#2a0001",
+     "share": 0.2184
+    },
+    {
+     "hex": "#a14c22",
+     "share": 0.1594
+    },
+    {
+     "hex": "#5e0001",
+     "share": 0.1463
+    },
+    {
+     "hex": "#e19655",
+     "share": 0.1153
+    },
+    {
+     "hex": "#51180b",
+     "share": 0.1078
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#92300f",
+     "share": 0.2656
+    },
+    {
+     "hex": "#9c4826",
+     "share": 0.2531
+    },
+    {
+     "hex": "#7d0f07",
+     "share": 0.2406
+    },
+    {
+     "hex": "#d47626",
+     "share": 0.2406
+    }
+   ]
+  },
+  {
+   "shot": 9,
+   "start": 11.65,
+   "end": 13.25,
+   "duration": 1.6,
+   "motion_mean": 0.00536,
+   "boundary_score": 22.586,
+   "palette": [
+    {
+     "hex": "#89381e",
+     "share": 0.3181
+    },
+    {
+     "hex": "#000000",
+     "share": 0.2949
+    },
+    {
+     "hex": "#bd7138",
+     "share": 0.2171
+    },
+    {
+     "hex": "#400907",
+     "share": 0.094
+    },
+    {
+     "hex": "#000100",
+     "share": 0.0405
+    },
+    {
+     "hex": "#000001",
+     "share": 0.0354
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#c1350b",
+     "share": 0.2812
+    },
+    {
+     "hex": "#aa5527",
+     "share": 0.2719
+    },
+    {
+     "hex": "#ca7028",
+     "share": 0.2375
+    },
+    {
+     "hex": "#94331c",
+     "share": 0.2094
+    }
+   ]
+  },
+  {
+   "shot": 10,
+   "start": 13.25,
+   "end": 14.6,
+   "duration": 1.35,
+   "motion_mean": 0.0123,
+   "boundary_score": 20.52,
+   "palette": [
+    {
+     "hex": "#060708",
+     "share": 0.2367
+    },
+    {
+     "hex": "#7d716e",
+     "share": 0.2189
+    },
+    {
+     "hex": "#7a4f4d",
+     "share": 0.1919
+    },
+    {
+     "hex": "#171211",
+     "share": 0.1524
+    },
+    {
+     "hex": "#341e18",
+     "share": 0.1251
+    },
+    {
+     "hex": "#9f8c82",
+     "share": 0.0749
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#934338",
+     "share": 0.2844
+    },
+    {
+     "hex": "#b84640",
+     "share": 0.2656
+    },
+    {
+     "hex": "#c96644",
+     "share": 0.2344
+    },
+    {
+     "hex": "#b3543e",
+     "share": 0.2156
+    }
+   ]
+  },
+  {
+   "shot": 11,
+   "start": 14.6,
+   "end": 18.08,
+   "duration": 3.48,
+   "motion_mean": 0.00892,
+   "boundary_score": 17.42,
+   "palette": [
+    {
+     "hex": "#0b0b0b",
+     "share": 0.3406
+    },
+    {
+     "hex": "#000000",
+     "share": 0.2855
+    },
+    {
+     "hex": "#030304",
+     "share": 0.1861
+    },
+    {
+     "hex": "#575956",
+     "share": 0.1418
+    },
+    {
+     "hex": "#000100",
+     "share": 0.0422
+    },
+    {
+     "hex": "#00021c",
+     "share": 0.0039
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#6a624a",
+     "share": 0.3438
+    },
+    {
+     "hex": "#021386",
+     "share": 0.3063
+    },
+    {
+     "hex": "#439b94",
+     "share": 0.225
+    },
+    {
+     "hex": "#74345e",
+     "share": 0.125
+    }
+   ]
+  },
+  {
+   "shot": 12,
+   "start": 18.08,
+   "end": 18.28,
+   "duration": 0.2,
+   "motion_mean": 0.02067,
+   "boundary_score": 6.636,
+   "palette": [
+    {
+     "hex": "#050506",
+     "share": 0.2673
+    },
+    {
+     "hex": "#121315",
+     "share": 0.1853
+    },
+    {
+     "hex": "#5b5c5d",
+     "share": 0.1718
+    },
+    {
+     "hex": "#25272c",
+     "share": 0.1628
+    },
+    {
+     "hex": "#1c1f22",
+     "share": 0.1379
+    },
+    {
+     "hex": "#909290",
+     "share": 0.0748
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 13,
+   "start": 18.28,
+   "end": 19.6,
+   "duration": 1.32,
+   "motion_mean": 0.00737,
+   "boundary_score": 6.037,
+   "palette": [
+    {
+     "hex": "#202226",
+     "share": 0.2641
+    },
+    {
+     "hex": "#0a0a0c",
+     "share": 0.218
+    },
+    {
+     "hex": "#bfc2c6",
+     "share": 0.1832
+    },
+    {
+     "hex": "#3a3c3e",
+     "share": 0.1281
+    },
+    {
+     "hex": "#191a1d",
+     "share": 0.1212
+    },
+    {
+     "hex": "#9c9e9e",
+     "share": 0.0853
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 14,
+   "start": 19.6,
+   "end": 22.57,
+   "duration": 2.97,
+   "motion_mean": 0.00277,
+   "boundary_score": 16.453,
+   "palette": [
+    {
+     "hex": "#516374",
+     "share": 0.1909
+    },
+    {
+     "hex": "#141920",
+     "share": 0.1832
+    },
+    {
+     "hex": "#1f2936",
+     "share": 0.1797
+    },
+    {
+     "hex": "#283443",
+     "share": 0.1705
+    },
+    {
+     "hex": "#3c4d5d",
+     "share": 0.17
+    },
+    {
+     "hex": "#687788",
+     "share": 0.1057
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 15,
+   "start": 22.57,
+   "end": 25.4,
+   "duration": 2.83,
+   "motion_mean": 0.0047,
+   "boundary_score": 13.861,
+   "palette": [
+    {
+     "hex": "#20252a",
+     "share": 0.2188
+    },
+    {
+     "hex": "#0b0d0e",
+     "share": 0.2124
+    },
+    {
+     "hex": "#2c3238",
+     "share": 0.1767
+    },
+    {
+     "hex": "#1a1c1f",
+     "share": 0.1667
+    },
+    {
+     "hex": "#14181b",
+     "share": 0.1314
+    },
+    {
+     "hex": "#595658",
+     "share": 0.094
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 16,
+   "start": 25.4,
+   "end": 29.53,
+   "duration": 4.13,
+   "motion_mean": 0.00113,
+   "boundary_score": 11.818,
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 0.9748
+    },
+    {
+     "hex": "#aeaeae",
+     "share": 0.0063
+    },
+    {
+     "hex": "#010101",
+     "share": 0.0057
+    },
+    {
+     "hex": "#606060",
+     "share": 0.0056
+    },
+    {
+     "hex": "#050505",
+     "share": 0.004
+    },
+    {
+     "hex": "#1e1e1e",
+     "share": 0.0035
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 17,
+   "start": 29.53,
+   "end": 31.8,
+   "duration": 2.27,
+   "motion_mean": 0.00386,
+   "boundary_score": 11.293,
+   "palette": [
+    {
+     "hex": "#2c2c33",
+     "share": 0.2545
+    },
+    {
+     "hex": "#29282f",
+     "share": 0.2301
+    },
+    {
+     "hex": "#191923",
+     "share": 0.1894
+    },
+    {
+     "hex": "#141518",
+     "share": 0.1581
+    },
+    {
+     "hex": "#202027",
+     "share": 0.1202
+    },
+    {
+     "hex": "#494e58",
+     "share": 0.0476
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#3ea3da",
+     "share": 0.275
+    },
+    {
+     "hex": "#070d8b",
+     "share": 0.2594
+    },
+    {
+     "hex": "#1675c4",
+     "share": 0.25
+    },
+    {
+     "hex": "#043b9b",
+     "share": 0.2156
+    }
+   ]
+  },
+  {
+   "shot": 18,
+   "start": 31.8,
+   "end": 34.57,
+   "duration": 2.77,
+   "motion_mean": 0.00438,
+   "boundary_score": 11.252,
+   "palette": [
+    {
+     "hex": "#080808",
+     "share": 0.2447
+    },
+    {
+     "hex": "#34404d",
+     "share": 0.2069
+    },
+    {
+     "hex": "#4d5e6d",
+     "share": 0.1689
+    },
+    {
+     "hex": "#131519",
+     "share": 0.1335
+    },
+    {
+     "hex": "#22252d",
+     "share": 0.1319
+    },
+    {
+     "hex": "#7e8a9a",
+     "share": 0.1141
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 19,
+   "start": 34.57,
+   "end": 39.4,
+   "duration": 4.83,
+   "motion_mean": 0.00518,
+   "boundary_score": 13.56,
+   "palette": [
+    {
+     "hex": "#20252b",
+     "share": 0.2485
+    },
+    {
+     "hex": "#0c0c0e",
+     "share": 0.2157
+    },
+    {
+     "hex": "#272e36",
+     "share": 0.2011
+    },
+    {
+     "hex": "#12181d",
+     "share": 0.1451
+    },
+    {
+     "hex": "#1d1c1f",
+     "share": 0.1089
+    },
+    {
+     "hex": "#4e4f54",
+     "share": 0.0806
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 20,
+   "start": 39.4,
+   "end": 44.25,
+   "duration": 4.85,
+   "motion_mean": 0.00287,
+   "boundary_score": 19.978,
+   "palette": [
+    {
+     "hex": "#090b12",
+     "share": 0.2881
+    },
+    {
+     "hex": "#314760",
+     "share": 0.1957
+    },
+    {
+     "hex": "#7e8490",
+     "share": 0.1697
+    },
+    {
+     "hex": "#28222c",
+     "share": 0.1495
+    },
+    {
+     "hex": "#535b6e",
+     "share": 0.1064
+    },
+    {
+     "hex": "#a9acb3",
+     "share": 0.0905
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#334bb9",
+     "share": 0.3125
+    },
+    {
+     "hex": "#0d298d",
+     "share": 0.2531
+    },
+    {
+     "hex": "#377cca",
+     "share": 0.2469
+    },
+    {
+     "hex": "#372686",
+     "share": 0.1875
+    }
+   ]
+  },
+  {
+   "shot": 21,
+   "start": 44.25,
+   "end": 50.2,
+   "duration": 5.95,
+   "motion_mean": 0.00483,
+   "boundary_score": 19.74,
+   "palette": [
+    {
+     "hex": "#0b0a0b",
+     "share": 0.2595
+    },
+    {
+     "hex": "#42525f",
+     "share": 0.2245
+    },
+    {
+     "hex": "#261f42",
+     "share": 0.2144
+    },
+    {
+     "hex": "#313a48",
+     "share": 0.1444
+    },
+    {
+     "hex": "#1c1729",
+     "share": 0.0821
+    },
+    {
+     "hex": "#677887",
+     "share": 0.0751
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#4d74bc",
+     "share": 0.4656
+    },
+    {
+     "hex": "#c04643",
+     "share": 0.3594
+    },
+    {
+     "hex": "#385199",
+     "share": 0.0875
+    },
+    {
+     "hex": "#909a9e",
+     "share": 0.0875
+    }
+   ]
+  },
+  {
+   "shot": 22,
+   "start": 50.2,
+   "end": 51.73,
+   "duration": 1.53,
+   "motion_mean": 0.02803,
+   "boundary_score": 16.003,
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 0.7379
+    },
+    {
+     "hex": "#23161c",
+     "share": 0.1234
+    },
+    {
+     "hex": "#baa18f",
+     "share": 0.069
+    },
+    {
+     "hex": "#604151",
+     "share": 0.0515
+    },
+    {
+     "hex": "#130000",
+     "share": 0.0127
+    },
+    {
+     "hex": "#000001",
+     "share": 0.0055
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#e0873f",
+     "share": 0.3594
+    },
+    {
+     "hex": "#2f3197",
+     "share": 0.3469
+    },
+    {
+     "hex": "#9d3d3c",
+     "share": 0.2406
+    },
+    {
+     "hex": "#926e62",
+     "share": 0.0531
+    }
+   ]
+  },
+  {
+   "shot": 23,
+   "start": 51.73,
+   "end": 58.0,
+   "duration": 6.27,
+   "motion_mean": 0.00234,
+   "boundary_score": 8.77,
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 0.7922
+    },
+    {
+     "hex": "#101011",
+     "share": 0.0669
+    },
+    {
+     "hex": "#34343c",
+     "share": 0.0574
+    },
+    {
+     "hex": "#939599",
+     "share": 0.0456
+    },
+    {
+     "hex": "#000001",
+     "share": 0.0334
+    },
+    {
+     "hex": "#010000",
+     "share": 0.0044
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#ba853c",
+     "share": 0.3312
+    },
+    {
+     "hex": "#13338c",
+     "share": 0.3063
+    },
+    {
+     "hex": "#3e7ea0",
+     "share": 0.25
+    },
+    {
+     "hex": "#644372",
+     "share": 0.1125
+    }
+   ]
+  },
+  {
+   "shot": 24,
+   "start": 58.0,
+   "end": 59.53,
+   "duration": 1.53,
+   "motion_mean": 0.0019,
+   "boundary_score": 11.916,
+   "palette": [
+    {
+     "hex": "#000101",
+     "share": 0.2494
+    },
+    {
+     "hex": "#161f28",
+     "share": 0.2058
+    },
+    {
+     "hex": "#090e12",
+     "share": 0.1644
+    },
+    {
+     "hex": "#304155",
+     "share": 0.1448
+    },
+    {
+     "hex": "#030709",
+     "share": 0.127
+    },
+    {
+     "hex": "#7e90a5",
+     "share": 0.1086
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#2b5379",
+     "share": 0.3344
+    },
+    {
+     "hex": "#2a4a6b",
+     "share": 0.2562
+    },
+    {
+     "hex": "#33608c",
+     "share": 0.2188
+    },
+    {
+     "hex": "#1f456a",
+     "share": 0.1906
+    }
+   ]
+  },
+  {
+   "shot": 25,
+   "start": 59.53,
+   "end": 60.8,
+   "duration": 1.27,
+   "motion_mean": 0.00474,
+   "boundary_score": 25.049,
+   "palette": [
+    {
+     "hex": "#13171b",
+     "share": 0.2393
+    },
+    {
+     "hex": "#555b62",
+     "share": 0.2137
+    },
+    {
+     "hex": "#7e8287",
+     "share": 0.1718
+    },
+    {
+     "hex": "#d2d4d5",
+     "share": 0.1356
+    },
+    {
+     "hex": "#b7babe",
+     "share": 0.1202
+    },
+    {
+     "hex": "#989ca1",
+     "share": 0.1194
+    }
+   ],
+   "accents": []
+  },
+  {
+   "shot": 26,
+   "start": 60.8,
+   "end": 62.0,
+   "duration": 1.2,
+   "motion_mean": 0.00506,
+   "boundary_score": 30.154,
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 0.2984
+    },
+    {
+     "hex": "#040100",
+     "share": 0.2298
+    },
+    {
+     "hex": "#1c0a03",
+     "share": 0.1716
+    },
+    {
+     "hex": "#5d270c",
+     "share": 0.1585
+    },
+    {
+     "hex": "#b57152",
+     "share": 0.1083
+    },
+    {
+     "hex": "#000100",
+     "share": 0.0334
+    }
+   ],
+   "accents": [
+    {
+     "hex": "#964824",
+     "share": 0.3406
+    },
+    {
+     "hex": "#8b3b16",
+     "share": 0.2437
+    },
+    {
+     "hex": "#712a07",
+     "share": 0.2219
+    },
+    {
+     "hex": "#a95835",
+     "share": 0.1938
+    }
+   ]
+  },
+  {
+   "shot": 27,
+   "start": 62.0,
+   "end": 68.0,
+   "duration": 6.0,
+   "motion_mean": 0.00033,
+   "boundary_score": 9.301,
+   "palette": [
+    {
+     "hex": "#000000",
+     "share": 0.9924
+    },
+    {
+     "hex": "#ffffff",
+     "share": 0.003
+    },
+    {
+     "hex": "#010101",
+     "share": 0.0025
+    },
+    {
+     "hex": "#272727",
+     "share": 0.0011
+    },
+    {
+     "hex": "#dcdcdc",
+     "share": 0.001
+    },
+    {
+     "hex": "#010002",
+     "share": 0.0001
+    }
+   ],
+   "accents": []
+  }
+ ],
+ "captions": [
+  {
+   "text": "OneKey",
+   "start": 1.9,
+   "end": 2.8,
+   "ink": null
+  },
+  {
+   "text": "Use your fingerprint or tap to unlock",
+   "start": 2.1,
+   "end": 2.5,
+   "ink": null
+  },
+  {
+   "text": "Beautifully powerful",
+   "start": 4.9,
+   "end": 6.3,
+   "ink": {
+    "x": 0.275,
+    "y": 0.4653,
+    "w": 0.4469,
+    "h": 0.0819,
+    "fill": "#ffffff"
+   }
+  },
+  {
+   "text": "Aluminum unibody",
+   "start": 7.5,
+   "end": 8.7,
+   "ink": {
+    "x": 0.2859,
+    "y": 0.7875,
+    "w": 0.4281,
+    "h": 0.0833,
+    "fill": "#d8d7d7"
+   }
+  },
+  {
+   "text": "irror-polished",
+   "start": 10.3,
+   "end": 10.7,
+   "ink": {
+    "x": 0.1914,
+    "y": 0.4625,
+    "w": 0.4,
+    "h": 0.0875,
+    "fill": "#d8d0cf"
+   }
+  },
+  {
+   "text": "Mirror-p",
+   "start": 11.2,
+   "end": 11.6,
+   "ink": {
+    "x": 0.2047,
+    "y": 0.4403,
+    "w": 0.2047,
+    "h": 0.1069,
+    "fill": "#ebdbc7"
+   }
+  },
+  {
+   "text": "with Corning® Gorilla® Glass",
+   "start": 13.2,
+   "end": 13.9,
+   "ink": {
+    "x": 0.3734,
+    "y": 0.9069,
+    "w": 0.2406,
+    "h": 0.0319,
+    "fill": "#b6b4b1"
+   }
+  },
+  {
+   "text": "Ultra-crips display",
+   "start": 14.1,
+   "end": 14.6,
+   "ink": {
+    "x": 0.2523,
+    "y": 0.3708,
+    "w": 0.493,
+    "h": 0.225,
+    "fill": "#fbfcfc"
+   }
+  },
+  {
+   "text": "OneKey",
+   "start": 15.2,
+   "end": 15.9,
+   "ink": {
+    "x": 0.4469,
+    "y": 0.2111,
+    "w": 0.093,
+    "h": 0.0278,
+    "fill": "#ddd7d4"
+   }
+  },
+  {
+   "text": "Quantum ready",
+   "start": 16.7,
+   "end": 17.1,
+   "ink": {
+    "x": 0.3281,
+    "y": 0.7903,
+    "w": 0.3406,
+    "h": 0.0792,
+    "fill": "#b4b8b2"
+   }
+  },
+  {
+   "text": "Four secure elements",
+   "start": 17.5,
+   "end": 18.1,
+   "ink": {
+    "x": 0.2383,
+    "y": 0.7861,
+    "w": 0.5211,
+    "h": 0.0694,
+    "fill": "#d1d1d1"
+   }
+  },
+  {
+   "text": "EAL 6+ Certified",
+   "start": 17.5,
+   "end": 18.0,
+   "ink": {
+    "x": 0.4211,
+    "y": 0.9139,
+    "w": 0.1453,
+    "h": 0.0264,
+    "fill": "#adadaa"
+   }
+  },
+  {
+   "text": "EAL 6+ Certified",
+   "start": 18.6,
+   "end": 19.3,
+   "ink": {
+    "x": 0.4211,
+    "y": 0.9139,
+    "w": 0.1453,
+    "h": 0.0264,
+    "fill": "#acafb3"
+   }
+  },
+  {
+   "text": "with a touch",
+   "start": 20.5,
+   "end": 22.6,
+   "ink": {
+    "x": 0.6359,
+    "y": 0.4583,
+    "w": 0.2789,
+    "h": 0.0653,
+    "fill": "#d2d6d9"
+   }
+  },
+  {
+   "text": "Confirmed",
+   "start": 24.4,
+   "end": 25.4,
+   "ink": {
+    "x": 0.507,
+    "y": 0.4181,
+    "w": 0.0805,
+    "h": 0.0722,
+    "fill": "#ffffff"
+   }
+  },
+  {
+   "text": "See exactly what you sign",
+   "start": 25.4,
+   "end": 27.1,
+   "ink": {
+    "x": 0.2109,
+    "y": 0.4653,
+    "w": 0.575,
+    "h": 0.0819,
+    "fill": "#ffffff"
+   }
+  },
+  {
+   "text": "Can’t find your wallet?",
+   "start": 27.2,
+   "end": 28.4,
+   "ink": {
+    "x": 0.2445,
+    "y": 0.4681,
+    "w": 0.5078,
+    "h": 0.0819,
+    "fill": "#d8d8d8"
+   }
+  },
+  {
+   "text": "No worries.",
+   "start": 28.4,
+   "end": 29.5,
+   "ink": {
+    "x": 0.3734,
+    "y": 0.4681,
+    "w": 0.25,
+    "h": 0.0639,
+    "fill": "#d8d8d8"
+   }
+  },
+  {
+   "text": "Works with Apple Find My",
+   "start": 29.6,
+   "end": 30.1,
+   "ink": {
+    "x": 0.1523,
+    "y": 0.7764,
+    "w": 0.6906,
+    "h": 0.0972,
+    "fill": "#f7f7f8"
+   }
+  },
+  {
+   "text": "Works with Apple Find My",
+   "start": 30.8,
+   "end": 31.7,
+   "ink": {
+    "x": 0.1523,
+    "y": 0.7764,
+    "w": 0.6906,
+    "h": 0.0972,
+    "fill": "#d9d8da"
+   }
+  },
+  {
+   "text": "Backup",
+   "start": 36.9,
+   "end": 39.1,
+   "ink": {
+    "x": 0.2461,
+    "y": 0.7875,
+    "w": 0.2008,
+    "h": 0.0833,
+    "fill": "#dad8d7"
+   }
+  },
+  {
+   "text": "Bundled with",
+   "start": 37.6,
+   "end": 39.2,
+   "ink": {
+    "x": 0.3789,
+    "y": 0.9069,
+    "w": 0.1211,
+    "h": 0.025,
+    "fill": "#b8b4b2"
+   }
+  },
+  {
+   "text": "Seceive",
+   "start": 40.3,
+   "end": 41.9,
+   "ink": {
+    "x": 0.5945,
+    "y": 0.2444,
+    "w": 0.0383,
+    "h": 0.0181,
+    "fill": "#eee3ff"
+   }
+  },
+  {
+   "text": "Connect",
+   "start": 40.3,
+   "end": 42.5,
+   "ink": {
+    "x": 0.5203,
+    "y": 0.4069,
+    "w": 0.0453,
+    "h": 0.0403,
+    "fill": "#dbfdff"
+   }
+  },
+  {
+   "text": "Security",
+   "start": 40.4,
+   "end": 42.6,
+   "ink": {
+    "x": 0.5133,
+    "y": 0.2528,
+    "w": 0.0414,
+    "h": 0.0347,
+    "fill": "#dff6ff"
+   }
+  },
+  {
+   "text": "Wallet",
+   "start": 40.4,
+   "end": 41.3,
+   "ink": {
+    "x": 0.5109,
+    "y": 0.4111,
+    "w": 0.0516,
+    "h": 0.0597,
+    "fill": "#d8faff"
+   }
+  },
+  {
+   "text": "Settings",
+   "start": 40.5,
+   "end": 42.5,
+   "ink": {
+    "x": 0.6148,
+    "y": 0.5556,
+    "w": 0.0414,
+    "h": 0.0194,
+    "fill": "#f8f6ff"
+   }
+  },
+  {
+   "text": "p signing",
+   "start": 40.9,
+   "end": 42.7,
+   "ink": {
+    "x": 0.457,
+    "y": 0.7875,
+    "w": 0.2125,
+    "h": 0.0833,
+    "fill": "#e7e2e0"
+   }
+  },
+  {
+   "text": "signing",
+   "start": 42.7,
+   "end": 44.0,
+   "ink": {
+    "x": 0.4922,
+    "y": 0.7875,
+    "w": 0.1773,
+    "h": 0.0833,
+    "fill": "#e4dfdd"
+   }
+  },
+  {
+   "text": "On-device portfolio",
+   "start": 52.6,
+   "end": 54.1,
+   "ink": {
+    "x": 0.2766,
+    "y": 0.7875,
+    "w": 0.4422,
+    "h": 0.0819,
+    "fill": "#ededec"
+   }
+  },
+  {
+   "text": "Allnew",
+   "start": 54.0,
+   "end": 55.4,
+   "ink": {
+    "x": 0.0922,
+    "y": 0.3958,
+    "w": 0.0828,
+    "h": 0.0361,
+    "fill": "#dbdbdb"
+   }
+  },
+  {
+   "text": "safeOS 2",
+   "start": 54.0,
+   "end": 55.4,
+   "ink": {
+    "x": 0.093,
+    "y": 0.4611,
+    "w": 0.2703,
+    "h": 0.0861,
+    "fill": "#dfdfdf"
+   }
+  },
+  {
+   "text": "Open source firmware",
+   "start": 55.4,
+   "end": 56.6,
+   "ink": {
+    "x": 0.2508,
+    "y": 0.4667,
+    "w": 0.4961,
+    "h": 0.0806,
+    "fill": "#fffffe"
+   }
+  },
+  {
+   "text": "Smoother. Clearer.",
+   "start": 56.6,
+   "end": 58.0,
+   "ink": {
+    "x": 0.2906,
+    "y": 0.4667,
+    "w": 0.4156,
+    "h": 0.0625,
+    "fill": "#fdfdfd"
+   }
+  },
+  {
+   "text": "OneKey Pro 2",
+   "start": 58.0,
+   "end": 59.4,
+   "ink": {
+    "x": 0.3805,
+    "y": 0.1153,
+    "w": 0.2,
+    "h": 0.0681,
+    "fill": "#c6c6ca"
+   }
+  },
+  {
+   "text": "OneKey Pro 2",
+   "start": 60.8,
+   "end": 62.0,
+   "ink": {
+    "x": 0.3805,
+    "y": 0.1153,
+    "w": 0.2,
+    "h": 0.0681,
+    "fill": "#cabfbc"
+   }
+  }
+ ]
+}

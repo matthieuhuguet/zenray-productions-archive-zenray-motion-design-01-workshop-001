@@ -1,0 +1,325 @@
+#!/usr/bin/env python3
+# 11 October 2026, 02:50 CEST: sound v2 of the animatic, made only from code.
+# An effects stem sits on the film's own events (cuts, captions, typing, interface moves, hero hits), and a temporary
+# music stem runs at the tempo measured on the reference (eighth-note grid at 175.85 BPM, so 87.9 BPM). Nothing of the
+# reference audio is used except numbers: tempo, the class of the attack nearest each cut, and the section boundaries.
+# Writes renders/sfx-v2.wav, renders/music-temp-v1.wav, renders/mix-v2.wav and verify/sound-events-v2.json.
+# Run from the atelier: ~/.venvs/motion-design/bin/python -I Scripts/MakeAudio.py
+import json
+import math
+import wave
+from pathlib import Path
+
+import numpy as np
+
+ROOT = Path(__file__).resolve().parent.parent
+RATE = 48000
+LEVELS = {"thump": 0.55, "whoosh": 0.28, "click": 0.22, "tick": 0.14, "key": 0.08, "blip": 0.07, "pulse": 0.25,
+          "ding": 0.25, "chime": 0.25, "impact": 0.7, "riser": 0.3}
+SECTIONS = [("intro", 0.0, 4.9), ("A", 4.9, 25.4), ("break", 25.4, 29.53), ("B", 29.53, 58.0),
+            ("hero", 58.0, 62.0), ("outro", 62.0, 68.0)]
+CHORDS = [  # D minor, one chord per bar: Dm, Bb, F, C (pad tones, bass root)
+    ([146.83, 174.61, 220.00], 73.42), ([116.54, 146.83, 174.61], 58.27),
+    ([174.61, 220.00, 261.63], 87.31), ([130.81, 164.81, 196.00], 65.41)]
+
+
+def load(relative):
+    return json.loads((ROOT / relative).read_text(encoding="utf-8"))
+
+
+def axis(seconds):
+    return np.arange(int(round(seconds * RATE))) / RATE
+
+
+def normalise(samples, peak):
+    top = float(np.max(np.abs(samples))) or 1.0
+    return samples * (peak / top)
+
+
+# --- effects, each returned at unit peak and scaled by LEVELS -------------------------------------------------------
+def thump(rng):
+    t = axis(0.45)
+    k = math.log(42.0 / 120.0)
+    phase = 2 * math.pi * 120.0 * 0.45 / k * ((42.0 / 120.0) ** (t / 0.45) - 1)
+    body = np.sin(phase) * np.minimum(1, t / 0.002) * np.exp(-t / 0.12)
+    click = np.diff(rng.uniform(-1, 1, len(t)), prepend=0.0) * np.exp(-t / 0.004) * (t < 0.03)
+    return body + 0.35 * click
+
+
+def whoosh(rng, span=0.6, low=300.0, high=2500.0):
+    t = axis(span)
+    noise = rng.uniform(-1, 1, len(t))
+    out = np.empty_like(noise)
+    state = 0.0
+    for i, value in enumerate(noise):
+        cutoff = low + (high - low) * (t[i] / span)
+        state += (1.0 - math.exp(-2.0 * math.pi * cutoff / RATE)) * (value - state)
+        out[i] = state
+    return out * np.minimum(1, t / 0.02) * np.exp(-np.maximum(0, t - 0.02) / 0.18)
+
+
+def click(rng):
+    t = axis(0.03)
+    return np.diff(rng.uniform(-1, 1, len(t)), prepend=0.0) * np.exp(-t / 0.002) + 0.4 * np.sin(2 * math.pi * 3000 * t) * np.exp(-t / 0.004)
+
+
+def tick():
+    t = axis(0.06)
+    return np.sin(2 * math.pi * 2400 * t) * np.minimum(1, t / 0.0005) * np.exp(-t / 0.012)
+
+
+def key(rng):
+    t = axis(0.02)
+    return np.diff(rng.uniform(-1, 1, len(t)), prepend=0.0) * np.exp(-t / 0.0015) + 0.5 * np.sin(2 * math.pi * 1800 * t) * np.exp(-t / 0.003)
+
+
+def blip(frequency):
+    t = axis(0.04)
+    return np.sin(2 * math.pi * frequency * t) * np.minimum(1, t / 0.001) * np.exp(-t / 0.01)
+
+
+def pulse():
+    t = axis(0.7)
+    swell = np.minimum(1, t / 0.025) * np.exp(-np.maximum(0, t - 0.025) / 0.3)  # 25 ms attack: the pulse starts on its frame
+    return (np.sin(2 * math.pi * 70 * t) + 0.35 * np.sin(2 * math.pi * 140 * t)) * swell
+
+
+def ding():
+    t = axis(0.9)
+    return (np.sin(2 * math.pi * 1318.5 * t) + 0.6 * np.sin(2 * math.pi * 1975.5 * t)) * np.minimum(1, t / 0.002) * np.exp(-t / 0.25)
+
+
+def chime():
+    t = axis(1.6)
+    tones = np.sin(2 * math.pi * 880 * t) + 0.6 * np.sin(2 * math.pi * 1320 * t) + 0.35 * np.sin(2 * math.pi * 1760 * t)
+    return tones * np.minimum(1, t / 0.004) * np.exp(-t / 0.5)
+
+
+def impact(rng):
+    t = axis(1.5)
+    boom = np.sin(2 * math.pi * 48 * t) * np.exp(-t / 0.5) + 0.5 * np.sin(2 * math.pi * 96 * t) * np.exp(-t / 0.25)
+    crack = np.diff(rng.uniform(-1, 1, len(t)), prepend=0.0) * np.exp(-t / 0.02)
+    return (boom + 0.4 * crack) * np.minimum(1, t / 0.002)
+
+
+def riser(rng, span):
+    t = axis(span)
+    ramp = (t / span) ** 2
+    bright = np.diff(rng.uniform(-1, 1, len(t)), prepend=0.0)
+    sweep = np.sin(2 * math.pi * (200 * t + (1000 / (2 * span)) * t ** 2))
+    return (0.6 * bright + 0.4 * sweep) * ramp
+
+
+def place(buffer, time_s, samples):
+    start = int(round(time_s * RATE))
+    end = min(len(buffer), start + len(samples))
+    if start < len(buffer):
+        buffer[start:end] += samples[:end - start]
+
+
+def resolve(value, tokens):
+    if isinstance(value, str) and value.startswith("@"):
+        group, name = value[1:].split(".")
+        return tokens[group][name]
+    return value
+
+
+def effect_events(timeline, choreography, tokens, audio):
+    shots = {shot["id"]: shot for shot in timeline["shots"]}
+    events = []
+    attacks = audio["attacks"]
+    for shot in timeline["shots"][1:]:
+        near = [a for a in attacks if abs(a["t"] - shot["start"]) <= 0.06]
+        kind = max(near, key=lambda a: a["strength"])["class"] if near else None
+        sound = {"impact grave": "thump", "souffle": "whoosh", "clic aigu": "click", "note ou accent": "whoosh"}.get(kind)
+        if sound:
+            events.append({"time": shot["start"], "kind": sound, "id": f"cut {shot['id']}", "check": True})
+    typed = {caption["id"] for caption in timeline["captions"] if caption["reveal"] == "typewriter"}
+    for start in sorted({round(c["start"], 3) for c in timeline["captions"] if c["id"] not in typed}):
+        ids = "+".join(c["id"] for c in timeline["captions"] if round(c["start"], 3) == start)
+        events.append({"time": start, "kind": "tick", "id": f"caption {ids}", "check": True})
+    motion = tokens["motion"]
+    for caption in timeline["captions"]:
+        if caption["id"] in typed:
+            letters = len(caption["text"])
+            step = (caption["end"] - caption["start"]) * motion["typeFraction"] / letters
+            events += [{"time": round(caption["start"] + i * step, 4), "kind": "key", "id": f"typing {caption['id']}", "check": False}
+                       for i in range(letters)]
+    for shot_id, records in choreography.items():
+        base = shots[shot_id]["start"]
+        for record in records:
+            op = record[0]
+            if op == "$draw":
+                at, duration = record[2], resolve(record[3], tokens)
+                if record[1] == "#check-path":
+                    events.append({"time": base + at + duration, "kind": "ding", "id": "check U03", "check": True})
+                if record[1] == "#logo-ring":
+                    events.append({"time": base + at, "kind": "whoosh", "id": "logo ring", "check": True})
+            elif op == "$qr":
+                at, duration = record[2], resolve(record[3], tokens)
+                events += [{"time": round(base + at + i * duration / 24, 4), "kind": "blip", "id": "QR U07", "check": False, "pitch": 900 + 40 * i}
+                           for i in range(24)]
+            elif op == "$count":
+                at, duration = record[2], resolve(record[3], tokens)
+                events += [{"time": round(base + at + duration * (1 - (1 - i / 20) ** 0.25), 4), "kind": "key", "id": "counter U05", "check": False}
+                           for i in range(20)]
+            elif op.startswith("#ping") or op.startswith("#ripple"):
+                events.append({"time": base + record[1], "kind": "pulse", "id": f"{op} {shot_id}", "check": True})
+            elif op == "#shot-S20 .menu-item":
+                events += [{"time": round(base + record[1] + i * motion["stagger"], 4), "kind": "click", "id": "menu U06", "check": False}
+                           for i in range(6)]
+            elif op == "#logo-dot":
+                events.append({"time": base + record[1], "kind": "chime", "id": "logo dot", "check": True})
+            elif op.startswith("#beat-"):
+                events.append({"time": base + record[1], "kind": "click", "id": f"{op} {shot_id}", "check": True})
+    for hit in (58.0, 59.53, 60.8):
+        events.append({"time": hit, "kind": "impact", "id": f"hero {hit}", "check": True})
+    events.append({"time": 56.6, "kind": "riser", "id": "lift into the hero", "check": False, "span": 1.4})
+    events.sort(key=lambda event: event["time"])
+    return events
+
+
+def render_effects(events, total, rng):
+    buffer = np.zeros(total)
+    makers = {"thump": lambda e: thump(rng), "whoosh": lambda e: whoosh(rng), "click": lambda e: click(rng), "tick": lambda e: tick(),
+              "key": lambda e: key(rng), "blip": lambda e: blip(e.get("pitch", 1200)), "pulse": lambda e: pulse(), "ding": lambda e: ding(),
+              "chime": lambda e: chime(), "impact": lambda e: impact(rng), "riser": lambda e: riser(rng, e["span"])}
+    for event in events:
+        place(buffer, event["time"], normalise(makers[event["kind"]](event), LEVELS[event["kind"]]))
+    return buffer
+
+
+# --- temporary music -------------------------------------------------------------------------------------------------
+def grid(timeline, eighth):
+    cuts = [shot["start"] for shot in timeline["shots"][1:]]
+    best = (0, 0.0)
+    for k in range(400):
+        phase = k / 400 * eighth
+        hits = sum(1 for c in cuts if min((c - phase) % eighth, eighth - (c - phase) % eighth) <= 0.05)
+        if hits > best[0]:
+            best = (hits, phase)
+    return best[1], best[0]
+
+
+def section_of(time_s):
+    for name, start, end in SECTIONS:
+        if start <= time_s < end:
+            return name
+    return "outro"
+
+
+def render_music(total, eighth, phase, rng):
+    left = np.zeros(total)
+    right = np.zeros(total)
+    quarter = 2 * eighth
+    bar = 4 * quarter
+    t_all = np.arange(total) / RATE
+    # Pad: one chord per bar, additive tone, soft attack and release, slightly delayed on the right for width.
+    bar_index = np.floor((t_all - phase) / bar).astype(int)
+    for chord_index, (tones, _) in enumerate(CHORDS):
+        mask = (bar_index % len(CHORDS)) == chord_index
+        voice = np.zeros(total)
+        for frequency in tones:
+            for harmonic in range(1, 7):
+                voice += np.sin(2 * math.pi * frequency * harmonic * t_all * (1.0 + 0.002 * (harmonic % 2))) / harmonic ** 1.5
+        position = ((t_all - phase) % bar) / bar
+        shape = np.minimum(1, position * bar / 0.3) * np.minimum(1, (1 - position) * bar / 0.4)
+        left += voice * mask * shape
+    level = np.zeros(total)
+    for name, start, end in SECTIONS:
+        span = (t_all >= start) & (t_all < end)
+        if name == "intro":
+            level[span] = ((t_all[span] - start) / (end - start)) ** 1.5 * 0.7
+        elif name == "break":
+            level[span] = 0.85
+        elif name == "hero":
+            level[span] = 0.95
+        elif name == "outro":
+            level[span] = 0.8 * np.clip(1 - (t_all[span] - start) / (end - start - 0.5), 0, 1)
+        else:
+            level[span] = 0.6
+    pad = left * level
+    delay = int(0.012 * RATE)
+    left = pad.copy()
+    right[delay:] = pad[:-delay]
+    groove = np.zeros(total)
+    beat = phase
+    index = 0
+    while beat < total / RATE:
+        name = section_of(beat)
+        if name in ("A", "B"):
+            if index % 2 == 0:
+                place(groove, beat, normalise(thump(rng), 0.5))
+            else:
+                place(groove, beat, normalise(click(rng), 0.12))
+            chord = CHORDS[int(math.floor((beat - phase) / bar)) % len(CHORDS)]
+            t = axis(0.18)
+            place(groove, beat, 0.22 * np.sin(2 * math.pi * chord[1] * t) * np.exp(-t / 0.08))
+        elif name == "hero" and index % 8 == 0:
+            place(groove, beat, normalise(thump(rng), 0.5))
+        beat += eighth
+        index += 1
+    for start, span in ((3.5, 1.4), (28.13, 1.4)):
+        place(groove, start, normalise(riser(rng, span), 0.22))
+    left += groove
+    right += groove
+    return normalise(left, 0.6), normalise(right, 0.6)
+
+
+def write_wav(path, left, right):
+    stereo = np.empty(2 * len(left))
+    stereo[0::2] = np.clip(left, -1, 1)
+    stereo[1::2] = np.clip(right, -1, 1)
+    pcm = np.round(stereo * 32767).astype("<i2")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with wave.open(str(path), "wb") as handle:
+        handle.setnchannels(2)
+        handle.setsampwidth(2)
+        handle.setframerate(RATE)
+        handle.writeframes(pcm.tobytes())
+
+
+def fade(samples, seconds=0.02):
+    count = int(seconds * RATE)
+    ramp = np.linspace(0, 1, count)
+    samples[:count] *= ramp
+    samples[-count:] *= ramp[::-1]
+    return samples
+
+
+def main():
+    tokens = load("params/tokens.json")
+    timeline = load("params/timeline.json")
+    choreography = load("params/choreography.json")
+    audio = load("analysis/audio.json")
+    rng = np.random.default_rng(7)
+    total = int(round(tokens["meta"]["durationSeconds"] * RATE))
+    eighth = 60.0 / audio["bpm"]
+    phase, hits = grid(timeline, eighth)
+
+    events = effect_events(timeline, choreography, tokens, audio)
+    effects = fade(render_effects(events, total, rng))
+    music_left, music_right = render_music(total, eighth, phase, rng)
+    music_left, music_right = fade(music_left), fade(music_right)
+    mix_left = music_left * 0.7 + effects
+    mix_right = music_right * 0.7 + effects
+    top = max(float(np.max(np.abs(mix_left))), float(np.max(np.abs(mix_right))))
+    if top > 0.89:
+        mix_left, mix_right = mix_left * 0.89 / top, mix_right * 0.89 / top
+
+    renders = ROOT / "renders"
+    write_wav(renders / "sfx-v2.wav", effects, effects)
+    write_wav(renders / "music-temp-v1.wav", music_left, music_right)
+    write_wav(renders / "mix-v2.wav", mix_left, mix_right)
+    doc = {"rate": RATE, "durationSeconds": total / RATE, "eighthSeconds": round(eighth, 5), "gridPhase": round(phase, 4),
+           "cutsOnGrid": hits, "events": events}
+    (ROOT / "verify" / "sound-events-v2.json").write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    kinds = {}
+    for event in events:
+        kinds[event["kind"]] = kinds.get(event["kind"], 0) + 1
+    print(f"audio v2: {len(events)} effect events {kinds}; grid {60 / eighth / 2:.2f} BPM (eighth {eighth:.4f} s, phase {phase:.3f} s, "
+          f"{hits} of {len(timeline['shots']) - 1} cuts on the grid); mix peak {max(np.max(np.abs(mix_left)), np.max(np.abs(mix_right))):.3f}")
+
+
+if __name__ == "__main__":
+    main()

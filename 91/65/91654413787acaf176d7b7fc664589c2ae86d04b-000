@@ -1,0 +1,793 @@
+{
+  "note": "11 October 2026, 01:55 CEST: every asset the film needs, by id. One entry drives three things: the named slot inside the HyperFrames animatic, the asset sheet of the storyboard, and the generation prompt. Prompts describe an original device (sheet A00), never the reference product, its brand or its text. Nothing is generated before Matthieu validates.",
+  "sources": {
+    "FLOW-IMAGE": "IMAGE FLOW",
+    "FLOW-VIDEO": "VIDÉO FLOW",
+    "3D": "RENDU 3D",
+    "CODE": "CODE",
+    "PROVIDED": "À FOURNIR",
+    "LICENSE": "SOUS LICENCE"
+  },
+  "status": {
+    "slot": "emplacement",
+    "done": "fait en code",
+    "temp": "provisoire en code",
+    "todo": "à faire en code"
+  },
+  "promptSuffix": "Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.",
+  "assets": [
+    {
+      "id": "A00",
+      "title": "Fiche de design de l'appareil",
+      "kind": "image",
+      "source": "FLOW-IMAGE",
+      "status": "slot",
+      "shots": [],
+      "seconds": 0,
+      "format": "4096 × 2304 px, fond noir, cinq vues",
+      "prompt": "Product design sheet of an original pocket hardware security device: a rounded slab with a 0.47 width-to-height ratio, 9 mm thick, anodised aluminium unibody with a thin polished chamfer, edge-to-edge black glass display with soft rounded corners, one slim side button with a fingerprint sensor, a pill-shaped USB-C port and three small speaker holes on the bottom edge. Colourways silver, copper and graphite. Orthographic front, back, left side and bottom views plus one three-quarter hero view, evenly lit on pure black.",
+      "notes": "À générer et valider en premier. Elle sert de référence d'image à toutes les vidéos, pour garder le même appareil d'un plan à l'autre. Proportions reprises du gabarit : 460 × 980 px."
+    },
+    {
+      "id": "A02",
+      "title": "Appareil qui monte, de face",
+      "kind": "image",
+      "source": "FLOW-IMAGE",
+      "status": "slot",
+      "shots": [
+        "S02"
+      ],
+      "seconds": 1.3,
+      "format": "PNG, 2160 px de haut, couche alpha",
+      "slot": {
+        "shot": "S02",
+        "variant": "box",
+        "x": 0.5,
+        "y": 0.6,
+        "w": 0.1,
+        "h": 0.36,
+        "radius": 28
+      },
+      "prompt": "Front view of the device from sheet A00, screen on with a soft warm gradient and the boot mark U01, floating on pure black, centred, soft rim light, transparent background.",
+      "notes": "Montée et échelle animées en code dans la forme de lumière."
+    },
+    {
+      "id": "A03",
+      "title": "Main qui tient l'appareil",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S03"
+      ],
+      "seconds": 1.7,
+      "format": "1920 × 1080, 60 i/s, fond noir pour détourage",
+      "slot": {
+        "shot": "S03",
+        "variant": "box",
+        "x": 0.5,
+        "y": 0.55,
+        "w": 0.24,
+        "h": 0.9,
+        "radius": 22,
+        "label": "inside"
+      },
+      "hide": [
+        "#device-main",
+        "#playhead"
+      ],
+      "prompt": "Close-up of a hand holding the device from sheet A00 from below, fingertips on its lower edge, screen on, static camera, pure black background, studio rim light, 8 seconds.",
+      "notes": "Le titre C00 passe derrière la main : détourer la main et l'appareil sur le noir. Écran : U01."
+    },
+    {
+      "id": "A05",
+      "title": "Macro de la tranche",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S05"
+      ],
+      "seconds": 1.17,
+      "format": "1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S05",
+        "variant": "full"
+      },
+      "hide": [
+        "#slab-a",
+        "#sheen-a"
+      ],
+      "prompt": "Extreme macro of the side edge of the device from sheet A00: brushed silver aluminium, slim side button and a small dark window, raking diagonal light, shallow depth of field, black background, the camera drifts slowly to the left with a gentle ease in and out, 8 seconds.",
+      "notes": "Mouvement mesuré : 18 px vers la gauche, courbe sine.inOut."
+    },
+    {
+      "id": "A06",
+      "title": "Macro du châssis vu de dessous",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S06"
+      ],
+      "seconds": 1.28,
+      "format": "1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S06",
+        "variant": "full"
+      },
+      "hide": [
+        "#slab-b",
+        "#sheen-b"
+      ],
+      "prompt": "Macro of the underside of the device chassis from sheet A00: milled internal cavities, a pill-shaped USB-C port, three small speaker holes, silver aluminium, cool studio light, the camera rotates very slightly clockwise, steady, 8 seconds.",
+      "notes": "Légende C02 en bas. Mouvement mesuré : rotation 1,2°, linéaire."
+    },
+    {
+      "id": "A07",
+      "title": "Trois coloris de profil",
+      "kind": "image",
+      "source": "3D",
+      "status": "slot",
+      "shots": [
+        "S07"
+      ],
+      "seconds": 1.47,
+      "format": "PNG 3840 px de large, couche alpha",
+      "slot": {
+        "shot": "S07",
+        "variant": "box",
+        "x": 0.5,
+        "y": 0.5,
+        "w": 0.46,
+        "h": 0.24,
+        "radius": 14,
+        "label": "inside"
+      },
+      "hide": [
+        "#slab-c",
+        "#connector"
+      ],
+      "prompt": "Three devices from sheet A00 stacked on top of each other and seen exactly from the side: silver, copper, graphite, floating on pure black, crisp edge highlights, transparent background.",
+      "notes": "Image fixe animée en code : recul 0,74 et glissement de 274 px vers la droite, mesurés."
+    },
+    {
+      "id": "A08",
+      "title": "Macro du cuivre poli",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S08"
+      ],
+      "seconds": 1.45,
+      "format": "1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S08",
+        "variant": "full"
+      },
+      "hide": [
+        "#bronze",
+        "#band"
+      ],
+      "prompt": "Macro of the polished copper back of the device from sheet A00, liquid wave-like reflections sliding across the surface, warm orange light, black surroundings, the camera pulls back slightly and settles, 8 seconds.",
+      "notes": "Légende C03. Mouvement mesuré : recul 0,93, courbe power2.out."
+    },
+    {
+      "id": "A09",
+      "title": "Coin de l'écran",
+      "kind": "video",
+      "source": "3D",
+      "status": "slot",
+      "shots": [
+        "S09"
+      ],
+      "seconds": 1.6,
+      "format": "1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S09",
+        "variant": "full"
+      },
+      "hide": [
+        "#plane"
+      ],
+      "prompt": "Macro of one corner of the device from sheet A00: copper frame, edge-to-edge glass display showing wallpaper W01, glossy reflection, the camera rolls very slightly, 8 seconds.",
+      "notes": "Fond d'écran : W01."
+    },
+    {
+      "id": "W01",
+      "title": "Fond d'écran en strates",
+      "kind": "image",
+      "source": "FLOW-IMAGE",
+      "status": "slot",
+      "shots": [
+        "S09",
+        "S10"
+      ],
+      "seconds": 0,
+      "format": "3840 × 2160 et 2160 × 4680 px",
+      "prompt": "Abstract wallpaper of layered landscape strata in deep red, orange and amber, like eroded dunes at dusk, smooth gradients and fine contour lines, no text.",
+      "notes": "Sert à l'écran (A09, A10, U02)."
+    },
+    {
+      "id": "A10",
+      "title": "Fond d'écran en mouvement",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S10"
+      ],
+      "seconds": 1.35,
+      "format": "1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S10",
+        "variant": "full"
+      },
+      "hide": [
+        "#streak-1",
+        "#streak-2",
+        "#streak-3"
+      ],
+      "prompt": "Full-frame slow lateral slide across wallpaper W01 seen through a glass display, crisp pixels and a faint reflection, the camera slides left and eases out, 8 seconds.",
+      "notes": "Légendes C04 et C05. Mouvement mesuré : 34 px vers la gauche, courbe power2.out."
+    },
+    {
+      "id": "A11",
+      "title": "Vue éclatée des puces",
+      "kind": "3d",
+      "source": "3D",
+      "status": "slot",
+      "shots": [
+        "S11"
+      ],
+      "seconds": 3.48,
+      "format": "1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S11",
+        "variant": "badge"
+      },
+      "prompt": "The device from sheet A00 seen from the front dissolves into an exploded stack of translucent security chip layers, glowing green light beams pass through them, dark background, the camera pulls back strongly and tilts, ease out, 8 seconds.",
+      "notes": "Version code provisoire visible dans le plan (couches et traces). Mouvement mesuré : recul 0,29, rotation 8,5°, descente de 304 px, courbe power1.out."
+    },
+    {
+      "id": "A13",
+      "title": "Macro de carte électronique",
+      "kind": "video",
+      "source": "3D",
+      "status": "slot",
+      "shots": [
+        "S13"
+      ],
+      "seconds": 1.32,
+      "format": "1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S13",
+        "variant": "full"
+      },
+      "hide": [
+        "#chip-grid"
+      ],
+      "prompt": "Macro of a dark circuit board with several square security chips whose edges light up one after another, shallow depth of field, the camera rises slightly and settles, 8 seconds.",
+      "notes": "Note C08. Mouvement mesuré : montée de 133 px, courbe power3.out."
+    },
+    {
+      "id": "A14",
+      "title": "Doigt sur le bouton latéral",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S14"
+      ],
+      "seconds": 2.97,
+      "format": "1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S14",
+        "variant": "full"
+      },
+      "hide": [
+        "#pcb",
+        "#trace-1",
+        "#trace-2",
+        ".pcb-bg"
+      ],
+      "prompt": "Close-up of the thin side edge of the device from sheet A00 held upright against a cool blue-grey background; a fingertip approaches and touches the slim side button; soft light, the camera almost still, 8 seconds.",
+      "notes": "Légendes C09 et C10, de part et d'autre de la tranche."
+    },
+    {
+      "id": "A15",
+      "title": "Main au bureau, validation",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S15"
+      ],
+      "seconds": 2.83,
+      "format": "1920 × 1080, 60 i/s, écran sombre à incruster",
+      "slot": {
+        "shot": "S15",
+        "variant": "full"
+      },
+      "prompt": "A hand holds the device from sheet A00 above a dark wooden desk at night, its screen facing the camera and kept plain dark for compositing, the camera slides left, pushes in slightly and rolls a few degrees, ease out, 8 seconds.",
+      "notes": "Écran : U03, incrusté par suivi des quatre coins. Mouvement mesuré : 216 px à gauche, avance 1,14, rotation 3,6°, courbe power1.out."
+    },
+    {
+      "id": "A17",
+      "title": "Balise sur tissu",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S17"
+      ],
+      "seconds": 2.27,
+      "format": "1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S17",
+        "variant": "full"
+      },
+      "hide": [
+        "#puck",
+        ".puck-bg"
+      ],
+      "prompt": "A small flat square tracker tag resting on deep blue-violet fabric, a soft glow on the left, static camera, low-key light, 8 seconds.",
+      "notes": "Anneaux lumineux en code au-dessus. Légende C15."
+    },
+    {
+      "id": "A18",
+      "title": "Pose sur le socle de recharge",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S18"
+      ],
+      "seconds": 2.77,
+      "format": "1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S18",
+        "variant": "full"
+      },
+      "hide": [
+        "#pad",
+        "#arc-1",
+        "#arc-2",
+        "#arc-3"
+      ],
+      "prompt": "A hand places the device from sheet A00 on a dark round wireless charging stand on a desk, low warm light, the camera turns very slightly, ease in and out, 8 seconds.",
+      "notes": "Légende C16."
+    },
+    {
+      "id": "A19",
+      "title": "Appareil et carte de sauvegarde",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S19"
+      ],
+      "seconds": 4.83,
+      "format": "1920 × 1080, 60 i/s, écran sombre à incruster",
+      "slot": {
+        "shot": "S19",
+        "variant": "full"
+      },
+      "hide": [
+        "#swipe",
+        "#card"
+      ],
+      "prompt": "A person in dim light holds the device from sheet A00 and a thin metal backup card against each other, face out of focus behind, screen kept plain dark for compositing, the camera slides left and rolls slightly, ease out, 8 seconds.",
+      "notes": "Écran : U04. Légendes C17 et C18. Mouvement mesuré : 215 px à gauche, rotation -6,4°, recul 0,93, courbe power1.out."
+    },
+    {
+      "id": "A20",
+      "title": "Devant l'ordinateur, code QR",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S20"
+      ],
+      "seconds": 4.85,
+      "format": "1920 × 1080, 60 i/s, deux écrans à incruster",
+      "slot": {
+        "shot": "S20",
+        "variant": "full"
+      },
+      "prompt": "A hand holds the device from sheet A00 in front of a generic unbranded laptop whose screen shows a plain white panel, dark room, both screens kept plain for compositing, the camera pulls back slightly and settles, 8 seconds.",
+      "notes": "Écrans : U06 puis U07. Légende C19."
+    },
+    {
+      "id": "A21",
+      "title": "Contact avec un téléphone",
+      "kind": "video",
+      "source": "FLOW-VIDEO",
+      "status": "slot",
+      "shots": [
+        "S21"
+      ],
+      "seconds": 5.95,
+      "format": "1920 × 1080, 60 i/s, écran à incruster",
+      "slot": {
+        "shot": "S21",
+        "variant": "full"
+      },
+      "hide": [
+        "#device-passkey",
+        ".ripple-bg"
+      ],
+      "prompt": "A hand brings the device from sheet A00 close to a generic unbranded smartphone on a deep violet background until they touch, the phone screen kept plain for compositing, the camera pulls back and rolls, accelerating, 8 seconds.",
+      "notes": "Écran du téléphone : U08. Ondes en code. Légende C20. Mouvement mesuré : recul 0,64, rotation -16,3°, courbe power1.in."
+    },
+    {
+      "id": "A22",
+      "title": "Rafale de macros",
+      "kind": "3d",
+      "source": "3D",
+      "status": "slot",
+      "shots": [
+        "S22"
+      ],
+      "seconds": 1.53,
+      "format": "5 plans de 0,25 s, 1920 × 1080, 60 i/s",
+      "slot": {
+        "shot": "S22",
+        "variant": "badge"
+      },
+      "prompt": "Five very short macro shots of the device from sheet A00, a quarter of a second each: tilted interface close-up, glowing side profile, copper edge, screen glow, frame corner; black background, hard light.",
+      "notes": "Coupes calées sur la croche à 175,9 BPM. Aplats de couleur en code en attendant."
+    },
+    {
+      "id": "A23",
+      "title": "Deux appareils de face",
+      "kind": "image",
+      "source": "3D",
+      "status": "slot",
+      "shots": [
+        "S23"
+      ],
+      "seconds": 6.27,
+      "format": "PNG, couche alpha, écrans sombres à incruster",
+      "slot": {
+        "shot": "S23",
+        "variant": "badge"
+      },
+      "prompt": "Two devices from sheet A00 side by side, front view, slightly turned towards each other, plain dark screens for compositing, floating on pure black, transparent background.",
+      "notes": "Écrans : U05 et U09. Mouvement mesuré : recul 0,43, rotation 10,9°, courbe power1.in."
+    },
+    {
+      "id": "A24",
+      "title": "Appareil graphite devant le titre",
+      "kind": "image",
+      "source": "FLOW-IMAGE",
+      "status": "slot",
+      "shots": [
+        "S24"
+      ],
+      "seconds": 1.53,
+      "format": "PNG, couche alpha",
+      "slot": {
+        "shot": "S24",
+        "variant": "box",
+        "x": 0.5,
+        "y": 0.55,
+        "w": 0.16,
+        "h": 0.56,
+        "radius": 34
+      },
+      "prompt": "The graphite device from sheet A00 standing upright, front view, a faint reflection on a glossy black floor, cool blue rim light, transparent background.",
+      "notes": "Devant les lettres A28."
+    },
+    {
+      "id": "A25",
+      "title": "Appareil argent, héros",
+      "kind": "image",
+      "source": "FLOW-IMAGE",
+      "status": "slot",
+      "shots": [
+        "S25"
+      ],
+      "seconds": 1.27,
+      "format": "PNG, couche alpha",
+      "slot": {
+        "shot": "S25",
+        "variant": "box",
+        "x": 0.5,
+        "y": 0.55,
+        "w": 0.16,
+        "h": 0.56,
+        "radius": 34
+      },
+      "hide": [
+        "#hero-device"
+      ],
+      "prompt": "The silver device from sheet A00 standing upright on a reflective floor, white smoke drifting behind it, soft top light, transparent background.",
+      "notes": "Sol réfléchissant en code."
+    },
+    {
+      "id": "A26",
+      "title": "Appareil cuivre, héros",
+      "kind": "image",
+      "source": "FLOW-IMAGE",
+      "status": "slot",
+      "shots": [
+        "S26"
+      ],
+      "seconds": 1.2,
+      "format": "PNG, couche alpha",
+      "slot": {
+        "shot": "S26",
+        "variant": "box",
+        "x": 0.5,
+        "y": 0.55,
+        "w": 0.16,
+        "h": 0.56,
+        "radius": 34
+      },
+      "prompt": "The copper device from sheet A00 standing upright, warm firelight reflections on its body, transparent background.",
+      "notes": "Sol chaud en code."
+    },
+    {
+      "id": "A28",
+      "title": "Lettres héros en fumée et en feu",
+      "kind": "3d",
+      "source": "3D",
+      "status": "temp",
+      "shots": [
+        "S24",
+        "S25",
+        "S26"
+      ],
+      "seconds": 4.0,
+      "format": "1920 × 1080, 60 i/s, couche alpha",
+      "slot": {
+        "shot": "S24",
+        "variant": "badge"
+      },
+      "prompt": "Giant volumetric letters made of drifting smoke, three looks: cool blue smoke, white smoke over a reflective floor, glowing fire embers; black background, slow turbulence, 8 seconds each.",
+      "notes": "Mot en fumée fait en code en attendant (filtre de turbulence). Idéal en simulation pyro dans Houdini."
+    },
+    {
+      "id": "U01",
+      "title": "Écran de démarrage",
+      "kind": "ui",
+      "source": "CODE",
+      "status": "done",
+      "shots": [
+        "S02",
+        "S03"
+      ],
+      "seconds": 3.0,
+      "format": "HTML, 460 × 980 px",
+      "inset": {
+        "shot": "S03",
+        "x": 0.5,
+        "y": 0.33,
+        "w": 0.075,
+        "h": 0.3,
+        "rotate": 0
+      },
+      "notes": "Marque en anneau qui s'éclaire."
+    },
+    {
+      "id": "U03",
+      "title": "Coche de validation",
+      "kind": "ui",
+      "source": "CODE",
+      "status": "done",
+      "shots": [
+        "S15"
+      ],
+      "seconds": 2.83,
+      "format": "HTML",
+      "notes": "Déjà dans le plan S15 (appareil et coche tracée)."
+    },
+    {
+      "id": "U04",
+      "title": "Recherche de carte",
+      "kind": "ui",
+      "source": "CODE",
+      "status": "done",
+      "shots": [
+        "S19"
+      ],
+      "seconds": 4.83,
+      "format": "HTML",
+      "inset": {
+        "shot": "S19",
+        "x": 0.5,
+        "y": 0.5,
+        "w": 0.15,
+        "h": 0.56,
+        "rotate": -8
+      },
+      "notes": "Carte en contour et ondes de recherche."
+    },
+    {
+      "id": "U05",
+      "title": "Portefeuille, anneau de solde",
+      "kind": "ui",
+      "source": "CODE",
+      "status": "done",
+      "shots": [
+        "S22",
+        "S23"
+      ],
+      "seconds": 6.27,
+      "format": "HTML",
+      "notes": "Anneau, compteur et panneaux du plan S23."
+    },
+    {
+      "id": "U06",
+      "title": "Menu d'applications",
+      "kind": "ui",
+      "source": "CODE",
+      "status": "done",
+      "shots": [
+        "S20"
+      ],
+      "seconds": 4.85,
+      "format": "HTML",
+      "notes": "Déjà dans le plan S20."
+    },
+    {
+      "id": "U07",
+      "title": "Code QR",
+      "kind": "ui",
+      "source": "CODE",
+      "status": "done",
+      "shots": [
+        "S20"
+      ],
+      "seconds": 4.85,
+      "format": "HTML",
+      "notes": "Matrice 25 × 25 qui s'assemble, déjà dans le plan S20."
+    },
+    {
+      "id": "U08",
+      "title": "Demande de clé d'accès",
+      "kind": "ui",
+      "source": "CODE",
+      "status": "done",
+      "shots": [
+        "S21"
+      ],
+      "seconds": 5.95,
+      "format": "HTML",
+      "inset": {
+        "shot": "S21",
+        "x": 0.6,
+        "y": 0.5,
+        "w": 0.17,
+        "h": 0.6,
+        "rotate": 6
+      },
+      "notes": "Feuille qui monte sur l'écran du téléphone, clé et bouton."
+    },
+    {
+      "id": "U02",
+      "title": "Écran verrouillé",
+      "kind": "ui",
+      "source": "CODE",
+      "status": "todo",
+      "shots": [
+        "S11"
+      ],
+      "seconds": 1.3,
+      "format": "HTML",
+      "notes": "Heure et fond d'écran W01. Prévu à la passe suivante."
+    },
+    {
+      "id": "U09",
+      "title": "Liste du nouveau système",
+      "kind": "ui",
+      "source": "CODE",
+      "status": "todo",
+      "shots": [
+        "S23"
+      ],
+      "seconds": 2.0,
+      "format": "HTML",
+      "notes": "Lignes de liste sur deux écrans. Prévu à la passe suivante."
+    },
+    {
+      "id": "T01",
+      "title": "Textes des légendes",
+      "kind": "text",
+      "source": "CODE",
+      "status": "temp",
+      "shots": [],
+      "seconds": 0,
+      "format": "30 légendes, temps et placements mesurés",
+      "notes": "Textes originaux et provisoires, à valider. Aucun mot repris de la référence."
+    },
+    {
+      "id": "L01",
+      "title": "Marque et compte",
+      "kind": "logo",
+      "source": "CODE",
+      "status": "done",
+      "shots": [
+        "S27"
+      ],
+      "seconds": 6.0,
+      "format": "SVG tracé",
+      "notes": "Anneau, barre et point d'accent, puis ZenRay et @zenrayst."
+    },
+    {
+      "id": "F01",
+      "title": "InterVariable",
+      "kind": "font",
+      "source": "CODE",
+      "status": "done",
+      "shots": [],
+      "seconds": 0,
+      "format": "TTF, licence SIL Open Font",
+      "notes": "Légendes et interface."
+    },
+    {
+      "id": "F02",
+      "title": "AnthropicSerif",
+      "kind": "font",
+      "source": "PROVIDED",
+      "status": "done",
+      "shots": [
+        "S23"
+      ],
+      "seconds": 0,
+      "format": "TTF",
+      "notes": "Chiffres. Licence de diffusion à vérifier avant publication."
+    },
+    {
+      "id": "F03",
+      "title": "Vogun Medium",
+      "kind": "font",
+      "source": "PROVIDED",
+      "status": "done",
+      "shots": [
+        "S24",
+        "S25",
+        "S26"
+      ],
+      "seconds": 0,
+      "format": "TTF",
+      "notes": "Mot héros. Licence de diffusion à vérifier avant publication."
+    },
+    {
+      "id": "X01",
+      "title": "Effets sonores",
+      "kind": "sfx",
+      "source": "CODE",
+      "status": "done",
+      "shots": [],
+      "seconds": 68.0,
+      "format": "WAV 48 kHz stéréo",
+      "notes": "Faits en code et calés sur les coupes, les légendes et les animations d'interface."
+    },
+    {
+      "id": "M00",
+      "title": "Musique provisoire",
+      "kind": "music",
+      "source": "CODE",
+      "status": "temp",
+      "shots": [],
+      "seconds": 68.0,
+      "format": "WAV 48 kHz stéréo",
+      "notes": "Faite en code au tempo mesuré, à remplacer par M01."
+    },
+    {
+      "id": "M01",
+      "title": "Musique finale",
+      "kind": "music",
+      "source": "LICENSE",
+      "status": "slot",
+      "shots": [],
+      "seconds": 68.0,
+      "format": "WAV 48 kHz stéréo, 68,05 s",
+      "prompt": "Modern minimal tech product film score, 88 BPM with an eighth-note pulse at 176, D minor, airy pads, soft sub-bass pulse, crisp percussive ticks; intro swell from 0 to 5 s, full groove from 5 to 25 s, quiet breakdown from 25 to 29.5 s, groove again from 29.5 to 58 s, cinematic hit and lift from 58 to 62 s, warm fade-out from 62 to 68 s; instrumental, no vocals.",
+      "notes": "À générer (modèle de musique, si ton accès le permet) ou à choisir dans une bibliothèque sous licence. La musique de la référence n'est pas créditée et ne se reprend pas."
+    }
+  ]
+}
