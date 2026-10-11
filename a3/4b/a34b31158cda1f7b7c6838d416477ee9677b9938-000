@@ -1,0 +1,45 @@
+{
+  "mp4": "renders/zenray-motion-design-01-animatique-v1.mp4",
+  "passed": true,
+  "checks": [
+    {
+      "name": "aac audio stream present",
+      "pass": true,
+      "detail": "aac"
+    },
+    {
+      "name": "stereo at 48 kHz",
+      "pass": true,
+      "detail": "2 channels, 48000 Hz"
+    },
+    {
+      "name": "duration matches the picture",
+      "pass": true,
+      "detail": "68.011 s"
+    },
+    {
+      "name": "no clipping (peak below 0.98 of full scale)",
+      "pass": true,
+      "detail": "0.786"
+    },
+    {
+      "name": "picture unchanged (frame hashes identical)",
+      "pass": true,
+      "detail": "identical"
+    }
+  ],
+  "values": {
+    "codec": "aac",
+    "channels": 2,
+    "sampleRate": 48000,
+    "audioSeconds": 68.011,
+    "peakFullScale": 0.7861,
+    "events": 0,
+    "audible": 0,
+    "allEvents": 130,
+    "maxGapMs": null,
+    "toleranceMs": 17.7,
+    "pictureIdentical": true
+  },
+  "offsets_ms": []
+}

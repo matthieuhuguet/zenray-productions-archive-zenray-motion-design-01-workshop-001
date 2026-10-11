@@ -1,0 +1,69 @@
+﻿seconde;plan;ce_qu_on_voit
+0;S01;"Noir ; une petite sphère lumineuse chaude au centre."
+1;S01;"Grande forme verticale en dégradé bleu et blanc, haut arrondi ; un point minuscule au centre."
+2;S02;Petit appareil à écran allumé, dégradé chaud, en lévitation au centre.
+3;S03;"Nom du produit en très grand titre gris ; l'appareil, tenu du bout des doigts, passe devant le titre."
+4;S03;"Même cadre ; le titre passe au blanc."
+5;S04;"Noir ; une courte phrase d'accroche au centre."
+6;S05;"Gros plan du métal argent : une fenêtre et un bouton sur la tranche ; un mot s'efface en bas à gauche."
+7;S06;"Châssis vu de dessous : cavités usinées, port allongé, trois perçages ; légende en bas."
+8;S06;Même châssis, plus près.
+9;S07;"Noir ; trois boîtiers empilés vus de profil : argent, cuivre, graphite."
+10;S08;"Surface cuivre polie comme un miroir, reflets en vagues ; légende au centre."
+11;S08;"Même surface ; un reflet passe sur la légende."
+12;S09;"Coin de l'écran ; fond d'écran en strates orangées, cadre cuivre."
+13;S10;"Fond d'écran rouge et orangé en plein cadre ; légende sur l'écran, petite note en bas."
+14;S10;Même écran, glissement lent.
+15;S11;Appareil de face, écran verrouillé avec un fond d'écran de montagne.
+16;S11;"Puces empilées en vue éclatée, faisceaux de lumière verte ; légende en bas."
+17;S11;"Une puce seule en lévitation ; légende et note de certification."
+18;S13;"Carte électronique en gros plan, plusieurs puces allumées ; légende en bas à gauche."
+19;S13;"Même carte ; d'autres puces s'allument."
+20;S14;"Tranche fine de l'appareil sur fond bleu-gris ; légende coupée en deux, à gauche et à droite."
+21;S14;Un doigt s'approche du bouton de la tranche.
+22;S14;"Le doigt touche le bouton ; plan plus serré."
+23;S15;"Main qui tient l'appareil au-dessus d'un bureau sombre ; légende en bas."
+24;S15;"Coche verte de validation à l'écran ; légende en bas à gauche."
+25;S16;"Noir ; une ligne de texte blanc au centre."
+26;S16;Même ligne, plus petite.
+27;S16;"Noir ; une question courte."
+28;S16;"Noir ; une réponse courte."
+29;S16;Même réponse.
+30;S17;"Balise plate posée sur un tissu bleu nuit, anneau lumineux à gauche ; légende en bas."
+31;S17;Même plan.
+32;S18;"Main qui pose l'appareil sur un socle de recharge, lumière basse ; légende en bas."
+33;S18;Même geste.
+34;S18;L'appareil repose sur le socle.
+35;S19;"Main qui tient l'appareil incliné ; l'écran cherche une carte ; fond violet."
+36;S19;Main en mouvement, flou de bougé.
+37;S19;"Une personne tient l'appareil et une carte de sauvegarde l'un contre l'autre ; légende et note."
+38;S19;Même plan.
+39;S20;Main qui tient l'appareil, interface colorée, devant un ordinateur qui affiche un code QR.
+40;S20;"Même plan ; menu d'applications à l'écran."
+41;S20;"Même plan ; légende en bas."
+42;S20;Même plan.
+43;S20;L'appareil affiche à son tour un code QR.
+44;S21;Noir de transition.
+45;S21;"Main qui approche l'appareil d'un téléphone, fond violet ; légende."
+46;S21;"Contact entre l'appareil et le téléphone ; demande de clé d'accès sur le téléphone."
+47;S21;Même plan.
+48;S21;"Même plan ; légende."
+49;S21;Silhouette dans l'ombre, téléphone et appareil en main.
+50;S22;Très gros plan incliné de l'interface : anneau de solde et montant, cadre cuivre.
+51;S22;Profil de l'appareil incliné, lueur de l'écran sur la tranche, fond noir.
+52;S23;"Appareil de face, petit, interface de portefeuille ; légende en bas."
+53;S23;Même plan.
+54;S23;"Mention d'un nouveau système à gauche ; deux appareils montrent l'interface."
+55;S23;"Noir ; une phrase grise au centre."
+56;S23;Même phrase, plus petite.
+57;S23;"Noir ; deux mots courts."
+58;S24;"Lettres géantes en fumée bleutée ; appareil graphite debout devant ; nom du produit en petit au-dessus."
+59;S24;Même plan.
+60;S25;"Lettres en fumée blanche ; appareil argent ; sol réfléchissant."
+61;S26;"Lettres en matière de feu orangée ; appareil cuivre."
+62;S27;Noir.
+63;S27;Logo de la marque, petit, au centre.
+64;S27;Même logo, plus net.
+65;S27;Même logo.
+66;S27;Noir.
+67;S27;Noir.

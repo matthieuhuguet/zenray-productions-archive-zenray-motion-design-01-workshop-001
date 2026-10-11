@@ -1,0 +1,92 @@
+{
+  "contract": {
+    "duration_tolerance_s": 0.1,
+    "motion_correlation_min": 0.45,
+    "shot_motion_rank_min": 0.5,
+    "hard_cut_score_min": 15.0,
+    "hard_cut_match_min": 0.6,
+    "cut_window_s": 0.1,
+    "caption_recall_min": 0.7,
+    "caption_timing_median_s": 0.25,
+    "palette_delta_e_median_max": 25.0,
+    "ink_ratio_min": 0.85,
+    "ink_ratio_max": 1.15
+  },
+  "checks": {
+    "duration": {
+      "value": 68.0,
+      "target": 68.053,
+      "fps": 60.0,
+      "size": [
+        1920,
+        1080
+      ],
+      "pass": true
+    },
+    "motion": {
+      "frame_correlation": 0.393,
+      "shot_rank_correlation": 0.423,
+      "pass": false
+    },
+    "cuts": {
+      "reference_hard_cuts": 13,
+      "matched": 5,
+      "rate": 0.385,
+      "pass": false
+    },
+    "captions": {
+      "captions": 30,
+      "readable": 29,
+      "readable_rate": 0.967,
+      "timing_median_s": 0.1,
+      "unreadable": [
+        {
+          "id": "C00",
+          "text": "Ready.",
+          "recall": 0.0
+        }
+      ],
+      "pass": true
+    },
+    "palette": {
+      "median_delta_e": 15.24,
+      "per_shot": [
+        25.9,
+        17.9,
+        17.1,
+        5.3,
+        6.6,
+        23.7,
+        17.2,
+        29.8,
+        43.4,
+        28.0,
+        0.4,
+        10.3,
+        27.2,
+        17.4,
+        9.3,
+        1.5,
+        8.9,
+        17.6,
+        9.7,
+        11.8,
+        15.2,
+        36.0,
+        22.1,
+        4.6,
+        10.4,
+        2.8,
+        3.1
+      ],
+      "pass": true
+    },
+    "typography": {
+      "reference_median_ink_px": 88.5,
+      "render_median_ink_px": 81.0,
+      "ratio": 0.916,
+      "pass": true
+    }
+  },
+  "passed": false
+}

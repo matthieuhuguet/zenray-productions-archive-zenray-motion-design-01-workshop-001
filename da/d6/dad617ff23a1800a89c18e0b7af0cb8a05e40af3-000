@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animatique étude 01</title>
+<style>
+@font-face { font-family: 'InterVariable'; src: url('../composition/assets/fonts/InterVariable.ttf') format('truetype'); font-weight: 100 900; }
+@font-face { font-family: 'AnthropicSerif'; src: url('../composition/assets/fonts/AnthropicSerif-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'AnthropicMono'; src: url('../composition/assets/fonts/AnthropicMono-Regular.ttf') format('truetype'); font-weight: 400; }
+:root { --paper: #ffffff; --ink: #161616; --soft: #6b6b6b; --line: #e6e4e1; --accent: #cc7c5e; --slot: #8b3b16; --done: #2f6b45; --temp: #8a6a12; --todo: #5a5a66; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'InterVariable', system-ui, sans-serif; font-weight: 400; line-height: 1.5; }
+main { max-width: 1280px; margin: 0 auto; padding: 48px 32px 120px; }
+h1 { font-family: 'AnthropicSerif', Georgia, serif; font-weight: 400; font-size: 40px; line-height: 1.15; margin: 8px 0 12px; }
+h2 { font-family: 'AnthropicSerif', Georgia, serif; font-weight: 400; font-size: 28px; margin: 56px 0 12px; border-top: 1px solid var(--line); padding-top: 24px; }
+h3 { margin: 0; font-size: 20px; }
+.num { font-family: 'AnthropicSerif', Georgia, serif; font-weight: 400; font-variant-numeric: tabular-nums; }
+.mono, code { font-family: 'AnthropicMono', ui-monospace, monospace; font-size: 13px; }
+.lead { color: var(--soft); max-width: 860px; }
+.meta { font-family: 'AnthropicMono', ui-monospace, monospace; font-size: 13px; color: var(--soft); }
+.perimeter { border-left: 4px solid var(--accent); background: #f8f6f3; padding: 14px 18px; border-radius: 6px; max-width: 920px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 20px 0; }
+.stat { border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 4px; }
+.big { font-size: 30px; }
+.scroll { overflow-x: auto; max-width: 100%; width: 100%; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { font-weight: 500; color: var(--soft); }
+.thumb { width: 160px; height: auto; border-radius: 4px; display: block; }
+.shot { border-top: 1px solid var(--line); padding: 28px 0 12px; margin-top: 28px; }
+.shot header { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.swatch { width: 22px; height: 22px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 1px var(--line); }
+.grid2 { display: grid; grid-template-columns: minmax(0, 520px) minmax(0, 1fr); gap: 28px; margin-top: 16px; }
+.grid2 figure { margin: 0; }
+.grid2 img { width: 100%; border-radius: 8px; box-shadow: 0 0 0 1px var(--line); display: block; }
+figcaption { color: var(--soft); font-size: 12px; margin-top: 6px; }
+.chip { display: inline-block; font-family: 'AnthropicMono', ui-monospace, monospace; font-size: 12px; padding: 1px 8px; border-radius: 999px; color: #fff; }
+.chip-slot { background: var(--slot); } .chip-done { background: var(--done); } .chip-temp { background: var(--temp); } .chip-todo { background: var(--todo); }
+details { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin: 8px 0; }
+summary { cursor: pointer; }
+.prompt { background: #f6f5f3; padding: 10px 12px; border-radius: 6px; white-space: pre-wrap; }
+.pass { color: var(--done); font-weight: 500; } .fail { color: #b3261e; font-weight: 500; }
+p, li, td, th, figcaption, summary { overflow-wrap: anywhere; }
+ul { padding-left: 20px; }
+@media (max-width: 900px) { .grid2 { grid-template-columns: minmax(0, 1fr); } .grid2 > * { min-width: 0; } }
+@media (max-width: 640px) { main { padding: 32px 16px 96px; } h1 { font-size: 30px; } }
+</style></head>
+<body><main>
+<p class="meta">zenray-motion-design-01 · animatique v1 · 11 October 2026 · rendu v8 et son v2</p>
+<h1>Animatique : la structure de la référence, montée sur les assets dont elle a besoin</h1>
+<p class="lead">Chaque plan reprend les temps, les coupes et le mouvement de caméra mesurés sur la référence. Chaque asset à produire est un emplacement nommé et animé dans le montage ; les assets faisables sans génération (titres, légendes, interfaces, logo, sons, musique provisoire) sont faits.</p>
+<div class="perimeter"><strong>Périmètre.</strong> Aucune image, aucun texte, aucun logo et aucun son de la référence ne figurent dans ce document ni dans le film. Les descriptions de la référence sont des reformulations. Les prompts décrivent un appareil original (fiche A00), jamais le produit de la référence. Aucune génération n'est lancée avant ta validation.</div>
+<div class="stats"><div class="stat"><span class="num big">27</span><span>plans, mêmes coupes que la référence</span></div><div class="stat"><span class="num big">42</span><span>assets recensés</span></div><div class="stat"><span class="num big">25</span><span>assets à produire, en emplacement nommé</span></div><div class="stat"><span class="num big">15</span><span>assets faits en code dans cette passe</span></div><div class="stat"><span class="num big">18</span><span>mouvements de caméra mesurés et rejoués</span></div><div class="stat"><span class="num big">87,9</span><span>BPM mesurés (croche à 175,85)</span></div><div class="stat"><span class="num big">130</span><span>effets sonores placés</span></div><div class="stat"><span class="num big">PASS</span><span>contrat de vérification de l&#x27;image</span></div></div>
+
+<h2>1. La référence, seconde par seconde</h2>
+<p>Ce qu'on voit à chaque seconde de la référence (image prise à n + 0,5 s), et ce que montre l'animatique au même instant.</p>
+<div class="scroll"><table><tr><th>Temps</th><th>Plan</th><th>Ce qu'on voit dans la référence</th><th>Animatique</th></tr><tr><td class="num">0 à 1 s</td><td class="mono">S01</td><td>Noir ; une petite sphère lumineuse chaude au centre.</td><td><img class="thumb" src="animatique/secondes/t00.jpg" alt="Animatique à 0,5 s" loading="lazy"></td></tr><tr><td class="num">1 à 2 s</td><td class="mono">S01</td><td>Grande forme verticale en dégradé bleu et blanc, haut arrondi ; un point minuscule au centre.</td><td><img class="thumb" src="animatique/secondes/t01.jpg" alt="Animatique à 1,5 s" loading="lazy"></td></tr><tr><td class="num">2 à 3 s</td><td class="mono">S02</td><td>Petit appareil à écran allumé, dégradé chaud, en lévitation au centre.</td><td><img class="thumb" src="animatique/secondes/t02.jpg" alt="Animatique à 2,5 s" loading="lazy"></td></tr><tr><td class="num">3 à 4 s</td><td class="mono">S03</td><td>Nom du produit en très grand titre gris ; l&#x27;appareil, tenu du bout des doigts, passe devant le titre.</td><td><img class="thumb" src="animatique/secondes/t03.jpg" alt="Animatique à 3,5 s" loading="lazy"></td></tr><tr><td class="num">4 à 5 s</td><td class="mono">S03</td><td>Même cadre ; le titre passe au blanc.</td><td><img class="thumb" src="animatique/secondes/t04.jpg" alt="Animatique à 4,5 s" loading="lazy"></td></tr><tr><td class="num">5 à 6 s</td><td class="mono">S04</td><td>Noir ; une courte phrase d&#x27;accroche au centre.</td><td><img class="thumb" src="animatique/secondes/t05.jpg" alt="Animatique à 5,5 s" loading="lazy"></td></tr><tr><td class="num">6 à 7 s</td><td class="mono">S05</td><td>Gros plan du métal argent : une fenêtre et un bouton sur la tranche ; un mot s&#x27;efface en bas à gauche.</td><td><img class="thumb" src="animatique/secondes/t06.jpg" alt="Animatique à 6,5 s" loading="lazy"></td></tr><tr><td class="num">7 à 8 s</td><td class="mono">S06</td><td>Châssis vu de dessous : cavités usinées, port allongé, trois perçages ; légende en bas.</td><td><img class="thumb" src="animatique/secondes/t07.jpg" alt="Animatique à 7,5 s" loading="lazy"></td></tr><tr><td class="num">8 à 9 s</td><td class="mono">S06</td><td>Même châssis, plus près.</td><td><img class="thumb" src="animatique/secondes/t08.jpg" alt="Animatique à 8,5 s" loading="lazy"></td></tr><tr><td class="num">9 à 10 s</td><td class="mono">S07</td><td>Noir ; trois boîtiers empilés vus de profil : argent, cuivre, graphite.</td><td><img class="thumb" src="animatique/secondes/t09.jpg" alt="Animatique à 9,5 s" loading="lazy"></td></tr><tr><td class="num">10 à 11 s</td><td class="mono">S08</td><td>Surface cuivre polie comme un miroir, reflets en vagues ; légende au centre.</td><td><img class="thumb" src="animatique/secondes/t10.jpg" alt="Animatique à 10,5 s" loading="lazy"></td></tr><tr><td class="num">11 à 12 s</td><td class="mono">S08</td><td>Même surface ; un reflet passe sur la légende.</td><td><img class="thumb" src="animatique/secondes/t11.jpg" alt="Animatique à 11,5 s" loading="lazy"></td></tr><tr><td class="num">12 à 13 s</td><td class="mono">S09</td><td>Coin de l&#x27;écran ; fond d&#x27;écran en strates orangées, cadre cuivre.</td><td><img class="thumb" src="animatique/secondes/t12.jpg" alt="Animatique à 12,5 s" loading="lazy"></td></tr><tr><td class="num">13 à 14 s</td><td class="mono">S10</td><td>Fond d&#x27;écran rouge et orangé en plein cadre ; légende sur l&#x27;écran, petite note en bas.</td><td><img class="thumb" src="animatique/secondes/t13.jpg" alt="Animatique à 13,5 s" loading="lazy"></td></tr><tr><td class="num">14 à 15 s</td><td class="mono">S10</td><td>Même écran, glissement lent.</td><td><img class="thumb" src="animatique/secondes/t14.jpg" alt="Animatique à 14,5 s" loading="lazy"></td></tr><tr><td class="num">15 à 16 s</td><td class="mono">S11</td><td>Appareil de face, écran verrouillé avec un fond d&#x27;écran de montagne.</td><td><img class="thumb" src="animatique/secondes/t15.jpg" alt="Animatique à 15,5 s" loading="lazy"></td></tr><tr><td class="num">16 à 17 s</td><td class="mono">S11</td><td>Puces empilées en vue éclatée, faisceaux de lumière verte ; légende en bas.</td><td><img class="thumb" src="animatique/secondes/t16.jpg" alt="Animatique à 16,5 s" loading="lazy"></td></tr><tr><td class="num">17 à 18 s</td><td class="mono">S11</td><td>Une puce seule en lévitation ; légende et note de certification.</td><td><img class="thumb" src="animatique/secondes/t17.jpg" alt="Animatique à 17,5 s" loading="lazy"></td></tr><tr><td class="num">18 à 19 s</td><td class="mono">S13</td><td>Carte électronique en gros plan, plusieurs puces allumées ; légende en bas à gauche.</td><td><img class="thumb" src="animatique/secondes/t18.jpg" alt="Animatique à 18,5 s" loading="lazy"></td></tr><tr><td class="num">19 à 20 s</td><td class="mono">S13</td><td>Même carte ; d&#x27;autres puces s&#x27;allument.</td><td><img class="thumb" src="animatique/secondes/t19.jpg" alt="Animatique à 19,5 s" loading="lazy"></td></tr><tr><td class="num">20 à 21 s</td><td class="mono">S14</td><td>Tranche fine de l&#x27;appareil sur fond bleu-gris ; légende coupée en deux, à gauche et à droite.</td><td><img class="thumb" src="animatique/secondes/t20.jpg" alt="Animatique à 20,5 s" loading="lazy"></td></tr><tr><td class="num">21 à 22 s</td><td class="mono">S14</td><td>Un doigt s&#x27;approche du bouton de la tranche.</td><td><img class="thumb" src="animatique/secondes/t21.jpg" alt="Animatique à 21,5 s" loading="lazy"></td></tr><tr><td class="num">22 à 23 s</td><td class="mono">S14</td><td>Le doigt touche le bouton ; plan plus serré.</td><td><img class="thumb" src="animatique/secondes/t22.jpg" alt="Animatique à 22,5 s" loading="lazy"></td></tr><tr><td class="num">23 à 24 s</td><td class="mono">S15</td><td>Main qui tient l&#x27;appareil au-dessus d&#x27;un bureau sombre ; légende en bas.</td><td><img class="thumb" src="animatique/secondes/t23.jpg" alt="Animatique à 23,5 s" loading="lazy"></td></tr><tr><td class="num">24 à 25 s</td><td class="mono">S15</td><td>Coche verte de validation à l&#x27;écran ; légende en bas à gauche.</td><td><img class="thumb" src="animatique/secondes/t24.jpg" alt="Animatique à 24,5 s" loading="lazy"></td></tr><tr><td class="num">25 à 26 s</td><td class="mono">S16</td><td>Noir ; une ligne de texte blanc au centre.</td><td><img class="thumb" src="animatique/secondes/t25.jpg" alt="Animatique à 25,5 s" loading="lazy"></td></tr><tr><td class="num">26 à 27 s</td><td class="mono">S16</td><td>Même ligne, plus petite.</td><td><img class="thumb" src="animatique/secondes/t26.jpg" alt="Animatique à 26,5 s" loading="lazy"></td></tr><tr><td class="num">27 à 28 s</td><td class="mono">S16</td><td>Noir ; une question courte.</td><td><img class="thumb" src="animatique/secondes/t27.jpg" alt="Animatique à 27,5 s" loading="lazy"></td></tr><tr><td class="num">28 à 29 s</td><td class="mono">S16</td><td>Noir ; une réponse courte.</td><td><img class="thumb" src="animatique/secondes/t28.jpg" alt="Animatique à 28,5 s" loading="lazy"></td></tr><tr><td class="num">29 à 30 s</td><td class="mono">S16</td><td>Même réponse.</td><td><img class="thumb" src="animatique/secondes/t29.jpg" alt="Animatique à 29,5 s" loading="lazy"></td></tr><tr><td class="num">30 à 31 s</td><td class="mono">S17</td><td>Balise plate posée sur un tissu bleu nuit, anneau lumineux à gauche ; légende en bas.</td><td><img class="thumb" src="animatique/secondes/t30.jpg" alt="Animatique à 30,5 s" loading="lazy"></td></tr><tr><td class="num">31 à 32 s</td><td class="mono">S17</td><td>Même plan.</td><td><img class="thumb" src="animatique/secondes/t31.jpg" alt="Animatique à 31,5 s" loading="lazy"></td></tr><tr><td class="num">32 à 33 s</td><td class="mono">S18</td><td>Main qui pose l&#x27;appareil sur un socle de recharge, lumière basse ; légende en bas.</td><td><img class="thumb" src="animatique/secondes/t32.jpg" alt="Animatique à 32,5 s" loading="lazy"></td></tr><tr><td class="num">33 à 34 s</td><td class="mono">S18</td><td>Même geste.</td><td><img class="thumb" src="animatique/secondes/t33.jpg" alt="Animatique à 33,5 s" loading="lazy"></td></tr><tr><td class="num">34 à 35 s</td><td class="mono">S18</td><td>L&#x27;appareil repose sur le socle.</td><td><img class="thumb" src="animatique/secondes/t34.jpg" alt="Animatique à 34,5 s" loading="lazy"></td></tr><tr><td class="num">35 à 36 s</td><td class="mono">S19</td><td>Main qui tient l&#x27;appareil incliné ; l&#x27;écran cherche une carte ; fond violet.</td><td><img class="thumb" src="animatique/secondes/t35.jpg" alt="Animatique à 35,5 s" loading="lazy"></td></tr><tr><td class="num">36 à 37 s</td><td class="mono">S19</td><td>Main en mouvement, flou de bougé.</td><td><img class="thumb" src="animatique/secondes/t36.jpg" alt="Animatique à 36,5 s" loading="lazy"></td></tr><tr><td class="num">37 à 38 s</td><td class="mono">S19</td><td>Une personne tient l&#x27;appareil et une carte de sauvegarde l&#x27;un contre l&#x27;autre ; légende et note.</td><td><img class="thumb" src="animatique/secondes/t37.jpg" alt="Animatique à 37,5 s" loading="lazy"></td></tr><tr><td class="num">38 à 39 s</td><td class="mono">S19</td><td>Même plan.</td><td><img class="thumb" src="animatique/secondes/t38.jpg" alt="Animatique à 38,5 s" loading="lazy"></td></tr><tr><td class="num">39 à 40 s</td><td class="mono">S20</td><td>Main qui tient l&#x27;appareil, interface colorée, devant un ordinateur qui affiche un code QR.</td><td><img class="thumb" src="animatique/secondes/t39.jpg" alt="Animatique à 39,5 s" loading="lazy"></td></tr><tr><td class="num">40 à 41 s</td><td class="mono">S20</td><td>Même plan ; menu d&#x27;applications à l&#x27;écran.</td><td><img class="thumb" src="animatique/secondes/t40.jpg" alt="Animatique à 40,5 s" loading="lazy"></td></tr><tr><td class="num">41 à 42 s</td><td class="mono">S20</td><td>Même plan ; légende en bas.</td><td><img class="thumb" src="animatique/secondes/t41.jpg" alt="Animatique à 41,5 s" loading="lazy"></td></tr><tr><td class="num">42 à 43 s</td><td class="mono">S20</td><td>Même plan.</td><td><img class="thumb" src="animatique/secondes/t42.jpg" alt="Animatique à 42,5 s" loading="lazy"></td></tr><tr><td class="num">43 à 44 s</td><td class="mono">S20</td><td>L&#x27;appareil affiche à son tour un code QR.</td><td><img class="thumb" src="animatique/secondes/t43.jpg" alt="Animatique à 43,5 s" loading="lazy"></td></tr><tr><td class="num">44 à 45 s</td><td class="mono">S21</td><td>Noir de transition.</td><td><img class="thumb" src="animatique/secondes/t44.jpg" alt="Animatique à 44,5 s" loading="lazy"></td></tr><tr><td class="num">45 à 46 s</td><td class="mono">S21</td><td>Main qui approche l&#x27;appareil d&#x27;un téléphone, fond violet ; légende.</td><td><img class="thumb" src="animatique/secondes/t45.jpg" alt="Animatique à 45,5 s" loading="lazy"></td></tr><tr><td class="num">46 à 47 s</td><td class="mono">S21</td><td>Contact entre l&#x27;appareil et le téléphone ; demande de clé d&#x27;accès sur le téléphone.</td><td><img class="thumb" src="animatique/secondes/t46.jpg" alt="Animatique à 46,5 s" loading="lazy"></td></tr><tr><td class="num">47 à 48 s</td><td class="mono">S21</td><td>Même plan.</td><td><img class="thumb" src="animatique/secondes/t47.jpg" alt="Animatique à 47,5 s" loading="lazy"></td></tr><tr><td class="num">48 à 49 s</td><td class="mono">S21</td><td>Même plan ; légende.</td><td><img class="thumb" src="animatique/secondes/t48.jpg" alt="Animatique à 48,5 s" loading="lazy"></td></tr><tr><td class="num">49 à 50 s</td><td class="mono">S21</td><td>Silhouette dans l&#x27;ombre, téléphone et appareil en main.</td><td><img class="thumb" src="animatique/secondes/t49.jpg" alt="Animatique à 49,5 s" loading="lazy"></td></tr><tr><td class="num">50 à 51 s</td><td class="mono">S22</td><td>Très gros plan incliné de l&#x27;interface : anneau de solde et montant, cadre cuivre.</td><td><img class="thumb" src="animatique/secondes/t50.jpg" alt="Animatique à 50,5 s" loading="lazy"></td></tr><tr><td class="num">51 à 52 s</td><td class="mono">S22</td><td>Profil de l&#x27;appareil incliné, lueur de l&#x27;écran sur la tranche, fond noir.</td><td><img class="thumb" src="animatique/secondes/t51.jpg" alt="Animatique à 51,5 s" loading="lazy"></td></tr><tr><td class="num">52 à 53 s</td><td class="mono">S23</td><td>Appareil de face, petit, interface de portefeuille ; légende en bas.</td><td><img class="thumb" src="animatique/secondes/t52.jpg" alt="Animatique à 52,5 s" loading="lazy"></td></tr><tr><td class="num">53 à 54 s</td><td class="mono">S23</td><td>Même plan.</td><td><img class="thumb" src="animatique/secondes/t53.jpg" alt="Animatique à 53,5 s" loading="lazy"></td></tr><tr><td class="num">54 à 55 s</td><td class="mono">S23</td><td>Mention d&#x27;un nouveau système à gauche ; deux appareils montrent l&#x27;interface.</td><td><img class="thumb" src="animatique/secondes/t54.jpg" alt="Animatique à 54,5 s" loading="lazy"></td></tr><tr><td class="num">55 à 56 s</td><td class="mono">S23</td><td>Noir ; une phrase grise au centre.</td><td><img class="thumb" src="animatique/secondes/t55.jpg" alt="Animatique à 55,5 s" loading="lazy"></td></tr><tr><td class="num">56 à 57 s</td><td class="mono">S23</td><td>Même phrase, plus petite.</td><td><img class="thumb" src="animatique/secondes/t56.jpg" alt="Animatique à 56,5 s" loading="lazy"></td></tr><tr><td class="num">57 à 58 s</td><td class="mono">S23</td><td>Noir ; deux mots courts.</td><td><img class="thumb" src="animatique/secondes/t57.jpg" alt="Animatique à 57,5 s" loading="lazy"></td></tr><tr><td class="num">58 à 59 s</td><td class="mono">S24</td><td>Lettres géantes en fumée bleutée ; appareil graphite debout devant ; nom du produit en petit au-dessus.</td><td><img class="thumb" src="animatique/secondes/t58.jpg" alt="Animatique à 58,5 s" loading="lazy"></td></tr><tr><td class="num">59 à 60 s</td><td class="mono">S24</td><td>Même plan.</td><td><img class="thumb" src="animatique/secondes/t59.jpg" alt="Animatique à 59,5 s" loading="lazy"></td></tr><tr><td class="num">60 à 61 s</td><td class="mono">S25</td><td>Lettres en fumée blanche ; appareil argent ; sol réfléchissant.</td><td><img class="thumb" src="animatique/secondes/t60.jpg" alt="Animatique à 60,5 s" loading="lazy"></td></tr><tr><td class="num">61 à 62 s</td><td class="mono">S26</td><td>Lettres en matière de feu orangée ; appareil cuivre.</td><td><img class="thumb" src="animatique/secondes/t61.jpg" alt="Animatique à 61,5 s" loading="lazy"></td></tr><tr><td class="num">62 à 63 s</td><td class="mono">S27</td><td>Noir.</td><td><img class="thumb" src="animatique/secondes/t62.jpg" alt="Animatique à 62,5 s" loading="lazy"></td></tr><tr><td class="num">63 à 64 s</td><td class="mono">S27</td><td>Logo de la marque, petit, au centre.</td><td><img class="thumb" src="animatique/secondes/t63.jpg" alt="Animatique à 63,5 s" loading="lazy"></td></tr><tr><td class="num">64 à 65 s</td><td class="mono">S27</td><td>Même logo, plus net.</td><td><img class="thumb" src="animatique/secondes/t64.jpg" alt="Animatique à 64,5 s" loading="lazy"></td></tr><tr><td class="num">65 à 66 s</td><td class="mono">S27</td><td>Même logo.</td><td><img class="thumb" src="animatique/secondes/t65.jpg" alt="Animatique à 65,5 s" loading="lazy"></td></tr><tr><td class="num">66 à 67 s</td><td class="mono">S27</td><td>Noir.</td><td><img class="thumb" src="animatique/secondes/t66.jpg" alt="Animatique à 66,5 s" loading="lazy"></td></tr><tr><td class="num">67 à 68 s</td><td class="mono">S27</td><td>Noir.</td><td><img class="thumb" src="animatique/secondes/t67.jpg" alt="Animatique à 67,5 s" loading="lazy"></td></tr></table></div>
+
+<h2>2. Plan par plan</h2>
+<p>Pour chaque plan : ce qu'on voit, ce que le plan illustre, comment l'animation est faite, le besoin de 3D, le mouvement mesuré et la façon dont l'animatique le rejoue, le son mesuré, puis les assets et les légendes. La pastille de couleur est la teinte du plan dans le script couleur.</p>
+
+<article class="shot" id="S01">
+<header><h3>S01 · Ouverture</h3><span class="num">0,00 à 1,90 s · images 0 à 114 · 114 images</span><span class="swatch" style="background:#c3d5d4" title="teinte du plan #c3d5d4"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S01.jpg" alt="Animatique, S01 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Une sphère lumineuse grandit puis se change en grande forme de lumière.</p>
+<p><strong>Ce que le plan illustre.</strong> L&#x27;éveil : le film s&#x27;ouvre sur une lumière, sans objet.</p>
+<p><strong>Comment c'est fait.</strong> Lumière abstraite en 2D (dégradés radiaux, flou, halo). Échelle mesurée ×2,38, courbe power2.inOut.</p>
+<p><strong>Intégration 3D.</strong> Non.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 1517 px ; recul ou avance 2,377, déplacement 1 px en x et 13 px en y, rotation 0,07°, courbe power2.inOut (écart 0,187).</p>
+<p><strong>Dans l'animatique.</strong> Mouvement porté par l&#x27;animation du sujet (plan exclu de la caméra).</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -31,6 dB, 12 attaques (clic aigu 1, souffle 5, note ou accent 6) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> aucun effet.</p>
+<p><strong>Assets du plan.</strong></p><ul><li>Aucun asset propre au plan.</li></ul>
+<p><strong>Légendes.</strong></p><ul><li>Aucune légende.</li></ul>
+</div></div></article>
+<article class="shot" id="S02">
+<header><h3>S02 · Apparition</h3><span class="num">1,90 à 3,20 s · images 114 à 192 · 78 images</span><span class="swatch" style="background:#bdc1b5" title="teinte du plan #bdc1b5"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S02.jpg" alt="Animatique, S02 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> La forme de lumière se rétracte et laisse monter un petit appareil.</p>
+<p><strong>Ce que le plan illustre.</strong> Le produit apparaît.</p>
+<p><strong>Comment c'est fait.</strong> Forme masquée qui se contracte (échelle 0,56, courbe power2.out) ; rendu de l&#x27;appareil qui monte.</p>
+<p><strong>Intégration 3D.</strong> Oui : rendu de l&#x27;appareil de face, détouré.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 484 px ; recul ou avance 0,560, déplacement 3 px en x et -40 px en y, rotation 1,95°, courbe power2.out (écart 0,146).</p>
+<p><strong>Dans l'animatique.</strong> Mouvement porté par l&#x27;animation du sujet (plan exclu de la caméra).</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -24,0 dB, 6 attaques (clic aigu 2, souffle 1, note ou accent 3).</p>
+<p><strong>Son de l'animatique.</strong> aucun effet.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A02</span> Appareil qui monte, de face · IMAGE FLOW · emplacement</li><li><span class="chip chip-done">U01</span> Écran de démarrage · CODE · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li>Aucune légende.</li></ul>
+</div></div></article>
+<article class="shot" id="S03">
+<header><h3>S03 · Révélation</h3><span class="num">3,20 à 4,90 s · images 192 à 294 · 102 images</span><span class="swatch" style="background:#2d1f1a" title="teinte du plan #2d1f1a"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S03.jpg" alt="Animatique, S03 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Le nom du produit en très grand titre ; l&#x27;appareil tenu du bout des doigts passe devant ; le titre passe du gris au blanc.</p>
+<p><strong>Ce que le plan illustre.</strong> Le nom du produit.</p>
+<p><strong>Comment c'est fait.</strong> Titre 2D placé derrière un plan détouré (main et appareil). Caméra fixe. Fondu du titre.</p>
+<p><strong>Intégration 3D.</strong> Oui : main et appareil (rendu 3D ou prise de vue), détourés.</p>
+<p><strong>Mouvement mesuré.</strong> Plan fixe (mouvement total inférieur à 12 px).</p>
+<p><strong>Dans l'animatique.</strong> Aucun mouvement de caméra.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -21,5 dB, 9 attaques (clic aigu 3, souffle 5, note ou accent 1).</p>
+<p><strong>Son de l'animatique.</strong> tic de légende 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A03</span> Main qui tient l&#x27;appareil · VIDÉO FLOW · emplacement</li><li><span class="chip chip-done">U01</span> Écran de démarrage · CODE · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C00</span> « Ready. », 4,30 à 4,90 s, images 258 à 294</li></ul>
+</div></div></article>
+<article class="shot" id="S04">
+<header><h3>S04 · Accroche</h3><span class="num">4,90 à 6,28 s · images 294 à 377 · 83 images</span><span class="swatch" style="background:#6c6c6c" title="teinte du plan #6c6c6c"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S04.jpg" alt="Animatique, S04 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Une phrase courte sur noir.</p>
+<p><strong>Ce que le plan illustre.</strong> La promesse du produit.</p>
+<p><strong>Comment c'est fait.</strong> Texte 2D qui recule en se posant (échelle 0,83, courbe power2.out).</p>
+<p><strong>Intégration 3D.</strong> Non.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 183 px ; recul ou avance 0,834, déplacement -1 px en x et 6 px en y, rotation 0,01°, courbe power2.out (écart 0,143).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué aux légendes du plan : échelle de 1,200 à 1, courbe power2.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,7 dB, 9 attaques (impact grave 1, clic aigu 4, souffle 2, note ou accent 2).</p>
+<p><strong>Son de l'animatique.</strong> tic de légende 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li>Aucun asset propre au plan.</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C01</span> « Small. Quiet. Sure. », 4,90 à 6,30 s, images 294 à 378</li></ul>
+</div></div></article>
+<article class="shot" id="S05">
+<header><h3>S05 · Matière, tranche</h3><span class="num">6,28 à 7,45 s · images 377 à 447 · 70 images</span><span class="swatch" style="background:#353534" title="teinte du plan #353534"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S05.jpg" alt="Animatique, S05 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Macro de la tranche en métal : fenêtre et bouton.</p>
+<p><strong>Ce que le plan illustre.</strong> La qualité d&#x27;usinage.</p>
+<p><strong>Comment c'est fait.</strong> Macro à faible profondeur de champ, lumière rasante ; léger glissement à gauche (18 px, sine.inOut).</p>
+<p><strong>Intégration 3D.</strong> Oui : macro du boîtier.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : translation, 18 px ; recul ou avance 0,986, déplacement -18 px en x et -1 px en y, rotation -0,15°, courbe sine.inOut (écart 0,083).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 1,014, décalé de 18 px et 1 px, tourné de 0,15°, puis retour à la composition avec la courbe sine.inOut.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -9,9 dB, 7 attaques (clic aigu 2, souffle 4, note ou accent 1).</p>
+<p><strong>Son de l'animatique.</strong> aucun effet.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A05</span> Macro de la tranche · VIDÉO FLOW · emplacement</li></ul>
+<p><strong>Légendes.</strong></p><ul><li>Aucune légende.</li></ul>
+</div></div></article>
+<article class="shot" id="S06">
+<header><h3>S06 · Matière, châssis</h3><span class="num">7,45 à 8,73 s · images 447 à 524 · 77 images</span><span class="swatch" style="background:#b7b7b4" title="teinte du plan #b7b7b4"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S06.jpg" alt="Animatique, S06 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Châssis vu de dessous : cavités, port, perçages ; légende.</p>
+<p><strong>Ce que le plan illustre.</strong> Un boîtier taillé d&#x27;une seule pièce.</p>
+<p><strong>Comment c'est fait.</strong> Macro, légère rotation (1,2°, linéaire).</p>
+<p><strong>Intégration 3D.</strong> Oui : macro du châssis.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : rotation, 23 px ; recul ou avance 1,012, déplacement -5 px en x et -1 px en y, rotation 1,18°, courbe none (écart 0,048).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 0,988, décalé de 5 px et 1 px, tourné de -1,18°, puis retour à la composition avec la courbe none.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -9,6 dB, 7 attaques (clic aigu 3, souffle 2, note ou accent 2) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> clic 1, tic de légende 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A06</span> Macro du châssis vu de dessous · VIDÉO FLOW · emplacement</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C02</span> « Cut from one piece. », 7,50 à 8,70 s, images 450 à 522</li></ul>
+</div></div></article>
+<article class="shot" id="S07">
+<header><h3>S07 · Coloris</h3><span class="num">8,73 à 10,20 s · images 524 à 612 · 88 images</span><span class="swatch" style="background:#271e1d" title="teinte du plan #271e1d"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S07.jpg" alt="Animatique, S07 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Trois boîtiers empilés de profil : argent, cuivre, graphite.</p>
+<p><strong>Ce que le plan illustre.</strong> Les trois coloris.</p>
+<p><strong>Comment c'est fait.</strong> Rendu produit ; recul (0,74) et glissement à droite (274 px), courbe power2.out.</p>
+<p><strong>Intégration 3D.</strong> Oui : trois boîtiers de profil.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 286 px ; recul ou avance 0,740, déplacement 274 px en x et 46 px en y, rotation -0,97°, courbe power2.out (écart 0,113).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 1,351, décalé de -274 px et -46 px, tourné de 0,97°, puis retour à la composition avec la courbe power2.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -9,6 dB, 9 attaques (clic aigu 3, souffle 4, note ou accent 2) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> clic 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A07</span> Trois coloris de profil · RENDU 3D · emplacement</li></ul>
+<p><strong>Légendes.</strong></p><ul><li>Aucune légende.</li></ul>
+</div></div></article>
+<article class="shot" id="S08">
+<header><h3>S08 · Finition</h3><span class="num">10,20 à 11,65 s · images 612 à 699 · 87 images</span><span class="swatch" style="background:#5e0001" title="teinte du plan #5e0001"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S08.jpg" alt="Animatique, S08 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Surface cuivre polie, reflets en vagues ; légende.</p>
+<p><strong>Ce que le plan illustre.</strong> La finition polie.</p>
+<p><strong>Comment c'est fait.</strong> Macro, reflet animé ; léger recul (0,93), courbe power2.out.</p>
+<p><strong>Intégration 3D.</strong> Oui : macro de la surface cuivre.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 74 px ; recul ou avance 0,932, déplacement -5 px en x et 5 px en y, rotation 0,52°, courbe power2.out (écart 0,080).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 1,073, décalé de 5 px et -5 px, tourné de -0,52°, puis retour à la composition avec la courbe power2.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,2 dB, 8 attaques (clic aigu 2, souffle 3, note ou accent 3) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> clic 1, tic de légende 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A08</span> Macro du cuivre poli · VIDÉO FLOW · emplacement</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C03</span> « A finish that holds the light. », 10,20 à 11,65 s, images 612 à 699</li></ul>
+</div></div></article>
+<article class="shot" id="S09">
+<header><h3>S09 · Écran, coin</h3><span class="num">11,65 à 13,25 s · images 699 à 795 · 96 images</span><span class="swatch" style="background:#89381e" title="teinte du plan #89381e"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S09.jpg" alt="Animatique, S09 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Coin de l&#x27;écran, fond d&#x27;écran en strates orangées, cadre cuivre.</p>
+<p><strong>Ce que le plan illustre.</strong> L&#x27;écran.</p>
+<p><strong>Comment c'est fait.</strong> Macro de l&#x27;écran et du cadre ; rotation 0,95°, linéaire.</p>
+<p><strong>Intégration 3D.</strong> Oui : coin de l&#x27;appareil ; image de fond d&#x27;écran.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : rotation, 18 px ; recul ou avance 1,015, déplacement 10 px en x et -12 px en y, rotation -0,95°, courbe none (écart 0,094).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 0,985, décalé de -10 px et 12 px, tourné de 0,95°, puis retour à la composition avec la courbe none.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -9,9 dB, 10 attaques (clic aigu 5, souffle 3, note ou accent 2) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> clic 1, tic de légende 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A09</span> Coin de l&#x27;écran · RENDU 3D · emplacement</li><li><span class="chip chip-slot">W01</span> Fond d&#x27;écran en strates · IMAGE FLOW · emplacement</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C05</span> « Hardened glass. », 13,20 à 13,90 s, images 792 à 834</li></ul>
+</div></div></article>
+<article class="shot" id="S10">
+<header><h3>S10 · Écran, image</h3><span class="num">13,25 à 14,60 s · images 795 à 876 · 81 images</span><span class="swatch" style="background:#7a4f4d" title="teinte du plan #7a4f4d"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S10.jpg" alt="Animatique, S10 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Fond d&#x27;écran en plein cadre ; légende et petite note.</p>
+<p><strong>Ce que le plan illustre.</strong> La netteté et la solidité de l&#x27;écran.</p>
+<p><strong>Comment c'est fait.</strong> Image qui glisse à gauche (34 px, power2.out) ; texte 2D.</p>
+<p><strong>Intégration 3D.</strong> Non : image animée.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : translation, 34 px ; recul ou avance 0,979, déplacement -34 px en x et 6 px en y, rotation 0,27°, courbe power2.out (écart 0,065).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 1,021, décalé de 34 px et -6 px, tourné de -0,27°, puis retour à la composition avec la courbe power2.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,0 dB, 8 attaques (clic aigu 3, souffle 2, note ou accent 3) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> souffle 1, tic de légende 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">W01</span> Fond d&#x27;écran en strates · IMAGE FLOW · emplacement</li><li><span class="chip chip-slot">A10</span> Fond d&#x27;écran en mouvement · VIDÉO FLOW · emplacement</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C04</span> « Clear. », 14,10 à 14,60 s, images 846 à 876</li></ul>
+</div></div></article>
+<article class="shot" id="S11">
+<header><h3>S11 · Sécurité, couches</h3><span class="num">14,60 à 18,08 s · images 876 à 1085 · 209 images</span><span class="swatch" style="background:#575956" title="teinte du plan #575956"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S11.jpg" alt="Animatique, S11 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Appareil de face écran verrouillé, puis puces en vue éclatée avec faisceaux verts, puis une puce seule ; légendes.</p>
+<p><strong>Ce que le plan illustre.</strong> L&#x27;architecture de sécurité.</p>
+<p><strong>Comment c'est fait.</strong> Vue éclatée en 3D, fort recul (0,29), rotation 8,5°, descente de 304 px, courbe power1.out ; faisceaux lumineux.</p>
+<p><strong>Intégration 3D.</strong> Oui : vue éclatée des puces.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 782 px ; recul ou avance 0,290, déplacement 17 px en x et 304 px en y, rotation 8,49°, courbe power1.out (écart 0,091).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 3,452, décalé de -17 px et -304 px, tourné de -8,49°, puis retour à la composition avec la courbe power1.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -11,3 dB, 15 attaques (clic aigu 2, souffle 8, note ou accent 5).</p>
+<p><strong>Son de l'animatique.</strong> tic de légende 2.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A11</span> Vue éclatée des puces · RENDU 3D · emplacement</li><li><span class="chip chip-todo">U02</span> Écran verrouillé · CODE · à faire en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C06</span> « Security, in layers. », 16,10 à 17,10 s, images 966 à 1026</li><li><span class="mono">C07</span> « Sealed in silicon. », 17,50 à 18,10 s, images 1050 à 1086</li><li><span class="mono">C08</span> « Tested by independent labs. », 17,50 à 19,40 s, images 1050 à 1164</li></ul>
+</div></div></article>
+<article class="shot" id="S12">
+<header><h3>S12 · Transition</h3><span class="num">18,08 à 18,28 s · images 1085 à 1097 · 12 images</span><span class="swatch" style="background:#25272c" title="teinte du plan #25272c"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S12.jpg" alt="Animatique, S12 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Éclair de deux images.</p>
+<p><strong>Ce que le plan illustre.</strong> Une ponctuation de montage.</p>
+<p><strong>Comment c'est fait.</strong> Flash et décalage de tranches en 2D.</p>
+<p><strong>Intégration 3D.</strong> Non.</p>
+<p><strong>Mouvement mesuré.</strong> Plan fixe (mouvement total inférieur à 12 px).</p>
+<p><strong>Dans l'animatique.</strong> Aucun mouvement de caméra.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,6 dB, 0 attaques (aucune attaque).</p>
+<p><strong>Son de l'animatique.</strong> aucun effet.</p>
+<p><strong>Assets du plan.</strong></p><ul><li>Aucun asset propre au plan.</li></ul>
+<p><strong>Légendes.</strong></p><ul><li>Aucune légende.</li></ul>
+</div></div></article>
+<article class="shot" id="S13">
+<header><h3>S13 · Puces</h3><span class="num">18,28 à 19,60 s · images 1097 à 1176 · 79 images</span><span class="swatch" style="background:#202226" title="teinte du plan #202226"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S13.jpg" alt="Animatique, S13 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Carte électronique, puces qui s&#x27;allument tour à tour ; légende.</p>
+<p><strong>Ce que le plan illustre.</strong> Plusieurs puces de sécurité.</p>
+<p><strong>Comment c'est fait.</strong> Macro, montée de 133 px, courbe power3.out ; lumière animée par puce.</p>
+<p><strong>Intégration 3D.</strong> Oui : macro de carte électronique.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : translation, 138 px ; recul ou avance 0,969, déplacement -37 px en x et -133 px en y, rotation -0,83°, courbe power3.out (écart 0,050).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 1,032, décalé de 37 px et 133 px, tourné de 0,83°, puis retour à la composition avec la courbe power3.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,5 dB, 8 attaques (impact grave 2, souffle 3, note ou accent 3) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> souffle 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A13</span> Macro de carte électronique · RENDU 3D · emplacement</li></ul>
+<p><strong>Légendes.</strong></p><ul><li>Aucune légende.</li></ul>
+</div></div></article>
+<article class="shot" id="S14">
+<header><h3>S14 · Toucher</h3><span class="num">19,60 à 22,57 s · images 1176 à 1354 · 178 images</span><span class="swatch" style="background:#1f2936" title="teinte du plan #1f2936"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S14.jpg" alt="Animatique, S14 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Tranche fine, doigt sur le bouton, légende coupée en deux.</p>
+<p><strong>Ce que le plan illustre.</strong> Le déverrouillage au toucher.</p>
+<p><strong>Comment c'est fait.</strong> Prise de vue ou rendu avec main ; mouvement léger (24 px), courbe power1.out ; légende 2D en deux parties.</p>
+<p><strong>Intégration 3D.</strong> Oui : main et tranche (prise de vue ou rendu).</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : translation, 24 px ; recul ou avance 1,006, déplacement 14 px en x et 19 px en y, rotation -0,22°, courbe power1.out (écart 0,067).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 0,994, décalé de -14 px et -19 px, tourné de 0,22°, puis retour à la composition avec la courbe power1.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -11,9 dB, 17 attaques (impact grave 2, souffle 8, note ou accent 7) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> souffle 1, tic de légende 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A14</span> Doigt sur le bouton latéral · VIDÉO FLOW · emplacement</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C09</span> « Tap », 20,30 à 22,60 s, images 1218 à 1356</li><li><span class="mono">C10</span> « to unlock. », 20,30 à 22,60 s, images 1218 à 1356</li></ul>
+</div></div></article>
+<article class="shot" id="S15">
+<header><h3>S15 · Validation</h3><span class="num">22,57 à 25,40 s · images 1354 à 1524 · 170 images</span><span class="swatch" style="background:#20252a" title="teinte du plan #20252a"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S15.jpg" alt="Animatique, S15 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Main qui tient l&#x27;appareil au-dessus d&#x27;un bureau, coche verte à l&#x27;écran.</p>
+<p><strong>Ce que le plan illustre.</strong> Ce qu&#x27;on valide se lit à l&#x27;écran.</p>
+<p><strong>Comment c'est fait.</strong> Prise de vue, écran incrusté ; glissement à gauche (216 px), avance (1,14), rotation 3,6°, courbe power1.out.</p>
+<p><strong>Intégration 3D.</strong> Écran incrusté sur une prise de vue.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : translation, 226 px ; recul ou avance 1,140, déplacement -216 px en x et 64 px en y, rotation -3,60°, courbe power1.out (écart 0,059).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 0,877, décalé de 216 px et -64 px, tourné de 3,60°, puis retour à la composition avec la courbe power1.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -11,7 dB, 11 attaques (impact grave 5, souffle 2, note ou accent 4) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> souffle 1, tic de légende 1, tintement 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A15</span> Main au bureau, validation · VIDÉO FLOW · emplacement</li><li><span class="chip chip-done">U03</span> Coche de validation · CODE · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C11</span> « Read it, then approve. », 23,20 à 25,30 s, images 1392 à 1518</li></ul>
+</div></div></article>
+<article class="shot" id="S16">
+<header><h3>S16 · Interlude</h3><span class="num">25,40 à 29,53 s · images 1524 à 1772 · 248 images</span><span class="swatch" style="background:#aeaeae" title="teinte du plan #aeaeae"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S16.jpg" alt="Animatique, S16 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Lignes de texte sur noir : une affirmation, une question, une réponse.</p>
+<p><strong>Ce que le plan illustre.</strong> Le passage vers la localisation.</p>
+<p><strong>Comment c'est fait.</strong> Texte 2D, frappe puis fondus ; recul 0,79, courbe power2.out.</p>
+<p><strong>Intégration 3D.</strong> Non.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 232 px ; recul ou avance 0,789, déplacement -64 px en x et 8 px en y, rotation -0,12°, courbe power2.out (écart 0,086).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué aux légendes du plan : échelle de 1,267 à 1, courbe power2.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -17,1 dB, 11 attaques (clic aigu 1, souffle 7, note ou accent 3).</p>
+<p><strong>Son de l'animatique.</strong> frappe 24, tic de légende 2.</p>
+<p><strong>Assets du plan.</strong></p><ul><li>Aucun asset propre au plan.</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C12</span> « Every detail, on screen. », 25,40 à 27,10 s, images 1524 à 1626</li><li><span class="mono">C13</span> « Left it somewhere? », 27,20 à 28,40 s, images 1632 à 1704</li><li><span class="mono">C14</span> « We&#x27;ll find it. », 28,40 à 29,50 s, images 1704 à 1770</li></ul>
+</div></div></article>
+<article class="shot" id="S17">
+<header><h3>S17 · Localisation</h3><span class="num">29,53 à 31,80 s · images 1772 à 1908 · 136 images</span><span class="swatch" style="background:#2c2c33" title="teinte du plan #2c2c33"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S17.jpg" alt="Animatique, S17 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Balise sur tissu bleu nuit, anneau lumineux.</p>
+<p><strong>Ce que le plan illustre.</strong> Retrouver l&#x27;appareil.</p>
+<p><strong>Comment c'est fait.</strong> Plan produit fixe ; anneau 2D.</p>
+<p><strong>Intégration 3D.</strong> Oui : balise sur tissu (rendu ou prise de vue).</p>
+<p><strong>Mouvement mesuré.</strong> Plan fixe (mouvement total inférieur à 12 px).</p>
+<p><strong>Dans l'animatique.</strong> Aucun mouvement de caméra.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,7 dB, 11 attaques (clic aigu 5, souffle 5, note ou accent 1) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> souffle 1, tic de légende 1, impulsion 3.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A17</span> Balise sur tissu · VIDÉO FLOW · emplacement</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C15</span> « Findable, anywhere. », 29,60 à 31,70 s, images 1776 à 1902</li></ul>
+</div></div></article>
+<article class="shot" id="S18">
+<header><h3>S18 · Recharge</h3><span class="num">31,80 à 34,57 s · images 1908 à 2074 · 166 images</span><span class="swatch" style="background:#34404d" title="teinte du plan #34404d"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S18.jpg" alt="Animatique, S18 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Main qui pose l&#x27;appareil sur un socle de recharge.</p>
+<p><strong>Ce que le plan illustre.</strong> La recharge sans fil.</p>
+<p><strong>Comment c'est fait.</strong> Prise de vue, rotation 0,8°, courbe power2.inOut.</p>
+<p><strong>Intégration 3D.</strong> Oui : prise de vue avec main.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : rotation, 16 px ; recul ou avance 1,001, déplacement 5 px en x et 0 px en y, rotation 0,81°, courbe power2.inOut (écart 0,078).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 0,999, décalé de -5 px et -0 px, tourné de -0,81°, puis retour à la composition avec la courbe power2.inOut.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,7 dB, 15 attaques (clic aigu 7, souffle 5, note ou accent 3).</p>
+<p><strong>Son de l'animatique.</strong> tic de légende 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A18</span> Pose sur le socle de recharge · VIDÉO FLOW · emplacement</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C16</span> « Charges without a cable. », 31,90 à 34,00 s, images 1914 à 2040</li></ul>
+</div></div></article>
+<article class="shot" id="S19">
+<header><h3>S19 · Sauvegarde</h3><span class="num">34,57 à 39,40 s · images 2074 à 2364 · 290 images</span><span class="swatch" style="background:#20252b" title="teinte du plan #20252b"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S19.jpg" alt="Animatique, S19 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> L&#x27;appareil cherche une carte, puis une personne tient l&#x27;appareil et la carte.</p>
+<p><strong>Ce que le plan illustre.</strong> La sauvegarde sur carte.</p>
+<p><strong>Comment c'est fait.</strong> Prise de vue ; glissement à gauche (215 px), rotation -6,4°, recul 0,93, courbe power1.out ; écran incrusté.</p>
+<p><strong>Intégration 3D.</strong> Écran incrusté sur une prise de vue.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : translation, 219 px ; recul ou avance 0,928, déplacement -215 px en x et 42 px en y, rotation -6,42°, courbe power1.out (écart 0,111).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 1,078, décalé de 215 px et -42 px, tourné de 6,42°, puis retour à la composition avec la courbe power1.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,5 dB, 28 attaques (clic aigu 11, souffle 9, note ou accent 8).</p>
+<p><strong>Son de l'animatique.</strong> tic de légende 2.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A19</span> Appareil et carte de sauvegarde · VIDÉO FLOW · emplacement</li><li><span class="chip chip-done">U04</span> Recherche de carte · CODE · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C17</span> « Saved to a card. », 36,90 à 39,10 s, images 2214 à 2346</li><li><span class="mono">C18</span> « Card included. », 37,60 à 39,20 s, images 2256 à 2352</li></ul>
+</div></div></article>
+<article class="shot" id="S20">
+<header><h3>S20 · Signature hors ligne</h3><span class="num">39,40 à 44,25 s · images 2364 à 2655 · 291 images</span><span class="swatch" style="background:#314760" title="teinte du plan #314760"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S20.jpg" alt="Animatique, S20 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Main qui tient l&#x27;appareil devant un ordinateur qui affiche un QR ; l&#x27;appareil montre son menu puis un QR.</p>
+<p><strong>Ce que le plan illustre.</strong> Signer sans connexion, par code QR.</p>
+<p><strong>Comment c'est fait.</strong> Prise de vue et deux écrans incrustés ; recul 0,90, courbe power2.out.</p>
+<p><strong>Intégration 3D.</strong> Deux écrans incrustés sur une prise de vue.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 116 px ; recul ou avance 0,895, déplacement -6 px en x et -19 px en y, rotation 0,57°, courbe power2.out (écart 0,068).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 1,118, décalé de 6 px et 19 px, tourné de -0,57°, puis retour à la composition avec la courbe power2.out.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -11,6 dB, 26 attaques (impact grave 1, clic aigu 8, souffle 10, note ou accent 7) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> souffle 1, clic 6, bip 24, tic de légende 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A20</span> Devant l&#x27;ordinateur, code QR · VIDÉO FLOW · emplacement</li><li><span class="chip chip-done">U06</span> Menu d&#x27;applications · CODE · fait en code</li><li><span class="chip chip-done">U07</span> Code QR · CODE · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C19</span> « Sign offline, by QR. », 40,70 à 44,00 s, images 2442 à 2640</li></ul>
+</div></div></article>
+<article class="shot" id="S21">
+<header><h3>S21 · Clé sans contact</h3><span class="num">44,25 à 50,20 s · images 2655 à 3012 · 357 images</span><span class="swatch" style="background:#261f42" title="teinte du plan #261f42"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S21.jpg" alt="Animatique, S21 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Noir, puis l&#x27;appareil touche un téléphone qui affiche une demande de clé d&#x27;accès.</p>
+<p><strong>Ce que le plan illustre.</strong> La clé d&#x27;accès sans contact.</p>
+<p><strong>Comment c'est fait.</strong> Prise de vue ; recul 0,64, rotation -16,3°, courbe power1.in ; écran du téléphone incrusté.</p>
+<p><strong>Intégration 3D.</strong> Écrans incrustés sur une prise de vue.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 397 px ; recul ou avance 0,639, déplacement 71 px en x et -60 px en y, rotation -16,30°, courbe power1.in (écart 0,092).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 1,564, décalé de -71 px et 60 px, tourné de 16,30°, puis retour à la composition avec la courbe power1.in.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,3 dB, 34 attaques (clic aigu 14, souffle 13, note ou accent 7) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> souffle 1, impulsion 5, tic de légende 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A21</span> Contact avec un téléphone · VIDÉO FLOW · emplacement</li><li><span class="chip chip-done">U08</span> Demande de clé d&#x27;accès · CODE · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C20</span> « One touch to sign in. », 45,20 à 48,90 s, images 2712 à 2934</li></ul>
+</div></div></article>
+<article class="shot" id="S22">
+<header><h3>S22 · Rafale</h3><span class="num">50,20 à 51,73 s · images 3012 à 3104 · 92 images</span><span class="swatch" style="background:#baa18f" title="teinte du plan #baa18f"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S22.jpg" alt="Animatique, S22 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Plans très courts : interface en très gros plan incliné, profil lumineux.</p>
+<p><strong>Ce que le plan illustre.</strong> L&#x27;énergie avant le logiciel.</p>
+<p><strong>Comment c'est fait.</strong> Coupes rapides sur le rythme, macros 3D, flashs.</p>
+<p><strong>Intégration 3D.</strong> Oui : macros de l&#x27;appareil.</p>
+<p><strong>Mouvement mesuré.</strong> Plan fixe (mouvement total inférieur à 12 px).</p>
+<p><strong>Dans l'animatique.</strong> Aucun mouvement de caméra.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,6 dB, 7 attaques (clic aigu 4, souffle 3) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> clic 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A22</span> Rafale de macros · RENDU 3D · emplacement</li><li><span class="chip chip-done">U05</span> Portefeuille, anneau de solde · CODE · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li>Aucune légende.</li></ul>
+</div></div></article>
+<article class="shot" id="S23">
+<header><h3>S23 · Logiciel</h3><span class="num">51,73 à 58,00 s · images 3104 à 3480 · 376 images</span><span class="swatch" style="background:#34343c" title="teinte du plan #34343c"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S23.jpg" alt="Animatique, S23 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Appareil avec interface de portefeuille, nouveau système sur deux appareils, phrases sur noir.</p>
+<p><strong>Ce que le plan illustre.</strong> Le logiciel et l&#x27;interface.</p>
+<p><strong>Comment c'est fait.</strong> Rendus produit et incrustations ; recul 0,43, rotation 10,9°, courbe power1.in ; texte 2D.</p>
+<p><strong>Intégration 3D.</strong> Oui : appareils de face.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 634 px ; recul ou avance 0,425, déplacement 118 px en x et 76 px en y, rotation 10,92°, courbe power1.in (écart 0,116).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 2,353, décalé de -118 px et -76 px, tourné de -10,92°, puis retour à la composition avec la courbe power1.in.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,5 dB, 36 attaques (clic aigu 13, souffle 15, note ou accent 8) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> clic 1, tic de légende 4, frappe 20, montée 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A23</span> Deux appareils de face · RENDU 3D · emplacement</li><li><span class="chip chip-done">U05</span> Portefeuille, anneau de solde · CODE · fait en code</li><li><span class="chip chip-todo">U09</span> Liste du nouveau système · CODE · à faire en code</li><li><span class="chip chip-done">F02</span> AnthropicSerif · À FOURNIR · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C21</span> « Your holdings, at a glance. », 51,90 à 54,10 s, images 3114 à 3246</li><li><span class="mono">C22</span> « Now with », 54,00 à 55,40 s, images 3240 à 3324</li><li><span class="mono">C23</span> « a new OS. », 54,00 à 55,40 s, images 3240 à 3324</li><li><span class="mono">C24</span> « Open, auditable code. », 55,40 à 56,60 s, images 3324 à 3396</li><li><span class="mono">C25</span> « Lighter. Calmer. Faster. », 56,60 à 58,00 s, images 3396 à 3480</li></ul>
+</div></div></article>
+<article class="shot" id="S24">
+<header><h3>S24 · Titre héros</h3><span class="num">58,00 à 59,53 s · images 3480 à 3572 · 92 images</span><span class="swatch" style="background:#161f28" title="teinte du plan #161f28"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S24.jpg" alt="Animatique, S24 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Lettres géantes en fumée bleutée, appareil graphite debout devant, petit titre au-dessus.</p>
+<p><strong>Ce que le plan illustre.</strong> Le titre héros.</p>
+<p><strong>Comment c'est fait.</strong> Lettres en matière volumétrique (fumée), appareil au premier plan, caméra fixe.</p>
+<p><strong>Intégration 3D.</strong> Oui : appareil ; lettres volumétriques.</p>
+<p><strong>Mouvement mesuré.</strong> Plan fixe (mouvement total inférieur à 12 px).</p>
+<p><strong>Dans l'animatique.</strong> Aucun mouvement de caméra.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -9,6 dB, 8 attaques (clic aigu 5, souffle 2, note ou accent 1) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> clic 1, tic de légende 1, impact 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A24</span> Appareil graphite devant le titre · IMAGE FLOW · emplacement</li><li><span class="chip chip-temp">A28</span> Lettres héros en fumée et en feu · RENDU 3D · provisoire en code</li><li><span class="chip chip-done">F03</span> Vogun Medium · À FOURNIR · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C26</span> « Next step. », 58,00 à 59,53 s, images 3480 à 3572</li></ul>
+</div></div></article>
+<article class="shot" id="S25">
+<header><h3>S25 · Héros argent</h3><span class="num">59,53 à 60,80 s · images 3572 à 3648 · 76 images</span><span class="swatch" style="background:#555b62" title="teinte du plan #555b62"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S25.jpg" alt="Animatique, S25 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Lettres en fumée blanche, appareil argent, sol réfléchissant.</p>
+<p><strong>Ce que le plan illustre.</strong> Le coloris argent.</p>
+<p><strong>Comment c'est fait.</strong> Même composition, autre matière, quasi fixe.</p>
+<p><strong>Intégration 3D.</strong> Oui : appareil argent.</p>
+<p><strong>Mouvement mesuré.</strong> Mouvement dominant : échelle, 14 px ; recul ou avance 1,013, déplacement 3 px en x et -8 px en y, rotation 0,12°, courbe none (écart 0,055).</p>
+<p><strong>Dans l'animatique.</strong> Appliqué au plan : départ à l&#x27;échelle 0,988, décalé de -3 px et 8 px, tourné de -0,12°, puis retour à la composition avec la courbe none.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -11,7 dB, 6 attaques (clic aigu 1, souffle 2, note ou accent 3) ; une attaque tombe sur la coupe.</p>
+<p><strong>Son de l'animatique.</strong> souffle 1, impact 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A25</span> Appareil argent, héros · IMAGE FLOW · emplacement</li><li><span class="chip chip-temp">A28</span> Lettres héros en fumée et en feu · RENDU 3D · provisoire en code</li><li><span class="chip chip-done">F03</span> Vogun Medium · À FOURNIR · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li>Aucune légende.</li></ul>
+</div></div></article>
+<article class="shot" id="S26">
+<header><h3>S26 · Héros cuivre</h3><span class="num">60,80 à 62,00 s · images 3648 à 3720 · 72 images</span><span class="swatch" style="background:#5d270c" title="teinte du plan #5d270c"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S26.jpg" alt="Animatique, S26 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Lettres en matière de feu, appareil cuivre.</p>
+<p><strong>Ce que le plan illustre.</strong> Le coloris cuivre.</p>
+<p><strong>Comment c'est fait.</strong> Variante de matière (feu), plan fixe.</p>
+<p><strong>Intégration 3D.</strong> Oui : appareil cuivre ; matière de feu.</p>
+<p><strong>Mouvement mesuré.</strong> Plan fixe (mouvement total inférieur à 12 px).</p>
+<p><strong>Dans l'animatique.</strong> Aucun mouvement de caméra.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -10,3 dB, 7 attaques (clic aigu 2, souffle 2, note ou accent 3).</p>
+<p><strong>Son de l'animatique.</strong> tic de légende 1, impact 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-slot">A26</span> Appareil cuivre, héros · IMAGE FLOW · emplacement</li><li><span class="chip chip-temp">A28</span> Lettres héros en fumée et en feu · RENDU 3D · provisoire en code</li><li><span class="chip chip-done">F03</span> Vogun Medium · À FOURNIR · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C27</span> « Your turn. », 60,80 à 62,00 s, images 3648 à 3720</li></ul>
+</div></div></article>
+<article class="shot" id="S27">
+<header><h3>S27 · Signature</h3><span class="num">62,00 à 68,00 s · images 3720 à 4080 · 360 images</span><span class="swatch" style="background:#272727" title="teinte du plan #272727"></span></header>
+<div class="grid2">
+<figure><img src="animatique/plans/S27.jpg" alt="Animatique, S27 à mi-plan" loading="lazy"><figcaption>Animatique v1, image au milieu du plan.</figcaption></figure>
+<div>
+<p><strong>Ce qu'on voit dans la référence.</strong> Noir, le logo apparaît puis le noir revient.</p>
+<p><strong>Ce que le plan illustre.</strong> La signature de marque.</p>
+<p><strong>Comment c'est fait.</strong> Logo 2D tracé puis éclairé, fondu au noir.</p>
+<p><strong>Intégration 3D.</strong> Non.</p>
+<p><strong>Mouvement mesuré.</strong> Plan fixe (mouvement total inférieur à 12 px).</p>
+<p><strong>Dans l'animatique.</strong> Aucun mouvement de caméra.</p>
+<p><strong>Son de la référence (mesuré).</strong> Niveau moyen -34,2 dB, 0 attaques (aucune attaque).</p>
+<p><strong>Son de l'animatique.</strong> souffle 1, tic de légende 2, carillon 1.</p>
+<p><strong>Assets du plan.</strong></p><ul><li><span class="chip chip-done">L01</span> Marque et compte · CODE · fait en code</li></ul>
+<p><strong>Légendes.</strong></p><ul><li><span class="mono">C28</span> « ZenRay », 63,50 à 66,00 s, images 3810 à 3960</li><li><span class="mono">C29</span> « @zenrayst », 65,00 à 67,00 s, images 3900 à 4020</li></ul>
+</div></div></article>
+
+<h2>3. Inventaire des assets</h2>
+<p>42 assets : 14 code, 12 vidéo flow, 7 rendu 3d, 6 image flow, 2 à fournir, 1 sous licence. Les pastilles brunes sont des emplacements à produire, les vertes sont faites en code, les ocres sont provisoires, les grises restent à faire en code.</p>
+<div class="scroll"><table><tr><th>Id</th><th>Asset</th><th>Type</th><th>Source</th><th>Statut</th><th>Plans</th><th>Durée</th><th>Format</th></tr><tr><td><span class="chip chip-slot">A00</span></td><td>Fiche de design de l&#x27;appareil</td><td>image</td><td>IMAGE FLOW</td><td>emplacement</td><td>tout le film</td><td class="num">sans durée</td><td>4096 × 2304 px, fond noir, cinq vues</td></tr><tr><td><span class="chip chip-slot">A02</span></td><td>Appareil qui monte, de face</td><td>image</td><td>IMAGE FLOW</td><td>emplacement</td><td>S02</td><td class="num">1,30 s</td><td>PNG, 2160 px de haut, couche alpha</td></tr><tr><td><span class="chip chip-slot">A03</span></td><td>Main qui tient l&#x27;appareil</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S03</td><td class="num">1,70 s</td><td>1920 × 1080, 60 i/s, fond noir pour détourage</td></tr><tr><td><span class="chip chip-slot">A05</span></td><td>Macro de la tranche</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S05</td><td class="num">1,17 s</td><td>1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">A06</span></td><td>Macro du châssis vu de dessous</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S06</td><td class="num">1,28 s</td><td>1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">A07</span></td><td>Trois coloris de profil</td><td>image</td><td>RENDU 3D</td><td>emplacement</td><td>S07</td><td class="num">1,47 s</td><td>PNG 3840 px de large, couche alpha</td></tr><tr><td><span class="chip chip-slot">A08</span></td><td>Macro du cuivre poli</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S08</td><td class="num">1,45 s</td><td>1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">A09</span></td><td>Coin de l&#x27;écran</td><td>vidéo</td><td>RENDU 3D</td><td>emplacement</td><td>S09</td><td class="num">1,60 s</td><td>1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">W01</span></td><td>Fond d&#x27;écran en strates</td><td>image</td><td>IMAGE FLOW</td><td>emplacement</td><td>S09, S10</td><td class="num">sans durée</td><td>3840 × 2160 et 2160 × 4680 px</td></tr><tr><td><span class="chip chip-slot">A10</span></td><td>Fond d&#x27;écran en mouvement</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S10</td><td class="num">1,35 s</td><td>1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">A11</span></td><td>Vue éclatée des puces</td><td>3D</td><td>RENDU 3D</td><td>emplacement</td><td>S11</td><td class="num">3,48 s</td><td>1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">A13</span></td><td>Macro de carte électronique</td><td>vidéo</td><td>RENDU 3D</td><td>emplacement</td><td>S13</td><td class="num">1,32 s</td><td>1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">A14</span></td><td>Doigt sur le bouton latéral</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S14</td><td class="num">2,97 s</td><td>1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">A15</span></td><td>Main au bureau, validation</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S15</td><td class="num">2,83 s</td><td>1920 × 1080, 60 i/s, écran sombre à incruster</td></tr><tr><td><span class="chip chip-slot">A17</span></td><td>Balise sur tissu</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S17</td><td class="num">2,27 s</td><td>1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">A18</span></td><td>Pose sur le socle de recharge</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S18</td><td class="num">2,77 s</td><td>1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">A19</span></td><td>Appareil et carte de sauvegarde</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S19</td><td class="num">4,83 s</td><td>1920 × 1080, 60 i/s, écran sombre à incruster</td></tr><tr><td><span class="chip chip-slot">A20</span></td><td>Devant l&#x27;ordinateur, code QR</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S20</td><td class="num">4,85 s</td><td>1920 × 1080, 60 i/s, deux écrans à incruster</td></tr><tr><td><span class="chip chip-slot">A21</span></td><td>Contact avec un téléphone</td><td>vidéo</td><td>VIDÉO FLOW</td><td>emplacement</td><td>S21</td><td class="num">5,95 s</td><td>1920 × 1080, 60 i/s, écran à incruster</td></tr><tr><td><span class="chip chip-slot">A22</span></td><td>Rafale de macros</td><td>3D</td><td>RENDU 3D</td><td>emplacement</td><td>S22</td><td class="num">1,53 s</td><td>5 plans de 0,25 s, 1920 × 1080, 60 i/s</td></tr><tr><td><span class="chip chip-slot">A23</span></td><td>Deux appareils de face</td><td>image</td><td>RENDU 3D</td><td>emplacement</td><td>S23</td><td class="num">6,27 s</td><td>PNG, couche alpha, écrans sombres à incruster</td></tr><tr><td><span class="chip chip-slot">A24</span></td><td>Appareil graphite devant le titre</td><td>image</td><td>IMAGE FLOW</td><td>emplacement</td><td>S24</td><td class="num">1,53 s</td><td>PNG, couche alpha</td></tr><tr><td><span class="chip chip-slot">A25</span></td><td>Appareil argent, héros</td><td>image</td><td>IMAGE FLOW</td><td>emplacement</td><td>S25</td><td class="num">1,27 s</td><td>PNG, couche alpha</td></tr><tr><td><span class="chip chip-slot">A26</span></td><td>Appareil cuivre, héros</td><td>image</td><td>IMAGE FLOW</td><td>emplacement</td><td>S26</td><td class="num">1,20 s</td><td>PNG, couche alpha</td></tr><tr><td><span class="chip chip-temp">A28</span></td><td>Lettres héros en fumée et en feu</td><td>3D</td><td>RENDU 3D</td><td>provisoire en code</td><td>S24, S25, S26</td><td class="num">4,00 s</td><td>1920 × 1080, 60 i/s, couche alpha</td></tr><tr><td><span class="chip chip-done">U01</span></td><td>Écran de démarrage</td><td>interface</td><td>CODE</td><td>fait en code</td><td>S02, S03</td><td class="num">3,00 s</td><td>HTML, 460 × 980 px</td></tr><tr><td><span class="chip chip-done">U03</span></td><td>Coche de validation</td><td>interface</td><td>CODE</td><td>fait en code</td><td>S15</td><td class="num">2,83 s</td><td>HTML</td></tr><tr><td><span class="chip chip-done">U04</span></td><td>Recherche de carte</td><td>interface</td><td>CODE</td><td>fait en code</td><td>S19</td><td class="num">4,83 s</td><td>HTML</td></tr><tr><td><span class="chip chip-done">U05</span></td><td>Portefeuille, anneau de solde</td><td>interface</td><td>CODE</td><td>fait en code</td><td>S22, S23</td><td class="num">6,27 s</td><td>HTML</td></tr><tr><td><span class="chip chip-done">U06</span></td><td>Menu d&#x27;applications</td><td>interface</td><td>CODE</td><td>fait en code</td><td>S20</td><td class="num">4,85 s</td><td>HTML</td></tr><tr><td><span class="chip chip-done">U07</span></td><td>Code QR</td><td>interface</td><td>CODE</td><td>fait en code</td><td>S20</td><td class="num">4,85 s</td><td>HTML</td></tr><tr><td><span class="chip chip-done">U08</span></td><td>Demande de clé d&#x27;accès</td><td>interface</td><td>CODE</td><td>fait en code</td><td>S21</td><td class="num">5,95 s</td><td>HTML</td></tr><tr><td><span class="chip chip-todo">U02</span></td><td>Écran verrouillé</td><td>interface</td><td>CODE</td><td>à faire en code</td><td>S11</td><td class="num">1,30 s</td><td>HTML</td></tr><tr><td><span class="chip chip-todo">U09</span></td><td>Liste du nouveau système</td><td>interface</td><td>CODE</td><td>à faire en code</td><td>S23</td><td class="num">2,00 s</td><td>HTML</td></tr><tr><td><span class="chip chip-temp">T01</span></td><td>Textes des légendes</td><td>texte</td><td>CODE</td><td>provisoire en code</td><td>tout le film</td><td class="num">sans durée</td><td>30 légendes, temps et placements mesurés</td></tr><tr><td><span class="chip chip-done">L01</span></td><td>Marque et compte</td><td>logo</td><td>CODE</td><td>fait en code</td><td>S27</td><td class="num">6,00 s</td><td>SVG tracé</td></tr><tr><td><span class="chip chip-done">F01</span></td><td>InterVariable</td><td>police</td><td>CODE</td><td>fait en code</td><td>tout le film</td><td class="num">sans durée</td><td>TTF, licence SIL Open Font</td></tr><tr><td><span class="chip chip-done">F02</span></td><td>AnthropicSerif</td><td>police</td><td>À FOURNIR</td><td>fait en code</td><td>S23</td><td class="num">sans durée</td><td>TTF</td></tr><tr><td><span class="chip chip-done">F03</span></td><td>Vogun Medium</td><td>police</td><td>À FOURNIR</td><td>fait en code</td><td>S24, S25, S26</td><td class="num">sans durée</td><td>TTF</td></tr><tr><td><span class="chip chip-done">X01</span></td><td>Effets sonores</td><td>effets</td><td>CODE</td><td>fait en code</td><td>tout le film</td><td class="num">68,00 s</td><td>WAV 48 kHz stéréo</td></tr><tr><td><span class="chip chip-temp">M00</span></td><td>Musique provisoire</td><td>musique</td><td>CODE</td><td>provisoire en code</td><td>tout le film</td><td class="num">68,00 s</td><td>WAV 48 kHz stéréo</td></tr><tr><td><span class="chip chip-slot">M01</span></td><td>Musique finale</td><td>musique</td><td>SOUS LICENCE</td><td>emplacement</td><td>tout le film</td><td class="num">68,00 s</td><td>WAV 48 kHz stéréo, 68,05 s</td></tr></table></div>
+<h3 style="margin-top:24px">Prompts, à lancer seulement après validation</h3>
+<p>Chaque prompt vidéo ou image se termine par le même suffixe : appareil conforme à la fiche A00, aucun texte, aucun logo, 16:9 et 1920 × 1080. Ordre conseillé : A00 d'abord (validation), puis W01, puis les vidéos dans l'ordre du film.</p>
+<details><summary><span class="chip chip-slot">A00</span> Fiche de design de l&#x27;appareil · IMAGE FLOW</summary><p class="prompt mono">Product design sheet of an original pocket hardware security device: a rounded slab with a 0.47 width-to-height ratio, 9 mm thick, anodised aluminium unibody with a thin polished chamfer, edge-to-edge black glass display with soft rounded corners, one slim side button with a fingerprint sensor, a pill-shaped USB-C port and three small speaker holes on the bottom edge. Colourways silver, copper and graphite. Orthographic front, back, left side and bottom views plus one three-quarter hero view, evenly lit on pure black. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>À générer et valider en premier. Elle sert de référence d&#x27;image à toutes les vidéos, pour garder le même appareil d&#x27;un plan à l&#x27;autre. Proportions reprises du gabarit : 460 × 980 px.</p></details><details><summary><span class="chip chip-slot">A02</span> Appareil qui monte, de face · IMAGE FLOW</summary><p class="prompt mono">Front view of the device from sheet A00, screen on with a soft warm gradient and the boot mark U01, floating on pure black, centred, soft rim light, transparent background. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Montée et échelle animées en code dans la forme de lumière.</p></details><details><summary><span class="chip chip-slot">A03</span> Main qui tient l&#x27;appareil · VIDÉO FLOW</summary><p class="prompt mono">Close-up of a hand holding the device from sheet A00 from below, fingertips on its lower edge, screen on, static camera, pure black background, studio rim light, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Le titre C00 passe derrière la main : détourer la main et l&#x27;appareil sur le noir. Écran : U01.</p></details><details><summary><span class="chip chip-slot">A05</span> Macro de la tranche · VIDÉO FLOW</summary><p class="prompt mono">Extreme macro of the side edge of the device from sheet A00: brushed silver aluminium, slim side button and a small dark window, raking diagonal light, shallow depth of field, black background, the camera drifts slowly to the left with a gentle ease in and out, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Mouvement mesuré : 18 px vers la gauche, courbe sine.inOut.</p></details><details><summary><span class="chip chip-slot">A06</span> Macro du châssis vu de dessous · VIDÉO FLOW</summary><p class="prompt mono">Macro of the underside of the device chassis from sheet A00: milled internal cavities, a pill-shaped USB-C port, three small speaker holes, silver aluminium, cool studio light, the camera rotates very slightly clockwise, steady, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Légende C02 en bas. Mouvement mesuré : rotation 1,2°, linéaire.</p></details><details><summary><span class="chip chip-slot">A07</span> Trois coloris de profil · RENDU 3D</summary><p class="prompt mono">Three devices from sheet A00 stacked on top of each other and seen exactly from the side: silver, copper, graphite, floating on pure black, crisp edge highlights, transparent background. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Image fixe animée en code : recul 0,74 et glissement de 274 px vers la droite, mesurés.</p></details><details><summary><span class="chip chip-slot">A08</span> Macro du cuivre poli · VIDÉO FLOW</summary><p class="prompt mono">Macro of the polished copper back of the device from sheet A00, liquid wave-like reflections sliding across the surface, warm orange light, black surroundings, the camera pulls back slightly and settles, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Légende C03. Mouvement mesuré : recul 0,93, courbe power2.out.</p></details><details><summary><span class="chip chip-slot">A09</span> Coin de l&#x27;écran · RENDU 3D</summary><p class="prompt mono">Macro of one corner of the device from sheet A00: copper frame, edge-to-edge glass display showing wallpaper W01, glossy reflection, the camera rolls very slightly, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Fond d&#x27;écran : W01.</p></details><details><summary><span class="chip chip-slot">W01</span> Fond d&#x27;écran en strates · IMAGE FLOW</summary><p class="prompt mono">Abstract wallpaper of layered landscape strata in deep red, orange and amber, like eroded dunes at dusk, smooth gradients and fine contour lines, no text. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Sert à l&#x27;écran (A09, A10, U02).</p></details><details><summary><span class="chip chip-slot">A10</span> Fond d&#x27;écran en mouvement · VIDÉO FLOW</summary><p class="prompt mono">Full-frame slow lateral slide across wallpaper W01 seen through a glass display, crisp pixels and a faint reflection, the camera slides left and eases out, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Légendes C04 et C05. Mouvement mesuré : 34 px vers la gauche, courbe power2.out.</p></details><details><summary><span class="chip chip-slot">A11</span> Vue éclatée des puces · RENDU 3D</summary><p class="prompt mono">The device from sheet A00 seen from the front dissolves into an exploded stack of translucent security chip layers, glowing green light beams pass through them, dark background, the camera pulls back strongly and tilts, ease out, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Version code provisoire visible dans le plan (couches et traces). Mouvement mesuré : recul 0,29, rotation 8,5°, descente de 304 px, courbe power1.out.</p></details><details><summary><span class="chip chip-slot">A13</span> Macro de carte électronique · RENDU 3D</summary><p class="prompt mono">Macro of a dark circuit board with several square security chips whose edges light up one after another, shallow depth of field, the camera rises slightly and settles, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Note C08. Mouvement mesuré : montée de 133 px, courbe power3.out.</p></details><details><summary><span class="chip chip-slot">A14</span> Doigt sur le bouton latéral · VIDÉO FLOW</summary><p class="prompt mono">Close-up of the thin side edge of the device from sheet A00 held upright against a cool blue-grey background; a fingertip approaches and touches the slim side button; soft light, the camera almost still, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Légendes C09 et C10, de part et d&#x27;autre de la tranche.</p></details><details><summary><span class="chip chip-slot">A15</span> Main au bureau, validation · VIDÉO FLOW</summary><p class="prompt mono">A hand holds the device from sheet A00 above a dark wooden desk at night, its screen facing the camera and kept plain dark for compositing, the camera slides left, pushes in slightly and rolls a few degrees, ease out, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Écran : U03, incrusté par suivi des quatre coins. Mouvement mesuré : 216 px à gauche, avance 1,14, rotation 3,6°, courbe power1.out.</p></details><details><summary><span class="chip chip-slot">A17</span> Balise sur tissu · VIDÉO FLOW</summary><p class="prompt mono">A small flat square tracker tag resting on deep blue-violet fabric, a soft glow on the left, static camera, low-key light, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Anneaux lumineux en code au-dessus. Légende C15.</p></details><details><summary><span class="chip chip-slot">A18</span> Pose sur le socle de recharge · VIDÉO FLOW</summary><p class="prompt mono">A hand places the device from sheet A00 on a dark round wireless charging stand on a desk, low warm light, the camera turns very slightly, ease in and out, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Légende C16.</p></details><details><summary><span class="chip chip-slot">A19</span> Appareil et carte de sauvegarde · VIDÉO FLOW</summary><p class="prompt mono">A person in dim light holds the device from sheet A00 and a thin metal backup card against each other, face out of focus behind, screen kept plain dark for compositing, the camera slides left and rolls slightly, ease out, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Écran : U04. Légendes C17 et C18. Mouvement mesuré : 215 px à gauche, rotation -6,4°, recul 0,93, courbe power1.out.</p></details><details><summary><span class="chip chip-slot">A20</span> Devant l&#x27;ordinateur, code QR · VIDÉO FLOW</summary><p class="prompt mono">A hand holds the device from sheet A00 in front of a generic unbranded laptop whose screen shows a plain white panel, dark room, both screens kept plain for compositing, the camera pulls back slightly and settles, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Écrans : U06 puis U07. Légende C19.</p></details><details><summary><span class="chip chip-slot">A21</span> Contact avec un téléphone · VIDÉO FLOW</summary><p class="prompt mono">A hand brings the device from sheet A00 close to a generic unbranded smartphone on a deep violet background until they touch, the phone screen kept plain for compositing, the camera pulls back and rolls, accelerating, 8 seconds. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Écran du téléphone : U08. Ondes en code. Légende C20. Mouvement mesuré : recul 0,64, rotation -16,3°, courbe power1.in.</p></details><details><summary><span class="chip chip-slot">A22</span> Rafale de macros · RENDU 3D</summary><p class="prompt mono">Five very short macro shots of the device from sheet A00, a quarter of a second each: tilted interface close-up, glowing side profile, copper edge, screen glow, frame corner; black background, hard light. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Coupes calées sur la croche à 175,9 BPM. Aplats de couleur en code en attendant.</p></details><details><summary><span class="chip chip-slot">A23</span> Deux appareils de face · RENDU 3D</summary><p class="prompt mono">Two devices from sheet A00 side by side, front view, slightly turned towards each other, plain dark screens for compositing, floating on pure black, transparent background. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Écrans : U05 et U09. Mouvement mesuré : recul 0,43, rotation 10,9°, courbe power1.in.</p></details><details><summary><span class="chip chip-slot">A24</span> Appareil graphite devant le titre · IMAGE FLOW</summary><p class="prompt mono">The graphite device from sheet A00 standing upright, front view, a faint reflection on a glossy black floor, cool blue rim light, transparent background. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Devant les lettres A28.</p></details><details><summary><span class="chip chip-slot">A25</span> Appareil argent, héros · IMAGE FLOW</summary><p class="prompt mono">The silver device from sheet A00 standing upright on a reflective floor, white smoke drifting behind it, soft top light, transparent background. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Sol réfléchissant en code.</p></details><details><summary><span class="chip chip-slot">A26</span> Appareil cuivre, héros · IMAGE FLOW</summary><p class="prompt mono">The copper device from sheet A00 standing upright, warm firelight reflections on its body, transparent background. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Sol chaud en code.</p></details><details><summary><span class="chip chip-temp">A28</span> Lettres héros en fumée et en feu · RENDU 3D</summary><p class="prompt mono">Giant volumetric letters made of drifting smoke, three looks: cool blue smoke, white smoke over a reflective floor, glowing fire embers; black background, slow turbulence, 8 seconds each. Original industrial design exactly as on design sheet A00. No text, no letters, no numbers, no logo, no brand marks, no watermark. 16:9, 1920x1080, photoreal, clean studio grade.</p><p>Mot en fumée fait en code en attendant (filtre de turbulence). Idéal en simulation pyro dans Houdini.</p></details><details><summary><span class="chip chip-slot">M01</span> Musique finale · SOUS LICENCE</summary><p class="prompt mono">Modern minimal tech product film score, 88 BPM with an eighth-note pulse at 176, D minor, airy pads, soft sub-bass pulse, crisp percussive ticks; intro swell from 0 to 5 s, full groove from 5 to 25 s, quiet breakdown from 25 to 29.5 s, groove again from 29.5 to 58 s, cinematic hit and lift from 58 to 62 s, warm fade-out from 62 to 68 s; instrumental, no vocals.</p><p>À générer (modèle de musique, si ton accès le permet) ou à choisir dans une bibliothèque sous licence. La musique de la référence n&#x27;est pas créditée et ne se reprend pas.</p></details>
+
+<h2>4. Identification des polices, de la musique, des sons et des images</h2>
+<h3>Polices</h3>
+<p>Référence : une grotesque néo-moderne proche de SF Pro Display ou d'Inter Display, en graisse moyenne pour le grand titre et régulière pour les légendes, avec une approche légèrement serrée. C'est une estimation visuelle, faute de métadonnées. Le film utilise InterVariable (F01, licence SIL Open Font) pour les légendes et l'interface, AnthropicSerif (F02) pour les chiffres, Vogun Medium (F03) pour le mot héros, et AnthropicMono pour les étiquettes de l'animatique. Les licences de diffusion de F02 et F03 restent à vérifier.</p>
+<h3>Musique</h3>
+<p>Référence : tempo mesuré de 175,85 BPM à la croche, soit 87,92 BPM ; 12 coupes sur 26 tombent à 50 ms près sur cette grille. Le niveau suit cinq parties : une ouverture très calme, un corps plein dès 4,9 s, un creux de 25,4 à 29,5 s, le corps de nouveau, puis une sortie au noir dès 62 s. La page de la référence ne crédite ni la musique ni le studio : la musique ne s'identifie pas et ne se reprend pas. M00 (musique provisoire faite en code) suit la même grille ; M01 se génère avec Lyria (0,08 $ le morceau par l'API Gemini) ou se choisit dans une bibliothèque sous licence.</p>
+<h3>Sons</h3>
+<p>Référence : 325 attaques mesurées (souffle 125, clic aigu 101, note ou accent 88, impact grave 11). Le design sonore repose donc surtout sur des souffles et des clics, avec très peu d'impacts graves. L'animatique place 130 effets faits en code sur ses propres événements : coupes (selon la classe de l'attaque de la référence la plus proche), apparition des légendes, frappe, menu, code QR, compteur, anneaux, coche, impacts du titre héros et logo.</p>
+<h3>Images, vidéos et 3D</h3>
+<p>À produire : 16 vidéos ou rendus 3D et 8 images, dont la fiche de design A00, qui sert de référence d'image à toutes les générations pour garder le même appareil d'un plan à l'autre. Les écrans des prises de vue restent sombres pour l'incrustation des interfaces faites en code (U03 à U08).</p>
+<h3>Voix</h3>
+<p>Aucune voix off n'est établie. Une transcription automatique ne trouve que quatre segments très courts, dont le profil (deux mots, probabilité de mot proche de 0,5, taux de compression identique) est celui d'un faux positif sur de la musique. À confirmer à l'écoute.</p>
+
+<h2>5. Google Flow : ce qu'il faut pour générer</h2>
+<p>Flow est une interface de création dans le navigateur, sans API publique, et aucun connecteur n'existe pour lui dans le registre des connecteurs. Ses modèles sont en revanche accessibles par l'API Gemini. Faits vérifiés le 11 October 2026 sur la documentation officielle : Veo 3.1 Standard à 0,40 $ par seconde en 1080p, Veo 3.1 Fast à 0,12 $, images de 0,07 à 0,13 $, Lyria 3.5 à 0,08 $ le morceau, sans offre gratuite par l'API.</p>
+<ul>
+<li><strong>Voie conseillée : l'API Gemini.</strong> Une clé créée dans Google AI Studio, avec la facturation activée. Tu la ranges toi-même dans le trousseau macOS (<code>security add-generic-password -a "$USER" -s gemini-api-key -w</code>), sans jamais la coller dans la conversation ; les scripts la lisent au moment de générer. La même clé active aussi la description automatique des captures par HyperFrames.</li>
+<li><strong>Voie Flow.</strong> Tu te connectes toi-même à Flow dans le navigateur intégré ; je saisis les prompts et je télécharge les résultats avec ton accord à chaque lot. Cette voie consomme les crédits de ton abonnement.</li>
+<li><strong>Voie Vertex AI.</strong> Un projet Google Cloud, l'API activée et un compte de service ; plus lourde, utile seulement pour un volume important.</li>
+</ul>
+<p>Estimation, à revérifier au moment de lancer : 16 vidéos de 8 s coûtent environ 51 $ en Standard ou 15 $ en Fast, et le double si chaque plan demande deux essais ; les images et la musique ajoutent quelques dollars. Rien n'est lancé sans ta validation de la fiche A00 et des prompts.</p>
+<ul><li><a href="https://ai.google.dev/gemini-api/docs/pricing">Tarifs de l&#x27;API Gemini (officiel)</a></li><li><a href="https://ai.google.dev/gemini-api/docs/video">Génération vidéo dans l&#x27;API Gemini (officiel)</a></li><li><a href="https://geekflare.com/news/you-can-now-use-veo-3-in-the-gemini-api">Veo 3 dans l&#x27;API Gemini</a></li><li><a href="https://www.etcentric.org/tag/veo-3-1-fast">Veo 3.1 dans Flow et Vertex</a></li></ul>
+
+<h2>6. Vérifications</h2>
+<h3>Image : animatique contre la référence</h3>
+<div class="scroll"><table><tr><th>Contrôle</th><th>Valeur</th><th>Limite</th><th>Résultat</th></tr><tr><td>Durée</td><td class="num">68,000 s</td><td>68,053 s à 0,10 s près</td><td><span class="pass">réussi</span></td></tr><tr><td>Mouvement image à image</td><td class="num">0,468</td><td>au moins 0,45</td><td><span class="pass">réussi</span></td></tr><tr><td>Mouvement par plan (rang)</td><td class="num">0,567</td><td>au moins 0,50</td><td><span class="pass">réussi</span></td></tr><tr><td>Coupes franches retrouvées</td><td class="num">9 sur 13</td><td>au moins 60 %</td><td><span class="pass">réussi</span></td></tr><tr><td>Légendes lues par l&#x27;OCR</td><td class="num">25 sur 30</td><td>au moins 70 %</td><td><span class="pass">réussi</span></td></tr><tr><td>Écart médian des légendes</td><td class="num">0,20 s</td><td>au plus 0,25 s</td><td><span class="pass">réussi</span></td></tr><tr><td>Couleurs par plan (ΔE médian)</td><td class="num">14,87</td><td>au plus 25</td><td><span class="pass">réussi</span></td></tr><tr><td>Taille d&#x27;encre des légendes</td><td class="num">0,890</td><td>entre 0,85 et 1,15</td><td><span class="pass">réussi</span></td></tr></table></div>
+<h3>Son</h3>
+<div class="scroll"><table><tr><th>Contrôle</th><th>Valeur</th><th>Limite</th><th>Résultat</th></tr><tr><td>Effets : événements chronométrés audibles</td><td class="num">55 sur 55 (130 en tout)</td><td>tous</td><td><span class="pass">réussi</span></td></tr><tr><td>Effets : écart maximal au départ</td><td class="num">10,0 ms</td><td>au plus 17,7 ms, soit une image</td><td><span class="pass">réussi</span></td></tr><tr><td>Musique provisoire : tempo mesuré</td><td class="num">175,83 BPM (croche)</td><td>175,85 BPM sur la référence</td><td><span class="pass">réussi</span></td></tr><tr><td>Fichier final : format</td><td class="num">AAC, 2 voies, 48 000 Hz</td><td>AAC, stéréo, 48 000 Hz</td><td><span class="pass">réussi</span></td></tr><tr><td>Fichier final : durée du son</td><td class="num">68,01 s</td><td>68,00 s à 0,05 s près</td><td><span class="pass">réussi</span></td></tr><tr><td>Fichier final : crête</td><td class="num">0,786</td><td>au plus 0,98 du plein niveau</td><td><span class="pass">réussi</span></td></tr><tr><td>Fichier final : image inchangée</td><td class="num">identique</td><td>identique au rendu v8</td><td><span class="pass">réussi</span></td></tr><tr><td>Fichier final : niveau intégré</td><td class="num">-18,5 LUFS</td><td>repère, sans seuil</td><td><span class="pass">réussi</span></td></tr></table></div>
+<p>Les départs se mesurent sur la piste d'effets seule, où la musique ne masque rien. Les 75 événements trop rapprochés pour être chronométrés un par un (frappe, bips du QR, compteur, menu) sont comptés mais non mesurés.</p>
+
+<h2>7. Fichiers</h2>
+<ul class="mono">
+<li>/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/renders/zenray-motion-design-01-animatique-v1.mp4</li>
+<li>/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/params/assets.json</li>
+<li>/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/params/reference-scenes.json</li>
+<li>/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/params/camera.json</li>
+<li>/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/params/color-script.json</li>
+<li>/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/renders/sfx-v2.wav</li>
+<li>/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/renders/music-temp-v1.wav</li>
+<li>/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/renders/mix-v2.wav</li>
+<li>/Users/zenray/.claude/tmp/tmp-zenray-motion-design-01/storyboard/assets.csv</li>
+</ul>
+</main></body></html>

@@ -1,0 +1,112 @@
+{
+  "contract": {
+    "duration_tolerance_s": 0.1,
+    "motion_correlation_min": 0.45,
+    "shot_motion_rank_min": 0.5,
+    "hard_cut_score_min": 15.0,
+    "hard_cut_match_min": 0.6,
+    "cut_window_s": 0.1,
+    "caption_recall_min": 0.7,
+    "caption_timing_median_s": 0.25,
+    "palette_delta_e_median_max": 25.0,
+    "ink_ratio_min": 0.85,
+    "ink_ratio_max": 1.15
+  },
+  "checks": {
+    "duration": {
+      "value": 68.0,
+      "target": 68.053,
+      "fps": 60.0,
+      "size": [
+        1920,
+        1080
+      ],
+      "pass": true
+    },
+    "motion": {
+      "frame_correlation": 0.468,
+      "shot_rank_correlation": 0.567,
+      "pass": true
+    },
+    "cuts": {
+      "reference_hard_cuts": 13,
+      "matched": 9,
+      "rate": 0.692,
+      "pass": true
+    },
+    "captions": {
+      "captions": 30,
+      "readable": 25,
+      "readable_rate": 0.833,
+      "timing_median_s": 0.2,
+      "unreadable": [
+        {
+          "id": "C00",
+          "text": "Ready.",
+          "recall": 0.0
+        },
+        {
+          "id": "C02",
+          "text": "Cut from one piece.",
+          "recall": 0.0
+        },
+        {
+          "id": "C04",
+          "text": "Clear.",
+          "recall": 0.0
+        },
+        {
+          "id": "C05",
+          "text": "Hardened glass.",
+          "recall": 0.0
+        },
+        {
+          "id": "C23",
+          "text": "a new OS.",
+          "recall": 0.5
+        }
+      ],
+      "pass": true
+    },
+    "palette": {
+      "median_delta_e": 14.87,
+      "per_shot": [
+        25.9,
+        14.9,
+        14.9,
+        5.3,
+        4.9,
+        22.4,
+        14.1,
+        20.9,
+        31.6,
+        21.2,
+        0.4,
+        10.3,
+        22.7,
+        16.8,
+        7.3,
+        1.5,
+        8.0,
+        16.2,
+        8.2,
+        17.3,
+        17.7,
+        36.0,
+        22.1,
+        4.4,
+        10.5,
+        0.6,
+        3.1
+      ],
+      "pass": true
+    },
+    "typography": {
+      "reference_median_ink_px": 88.5,
+      "render_median_ink_px": 78.7,
+      "ratio": 0.89,
+      "pass": true
+    }
+  },
+  "passed": true
+}

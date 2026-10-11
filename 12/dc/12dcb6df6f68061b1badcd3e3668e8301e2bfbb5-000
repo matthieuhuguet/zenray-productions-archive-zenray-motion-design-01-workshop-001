@@ -1,4 +1,5 @@
 // 10 October 2026, 23:58 CEST: the one root timeline. Every shot's choreography, its ambient drift and every caption reveal sit on it at absolute times.
+// 11 October 2026, 02:25 CEST: measured camera moves (window.ZR_CAMERA) join the timeline; they replace the ambient drift of their shot.
 // Copied from template/ by Scripts/Cook.mjs; edit the template copy only.
 (function () {
   const core = window.ZR;
@@ -6,6 +7,7 @@
   window.ZR_MAIN_TIMELINE = tl;
   const shotStart = Object.fromEntries(core.timeline.shots.map((shot) => [shot.id, shot.start]));
   const shotLength = Object.fromEntries(core.timeline.shots.map((shot) => [shot.id, shot.end - shot.start]));
+  const camera = window.ZR_CAMERA || {};
   Object.entries(core.choreography).forEach(([shotId, records]) => {
     const base = shotStart[shotId];
     if (base === undefined) throw new Error(`Choreography names unknown shot ${shotId}`);
@@ -14,10 +16,31 @@
   Object.entries(window.ZR_AMBIENT || {}).forEach(([shotId, drift]) => {
     const base = shotStart[shotId];
     if (base === undefined) throw new Error(`Ambient drift names unknown shot ${shotId}`);
+    if (camera[shotId]) return;
     const amount = drift.amplitude;
     const from = { [drift.property]: -amount };
     const to = { [drift.property]: amount, duration: shotLength[shotId], ease: 'none' };
     tl.fromTo(drift.target, from, to, base);
+  });
+  // Content moves start from the inverse of the measured change and settle on the designed layout.
+  // Caption moves (text-only shots) scale each caption over its own share of the shot.
+  Object.entries(camera).forEach(([shotId, move]) => {
+    const base = shotStart[shotId];
+    if (base === undefined) throw new Error(`Camera move names unknown shot ${shotId}`);
+    const span = shotLength[shotId];
+    const ease = move.ease || 'none';
+    if (move.target === 'content') {
+      tl.fromTo(`#cam-${shotId}`, { ...move.from }, { scale: 1, x: 0, y: 0, rotation: 0, duration: span, ease }, base);
+      return;
+    }
+    const shotEnd = base + span;
+    core.timeline.captions
+      .filter((caption) => caption.start >= base - 1e-6 && caption.start < shotEnd)
+      .forEach((caption) => {
+        const duration = Math.min(caption.end, shotEnd) - caption.start;
+        const startScale = Math.pow(move.from.scale, duration / span);
+        tl.fromTo(`#cap-${caption.id}`, { scale: startScale }, { scale: 1, duration, ease }, caption.start);
+      });
   });
   core.timeline.captions.forEach((caption) => {
     core.reveal(tl, caption, core.one(`#cap-${caption.id}`));

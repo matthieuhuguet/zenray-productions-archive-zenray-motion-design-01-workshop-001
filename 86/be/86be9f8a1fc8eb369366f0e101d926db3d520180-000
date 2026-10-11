@@ -1,0 +1,814 @@
+{
+  "rate": 48000,
+  "durationSeconds": 68.0,
+  "eighthSeconds": 0.3412,
+  "gridPhase": 0.1501,
+  "cutsOnGrid": 12,
+  "events": [
+    {
+      "time": 4.3,
+      "kind": "tick",
+      "id": "caption C00",
+      "check": true
+    },
+    {
+      "time": 4.9,
+      "kind": "tick",
+      "id": "caption C01",
+      "check": true
+    },
+    {
+      "time": 7.45,
+      "kind": "click",
+      "id": "cut S06",
+      "check": true
+    },
+    {
+      "time": 7.5,
+      "kind": "tick",
+      "id": "caption C02",
+      "check": true
+    },
+    {
+      "time": 8.73,
+      "kind": "click",
+      "id": "cut S07",
+      "check": true
+    },
+    {
+      "time": 10.2,
+      "kind": "click",
+      "id": "cut S08",
+      "check": true
+    },
+    {
+      "time": 10.2,
+      "kind": "tick",
+      "id": "caption C03",
+      "check": true
+    },
+    {
+      "time": 11.65,
+      "kind": "click",
+      "id": "cut S09",
+      "check": true
+    },
+    {
+      "time": 13.2,
+      "kind": "tick",
+      "id": "caption C05",
+      "check": true
+    },
+    {
+      "time": 13.25,
+      "kind": "whoosh",
+      "id": "cut S10",
+      "check": true
+    },
+    {
+      "time": 14.1,
+      "kind": "tick",
+      "id": "caption C04",
+      "check": true
+    },
+    {
+      "time": 16.1,
+      "kind": "tick",
+      "id": "caption C06",
+      "check": true
+    },
+    {
+      "time": 17.5,
+      "kind": "tick",
+      "id": "caption C07+C08",
+      "check": true
+    },
+    {
+      "time": 18.28,
+      "kind": "whoosh",
+      "id": "cut S13",
+      "check": true
+    },
+    {
+      "time": 19.6,
+      "kind": "whoosh",
+      "id": "cut S14",
+      "check": true
+    },
+    {
+      "time": 20.3,
+      "kind": "tick",
+      "id": "caption C09+C10",
+      "check": true
+    },
+    {
+      "time": 22.57,
+      "kind": "whoosh",
+      "id": "cut S15",
+      "check": true
+    },
+    {
+      "time": 23.2,
+      "kind": "tick",
+      "id": "caption C11",
+      "check": true
+    },
+    {
+      "time": 23.67,
+      "kind": "ding",
+      "id": "check U03",
+      "check": true
+    },
+    {
+      "time": 25.4,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.4496,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.4992,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.5487,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.5983,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.6479,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.6975,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.7471,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.7967,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.8462,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.8958,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.9454,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 25.995,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.0446,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.0942,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.1438,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.1933,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.2429,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.2925,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.3421,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.3917,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.4413,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.4908,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 26.5404,
+      "kind": "key",
+      "id": "typing C12",
+      "check": false
+    },
+    {
+      "time": 27.2,
+      "kind": "tick",
+      "id": "caption C13",
+      "check": true
+    },
+    {
+      "time": 28.4,
+      "kind": "tick",
+      "id": "caption C14",
+      "check": true
+    },
+    {
+      "time": 29.53,
+      "kind": "whoosh",
+      "id": "cut S17",
+      "check": true
+    },
+    {
+      "time": 29.6,
+      "kind": "tick",
+      "id": "caption C15",
+      "check": true
+    },
+    {
+      "time": 29.830000000000002,
+      "kind": "pulse",
+      "id": "#ping-1 S17",
+      "check": true
+    },
+    {
+      "time": 30.23,
+      "kind": "pulse",
+      "id": "#ping-2 S17",
+      "check": true
+    },
+    {
+      "time": 30.630000000000003,
+      "kind": "pulse",
+      "id": "#ping-3 S17",
+      "check": true
+    },
+    {
+      "time": 31.9,
+      "kind": "tick",
+      "id": "caption C16",
+      "check": true
+    },
+    {
+      "time": 36.9,
+      "kind": "tick",
+      "id": "caption C17",
+      "check": true
+    },
+    {
+      "time": 37.6,
+      "kind": "tick",
+      "id": "caption C18",
+      "check": true
+    },
+    {
+      "time": 39.4,
+      "kind": "whoosh",
+      "id": "cut S20",
+      "check": true
+    },
+    {
+      "time": 39.7,
+      "kind": "click",
+      "id": "menu U06",
+      "check": false
+    },
+    {
+      "time": 39.76,
+      "kind": "click",
+      "id": "menu U06",
+      "check": false
+    },
+    {
+      "time": 39.8,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 900
+    },
+    {
+      "time": 39.82,
+      "kind": "click",
+      "id": "menu U06",
+      "check": false
+    },
+    {
+      "time": 39.88,
+      "kind": "click",
+      "id": "menu U06",
+      "check": false
+    },
+    {
+      "time": 39.9,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 940
+    },
+    {
+      "time": 39.94,
+      "kind": "click",
+      "id": "menu U06",
+      "check": false
+    },
+    {
+      "time": 40.0,
+      "kind": "click",
+      "id": "menu U06",
+      "check": false
+    },
+    {
+      "time": 40.0,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 980
+    },
+    {
+      "time": 40.1,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1020
+    },
+    {
+      "time": 40.2,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1060
+    },
+    {
+      "time": 40.3,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1100
+    },
+    {
+      "time": 40.4,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1140
+    },
+    {
+      "time": 40.5,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1180
+    },
+    {
+      "time": 40.6,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1220
+    },
+    {
+      "time": 40.7,
+      "kind": "tick",
+      "id": "caption C19",
+      "check": true
+    },
+    {
+      "time": 40.7,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1260
+    },
+    {
+      "time": 40.8,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1300
+    },
+    {
+      "time": 40.9,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1340
+    },
+    {
+      "time": 41.0,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1380
+    },
+    {
+      "time": 41.1,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1420
+    },
+    {
+      "time": 41.2,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1460
+    },
+    {
+      "time": 41.3,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1500
+    },
+    {
+      "time": 41.4,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1540
+    },
+    {
+      "time": 41.5,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1580
+    },
+    {
+      "time": 41.6,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1620
+    },
+    {
+      "time": 41.7,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1660
+    },
+    {
+      "time": 41.8,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1700
+    },
+    {
+      "time": 41.9,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1740
+    },
+    {
+      "time": 42.0,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1780
+    },
+    {
+      "time": 42.1,
+      "kind": "blip",
+      "id": "QR U07",
+      "check": false,
+      "pitch": 1820
+    },
+    {
+      "time": 44.25,
+      "kind": "whoosh",
+      "id": "cut S21",
+      "check": true
+    },
+    {
+      "time": 44.45,
+      "kind": "pulse",
+      "id": "#ripple-1 S21",
+      "check": true
+    },
+    {
+      "time": 45.2,
+      "kind": "tick",
+      "id": "caption C20",
+      "check": true
+    },
+    {
+      "time": 45.25,
+      "kind": "pulse",
+      "id": "#ripple-2 S21",
+      "check": true
+    },
+    {
+      "time": 46.05,
+      "kind": "pulse",
+      "id": "#ripple-3 S21",
+      "check": true
+    },
+    {
+      "time": 47.45,
+      "kind": "pulse",
+      "id": "#ripple-1 S21",
+      "check": true
+    },
+    {
+      "time": 48.25,
+      "kind": "pulse",
+      "id": "#ripple-2 S21",
+      "check": true
+    },
+    {
+      "time": 50.2,
+      "kind": "click",
+      "id": "cut S22",
+      "check": true
+    },
+    {
+      "time": 51.73,
+      "kind": "click",
+      "id": "cut S23",
+      "check": true
+    },
+    {
+      "time": 51.9,
+      "kind": "tick",
+      "id": "caption C21",
+      "check": true
+    },
+    {
+      "time": 51.93,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 51.9529,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 51.9768,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.0017,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.0277,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.0549,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.0836,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.1138,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.1458,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.1799,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.2164,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.2557,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.2985,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.3455,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.3979,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.4572,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.5263,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.6098,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.7178,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 52.8788,
+      "kind": "key",
+      "id": "counter U05",
+      "check": false
+    },
+    {
+      "time": 54.0,
+      "kind": "tick",
+      "id": "caption C22+C23",
+      "check": true
+    },
+    {
+      "time": 55.4,
+      "kind": "tick",
+      "id": "caption C24",
+      "check": true
+    },
+    {
+      "time": 56.6,
+      "kind": "tick",
+      "id": "caption C25",
+      "check": true
+    },
+    {
+      "time": 56.6,
+      "kind": "riser",
+      "id": "lift into the hero",
+      "check": false,
+      "span": 1.4
+    },
+    {
+      "time": 58.0,
+      "kind": "click",
+      "id": "cut S24",
+      "check": true
+    },
+    {
+      "time": 58.0,
+      "kind": "tick",
+      "id": "caption C26",
+      "check": true
+    },
+    {
+      "time": 58.0,
+      "kind": "impact",
+      "id": "hero 58.0",
+      "check": true
+    },
+    {
+      "time": 59.53,
+      "kind": "whoosh",
+      "id": "cut S25",
+      "check": true
+    },
+    {
+      "time": 59.53,
+      "kind": "impact",
+      "id": "hero 59.53",
+      "check": true
+    },
+    {
+      "time": 60.8,
+      "kind": "tick",
+      "id": "caption C27",
+      "check": true
+    },
+    {
+      "time": 60.8,
+      "kind": "impact",
+      "id": "hero 60.8",
+      "check": true
+    },
+    {
+      "time": 63.0,
+      "kind": "whoosh",
+      "id": "logo ring",
+      "check": true
+    },
+    {
+      "time": 63.5,
+      "kind": "tick",
+      "id": "caption C28",
+      "check": true
+    },
+    {
+      "time": 64.6,
+      "kind": "chime",
+      "id": "logo dot",
+      "check": true
+    },
+    {
+      "time": 65.0,
+      "kind": "tick",
+      "id": "caption C29",
+      "check": true
+    }
+  ]
+}

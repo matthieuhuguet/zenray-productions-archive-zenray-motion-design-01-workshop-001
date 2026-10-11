@@ -1,0 +1,106 @@
+{
+  "mp4": "renders/sfx-v2.wav",
+  "passed": true,
+  "checks": [
+    {
+      "name": "pcm_s16le audio stream present",
+      "pass": true,
+      "detail": "pcm_s16le"
+    },
+    {
+      "name": "stereo at 48 kHz",
+      "pass": true,
+      "detail": "2 channels, 48000 Hz"
+    },
+    {
+      "name": "duration matches the picture",
+      "pass": true,
+      "detail": "68.000 s"
+    },
+    {
+      "name": "no clipping (peak below 0.98 of full scale)",
+      "pass": true,
+      "detail": "0.770"
+    },
+    {
+      "name": "every timed event is audible",
+      "pass": true,
+      "detail": "55 of 55"
+    },
+    {
+      "name": "onsets within one picture frame",
+      "pass": true,
+      "detail": "largest gap 10.0 ms, tolerance 17.7 ms"
+    }
+  ],
+  "values": {
+    "codec": "pcm_s16le",
+    "channels": 2,
+    "sampleRate": 48000,
+    "audioSeconds": 68.0,
+    "peakFullScale": 0.7699,
+    "events": 55,
+    "audible": 55,
+    "allEvents": 130,
+    "maxGapMs": 10.0,
+    "toleranceMs": 17.7,
+    "pictureIdentical": null
+  },
+  "offsets_ms": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    6.0,
+    0.0,
+    0.0,
+    0.0,
+    6.0,
+    8.0,
+    0.0,
+    4.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    6.0,
+    0.0,
+    10.0,
+    10.0,
+    10.0,
+    0.0,
+    0.0,
+    0.0,
+    4.0,
+    0.0,
+    4.0,
+    10.0,
+    0.0,
+    10.0,
+    8.0,
+    8.0,
+    8.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    4.0,
+    0.0,
+    0.0,
+    0.0
+  ]
+}
