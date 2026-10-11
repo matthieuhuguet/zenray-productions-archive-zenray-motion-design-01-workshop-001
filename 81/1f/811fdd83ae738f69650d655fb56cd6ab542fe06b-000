@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+# 11 October 2026, 01:10 CEST: describe the sound of a reference video without keeping any of it.
+# Measures tempo, beat grid, attacks (with a rough class: low impact, high click, noise sweep, tonal),
+# loudness every 0.25 s and per shot. Writes numbers and a derived curve only, never audio.
+# Run with python -I: the reference is untrusted media, decoded only by ffmpeg.
+# ~/.venvs/motion-design/bin/python -I Scripts/AnalyzeAudio.py <ref.mp4> --timeline params/timeline.json --out <audio.json> --plot <audio.png>
+import argparse
+import json
+import math
+import subprocess
+from pathlib import Path
+
+import numpy as np
+from PIL import Image, ImageDraw
+
+RATE = 48000
+FRAME = 2048
+HOP = 512
+
+
+def decode(path):
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-map", "0:a:0", "-ac", "1", "-ar", str(RATE),
+                          "-f", "s16le", "-"], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, dtype="<i2").astype(np.float32) / 32768.0
+
+
+def spectrogram(signal):
+    window = np.hanning(FRAME).astype(np.float32)
+    count = 1 + (len(signal) - FRAME) // HOP
+    frames = np.lib.stride_tricks.as_strided(signal, shape=(count, FRAME),
+                                             strides=(signal.strides[0] * HOP, signal.strides[0]))
+    return np.abs(np.fft.rfft(frames * window, axis=1))
+
+
+def onsets(magnitude, frame_seconds):
+    log_mag = np.log1p(1000 * magnitude)
+    flux = np.maximum(0.0, np.diff(log_mag, axis=0)).sum(axis=1)
+    flux = np.concatenate([[0.0], flux])
+    flux /= flux.max() or 1.0
+    width = max(1, int(0.5 / frame_seconds))
+    padded = np.pad(flux, (width, width), mode="edge")
+    median = np.array([np.median(padded[i:i + 2 * width + 1]) for i in range(len(flux))])
+    threshold = median + 0.08
+    spacing = int(0.05 / frame_seconds)
+    peaks, last = [], -spacing
+    for i in range(1, len(flux) - 1):
+        if flux[i] > threshold[i] and flux[i] >= flux[i - 1] and flux[i] >= flux[i + 1] and i - last >= spacing:
+            peaks.append(i)
+            last = i
+    return flux, peaks
+
+
+def classify(magnitude, frequencies, index, frame_seconds, rms):
+    span = magnitude[index:index + max(1, int(0.1 / frame_seconds))].sum(axis=0) + 1e-9
+    total = span.sum()
+    low = span[frequencies < 150].sum() / total
+    high = span[frequencies > 4000].sum() / total
+    centroid = float((span * frequencies).sum() / total)
+    before = rms[max(0, index - 1)]
+    after = rms[index:index + max(1, int(0.08 / frame_seconds))]
+    peak_at = int(np.argmax(after)) if len(after) else 0
+    attack_ms = peak_at * frame_seconds * 1000
+    if low > 0.45:
+        kind = "impact grave"
+    elif high > 0.35 and attack_ms <= 15:
+        kind = "clic aigu"
+    elif centroid > 1500 and attack_ms > 25:
+        kind = "souffle"
+    else:
+        kind = "note ou accent"
+    return {"low": round(float(low), 3), "high": round(float(high), 3), "centroidHz": round(centroid),
+            "attackMs": round(attack_ms), "jump": round(float(after.max() - before) if len(after) else 0.0, 4),
+            "class": kind}
+
+
+def tempo(flux, frame_seconds):
+    envelope = flux - flux.mean()
+    corr = np.correlate(envelope, envelope, mode="full")[len(envelope) - 1:]
+    lags = np.arange(len(corr))
+    bpm_of = 60.0 / (lags[1:] * frame_seconds)
+    valid = (bpm_of >= 70) & (bpm_of <= 180)
+    best = int(lags[1:][valid][np.argmax(corr[1:][valid])])
+    if 1 < best < len(corr) - 1:
+        a, b, c = corr[best - 1], corr[best], corr[best + 1]
+        shift = 0.5 * (a - c) / (a - 2 * b + c) if (a - 2 * b + c) else 0.0
+    else:
+        shift = 0.0
+    period = (best + shift) * frame_seconds
+    phases = np.linspace(0, period, 64, endpoint=False)
+    scores = []
+    for phase in phases:
+        idx = ((np.arange(phase, len(flux) * frame_seconds, period)) / frame_seconds).astype(int)
+        idx = idx[idx < len(flux)]
+        scores.append(flux[idx].sum())
+    phase = float(phases[int(np.argmax(scores))])
+    beats = [round(t, 3) for t in np.arange(phase, len(flux) * frame_seconds, period)]
+    return round(60.0 / period, 2), round(phase, 3), beats
+
+
+def draw(path, flux, frame_seconds, beats, shots, loud):
+    width, height = 1600, 360
+    image = Image.new("RGB", (width, height), (12, 12, 14))
+    pen = ImageDraw.Draw(image)
+    duration = len(flux) * frame_seconds
+    def x_of(t):
+        return int(t / duration * (width - 1))
+    for shot in shots:
+        pen.line([(x_of(shot["start"]), 0), (x_of(shot["start"]), height)], fill=(70, 70, 78))
+    for t in beats:
+        pen.line([(x_of(t), height - 18), (x_of(t), height - 6)], fill=(204, 124, 94))
+    points = [(x_of(i * frame_seconds), int(height * 0.62 - flux[i] * height * 0.5)) for i in range(0, len(flux), 2)]
+    pen.line(points, fill=(216, 216, 216), width=1)
+    top = max(loud["db"]) if loud["db"] else 0
+    loud_points = [(x_of(t), int(height * 0.95 - max(0.0, (db - top + 40) / 40) * height * 0.3)) for t, db in zip(loud["t"], loud["db"])]
+    if len(loud_points) > 1:
+        pen.line(loud_points, fill=(77, 116, 188), width=2)
+    image.save(path)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Describe a reference soundtrack with numbers only.")
+    parser.add_argument("video", type=Path)
+    parser.add_argument("--timeline", type=Path, required=True)
+    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--plot", type=Path)
+    args = parser.parse_args()
+
+    shots = json.loads(args.timeline.read_text(encoding="utf-8"))["shots"]
+    signal = decode(args.video)
+    magnitude = spectrogram(signal)
+    frequencies = np.fft.rfftfreq(FRAME, 1.0 / RATE)
+    frame_seconds = HOP / RATE
+    rms = np.sqrt((magnitude ** 2).mean(axis=1))
+    rms /= rms.max() or 1.0
+    flux, peaks = onsets(magnitude, frame_seconds)
+    bpm, phase, beats = tempo(flux, frame_seconds)
+    attacks = []
+    for index in peaks:
+        info = classify(magnitude, frequencies, index, frame_seconds, rms)
+        info["t"] = round(index * frame_seconds, 3)
+        info["strength"] = round(float(flux[index]), 3)
+        attacks.append(info)
+
+    window = int(0.25 * RATE)
+    loud = {"t": [], "db": []}
+    for start in range(0, len(signal) - window, window):
+        level = float(np.sqrt(np.mean(signal[start:start + window] ** 2)) + 1e-9)
+        loud["t"].append(round(start / RATE, 2))
+        loud["db"].append(round(20 * math.log10(level), 1))
+    per_shot = {}
+    for shot in shots:
+        values = [db for t, db in zip(loud["t"], loud["db"]) if shot["start"] <= t < shot["end"]]
+        inside = [a for a in attacks if shot["start"] <= a["t"] < shot["end"]]
+        per_shot[shot["id"]] = {
+            "meanDb": round(sum(values) / len(values), 1) if values else None,
+            "maxDb": max(values) if values else None,
+            "attacks": len(inside),
+            "classes": {kind: sum(1 for a in inside if a["class"] == kind)
+                        for kind in ("impact grave", "clic aigu", "souffle", "note ou accent")},
+            "attackOnCut": any(abs(a["t"] - shot["start"]) <= 0.06 for a in attacks),
+        }
+    result = {"source": args.video.name, "durationSeconds": round(len(signal) / RATE, 3), "bpm": bpm,
+              "beatPhase": phase, "beats": beats, "attacks": attacks, "loudness": loud, "shots": per_shot}
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    if args.plot:
+        draw(args.plot, flux, frame_seconds, beats, shots, loud)
+    on_cut = sum(1 for s in per_shot.values() if s["attackOnCut"])
+    print(f"audio: {bpm} BPM, {len(attacks)} attacks, {on_cut} of {len(shots)} cuts land on an attack")
+
+
+if __name__ == "__main__":
+    main()

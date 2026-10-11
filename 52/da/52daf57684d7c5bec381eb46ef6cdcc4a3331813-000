@@ -1,0 +1,161 @@
+#!/usr/bin/env python3
+# 11 October 2026, 01:10 CEST: measure the camera (or main subject) motion of every shot of a reference video.
+# Tracks corners with Lucas-Kanade optical flow, fits a similarity transform per frame pair (RANSAC),
+# and sums scale, rotation and centre displacement within each shot. Pairs never cross a cut.
+# Output: per-shot totals at 1920x1080, the dominant move, its timing curve and the closest GSAP ease.
+# Run with python -I: the reference is untrusted media, read only through OpenCV.
+# ~/.venvs/motion-design/bin/python -I Scripts/AnalyzeCamera.py <ref.mp4> --timeline params/timeline.json --out <camera.json>
+import argparse
+import json
+import math
+from pathlib import Path
+
+import cv2
+import numpy as np
+
+EASES = {
+    "none": lambda t: t,
+    "power1.in": lambda t: t ** 2,
+    "power1.out": lambda t: 1 - (1 - t) ** 2,
+    "power1.inOut": lambda t: 2 * t * t if t < 0.5 else 1 - (-2 * t + 2) ** 2 / 2,
+    "power2.in": lambda t: t ** 3,
+    "power2.out": lambda t: 1 - (1 - t) ** 3,
+    "power2.inOut": lambda t: 4 * t ** 3 if t < 0.5 else 1 - (-2 * t + 2) ** 3 / 2,
+    "power3.out": lambda t: 1 - (1 - t) ** 4,
+    "expo.out": lambda t: 1.0 if t >= 1 else 1 - 2 ** (-10 * t),
+    "sine.inOut": lambda t: -(math.cos(math.pi * t) - 1) / 2,
+}
+STATIC_PX = 12.0  # a whole-shot move smaller than this, at 1080p, counts as a still frame
+EDGE_GUARD = 2  # frames skipped next to each cut, so a pair never straddles a cut found one frame late
+
+
+def measure(prev, cur, t):
+    pts = cv2.goodFeaturesToTrack(prev, maxCorners=400, qualityLevel=0.01, minDistance=7, blockSize=7)
+    if pts is None or len(pts) < 25:
+        return {"t": t, "ok": False, "n": 0 if pts is None else int(len(pts))}
+    nxt, status, _ = cv2.calcOpticalFlowPyrLK(prev, cur, pts, None, winSize=(21, 21), maxLevel=3)
+    keep = status.ravel() == 1
+    good0, good1 = pts[keep], nxt[keep]
+    if len(good0) < 25:
+        return {"t": t, "ok": False, "n": int(len(good0))}
+    matrix, inliers = cv2.estimateAffinePartial2D(good0, good1, method=cv2.RANSAC, ransacReprojThreshold=1.5,
+                                                  maxIters=2000, confidence=0.99)
+    if matrix is None:
+        return {"t": t, "ok": False, "n": int(len(good0))}
+    ratio = float(inliers.sum()) / len(good0)
+    a, b = float(matrix[0, 0]), float(matrix[1, 0])
+    scale = math.hypot(a, b)
+    rotation = math.degrees(math.atan2(b, a))
+    height, width = prev.shape
+    cx, cy = width / 2, height / 2
+    ncx = matrix[0, 0] * cx + matrix[0, 1] * cy + matrix[0, 2]
+    ncy = matrix[1, 0] * cx + matrix[1, 1] * cy + matrix[1, 2]
+    flow = (good1 - good0).reshape(-1, 2)
+    outliers = flow[inliers.ravel() == 0]
+    local = float(np.median(np.linalg.norm(outliers, axis=1))) if len(outliers) else 0.0
+    return {"t": t, "ok": ratio >= 0.3 and abs(scale - 1) < 0.15, "n": int(len(good0)), "ratio": ratio,
+            "s": scale, "rot": rotation, "dx": float(ncx - cx), "dy": float(ncy - cy), "local": local}
+
+
+def best_ease(times, progress):
+    best_name, best_err = "none", float("inf")
+    for name, ease in EASES.items():
+        err = math.sqrt(sum((ease(t) - p) ** 2 for t, p in zip(times, progress)) / len(times))
+        if err < best_err:
+            best_name, best_err = name, err
+    return best_name, best_err
+
+
+def summarise(shot, records, to_full):
+    span = shot["end"] - shot["start"]
+    usable = [r for r in records if r["ok"]]
+    half_diagonal = math.hypot(1920, 1080) / 2
+    scale = math.prod(r["s"] for r in usable) if usable else 1.0
+    rotation = sum(r["rot"] for r in usable)
+    dx = sum(r["dx"] for r in usable) * to_full
+    dy = sum(r["dy"] for r in usable) * to_full
+    parts = {"scale": abs(scale - 1) * half_diagonal, "rotation": abs(math.radians(rotation)) * half_diagonal,
+             "translation": math.hypot(dx, dy)}
+    dominant = max(parts, key=parts.get)
+    summary = {
+        "start": shot["start"], "end": shot["end"], "pairs": len(records), "usable": len(usable),
+        "inlierRatio": round(sum(r["ratio"] for r in usable) / len(usable), 3) if usable else 0.0,
+        "scale": round(scale, 4), "rotationDeg": round(rotation, 2), "dx": round(dx, 1), "dy": round(dy, 1),
+        "dominant": dominant, "movePx": round(parts[dominant], 1),
+        "localMotionPx": round(float(np.median([r["local"] for r in usable])) * to_full, 2) if usable else 0.0,
+    }
+    if not usable or parts[dominant] < STATIC_PX:
+        summary.update({"static": True, "ease": None, "easeError": None, "curve": []})
+        return summary
+    increments = []
+    for r in records:
+        if not r["ok"]:
+            increments.append((r["t"], 0.0))
+        elif dominant == "scale":
+            increments.append((r["t"], abs(r["s"] - 1) * half_diagonal))
+        elif dominant == "rotation":
+            increments.append((r["t"], abs(math.radians(r["rot"])) * half_diagonal))
+        else:
+            increments.append((r["t"], math.hypot(r["dx"], r["dy"]) * to_full))
+    total = sum(value for _, value in increments) or 1.0
+    running, times, progress = 0.0, [], []
+    for t, value in increments:
+        running += value
+        times.append(min(1.0, max(0.0, (t - shot["start"]) / span)))
+        progress.append(running / total)
+    ease, error = best_ease(times, progress)
+    samples = [round(progress[min(len(progress) - 1, int(i / 20 * (len(progress) - 1)))], 3) for i in range(21)]
+    summary.update({"static": False, "ease": ease, "easeError": round(error, 3), "curve": samples})
+    return summary
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Measure per-shot camera motion of a reference video.")
+    parser.add_argument("video", type=Path)
+    parser.add_argument("--timeline", type=Path, required=True)
+    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--step", type=int, default=2, help="read one frame out of N (60 fps source: 2 gives 30 fps)")
+    parser.add_argument("--width", type=int, default=640)
+    args = parser.parse_args()
+
+    shots = json.loads(args.timeline.read_text(encoding="utf-8"))["shots"]
+    capture = cv2.VideoCapture(str(args.video))
+    fps = capture.get(cv2.CAP_PROP_FPS) or 60.0
+    full_width = capture.get(cv2.CAP_PROP_FRAME_WIDTH) or 1920.0
+    to_full = full_width / args.width
+    records = {shot["id"]: [] for shot in shots}
+
+    def shot_of(t):
+        for shot in shots:
+            if shot["start"] <= t < shot["end"]:
+                return shot
+        return shots[-1]
+
+    previous, previous_id, index = None, None, -1
+    while True:
+        ok, frame = capture.read()
+        if not ok:
+            break
+        index += 1
+        if index % args.step:
+            continue
+        t = index / fps
+        shot = shot_of(t)
+        near_cut = min(abs(t - shot["start"]), abs(shot["end"] - t)) < EDGE_GUARD * args.step / fps
+        height = int(round(frame.shape[0] * args.width / frame.shape[1]))
+        gray = cv2.cvtColor(cv2.resize(frame, (args.width, height), interpolation=cv2.INTER_AREA), cv2.COLOR_BGR2GRAY)
+        if previous is not None and shot["id"] == previous_id and not near_cut:
+            records[shot["id"]].append(measure(previous, gray, t))
+        previous, previous_id = gray, shot["id"]
+    capture.release()
+
+    result = {"source": args.video.name, "fps": fps, "step": args.step, "width": args.width,
+              "shots": {shot["id"]: summarise(shot, records[shot["id"]], to_full) for shot in shots}}
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    moving = [sid for sid, s in result["shots"].items() if not s["static"]]
+    print(f"camera: {len(shots)} shots, {len(moving)} with a measurable move, frames read {index + 1}")
+
+
+if __name__ == "__main__":
+    main()
